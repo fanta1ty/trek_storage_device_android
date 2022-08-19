@@ -18,10 +18,11 @@ fun Dialog(
     positiveButtonText: Int = android.R.string.ok,
     negativeButtonText: Int = android.R.string.cancel,
     onNegativeClickEvent: (() -> Unit)? = null,
-    onPositiveClickEvent: (() -> Unit)? = null
+    onPositiveClickEvent: (() -> Unit)? = null,
+    onDismissRequest: (() -> Unit)? = null
 ) {
     AlertDialog(
-        onDismissRequest = {},
+        onDismissRequest = { onDismissRequest?.invoke() },
         properties = DialogProperties(
             dismissOnBackPress = isCancellable,
             dismissOnClickOutside = isCancellable
@@ -34,7 +35,9 @@ fun Dialog(
         },
         buttons = {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 8.dp, bottom = 8.dp),
                 horizontalArrangement = Arrangement.End
             ) {
                 if (onNegativeClickEvent != null) {
@@ -52,7 +55,6 @@ fun Dialog(
                         Text(stringResource(positiveButtonText))
                     }
                 }
-
             }
         })
 }

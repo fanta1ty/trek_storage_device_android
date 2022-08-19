@@ -4,9 +4,11 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import sg.com.trekstorageauthentication.presentation.ui.navigation.NavGraph
 import sg.com.trekstorageauthentication.presentation.ui.theme.TrekStorageAuthenticationTheme
 
+@AndroidEntryPoint
 class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

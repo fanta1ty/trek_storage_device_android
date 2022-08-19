@@ -4,7 +4,10 @@ import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,7 +20,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.CoroutineScope
 import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.presentation.login.component.AutoSizeText
 import sg.com.trekstorageauthentication.presentation.login.component.BiometricAuthenticationDisabledDialog
@@ -105,7 +107,8 @@ fun LoginScreen(navController: NavHostController) {
 
     BiometricAuthenticationDisabledDialog(
         state = stateHolder.viewModel.biometricAuthenticationReadyState,
-        onNegativeEvent = stateHolder::dismissBiometricAuthenticationDisabledDialog
+        onNegativeEvent = stateHolder::dismissBiometricAuthenticationDisabledDialog,
+        onDismissRequest = stateHolder::dismissBiometricAuthenticationDisabledDialog
     )
 }
 
@@ -113,10 +116,9 @@ fun LoginScreen(navController: NavHostController) {
 fun rememberLoginScreenStateHolder(
     context: Context = LocalContext.current,
     viewModel: LoginViewModel = hiltViewModel(),
-    coroutineScope: CoroutineScope = rememberCoroutineScope(),
     password: MutableState<String> = mutableStateOf("")
 ): LoginScreenStateHolder {
     return remember {
-        LoginScreenStateHolder(context, viewModel, coroutineScope, password)
+        LoginScreenStateHolder(context, viewModel, password)
     }
 }

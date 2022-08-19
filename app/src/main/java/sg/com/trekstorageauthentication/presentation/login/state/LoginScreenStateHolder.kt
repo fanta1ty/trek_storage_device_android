@@ -7,16 +7,12 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.presentation.login.LoginViewModel
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class LoginScreenStateHolder(
     private val context: Context,
     val viewModel: LoginViewModel,
-    private val coroutineScope: CoroutineScope,
     private val _password: MutableState<String>
 ) {
     val password: State<String>
@@ -34,18 +30,22 @@ class LoginScreenStateHolder(
         val isBiometricAuthenticationReady = canPerformBiometricAuthentication()
         if (!isBiometricAuthenticationReady) return
 
-        coroutineScope.launch {
-            when (awaitBiometricAuthenticationResult()) {
-                true -> {
-                    //Show success snack bar
-                }
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle(context.getString(R.string.dialog_biometric_authentication_title))
+            .setDescription(context.getString(R.string.dialog_biometric_authentication_description))
+            .setNegativeButtonText(context.getString(android.R.string.cancel))
+            .build()
 
-                false -> {
-                    //Vibrate 2 times
-                    //Show error snack bar
+        val executor = ContextCompat.getMainExecutor(context)
+
+        BiometricPrompt(
+            context as FragmentActivity,
+            executor,
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    //TODO: Show success snack bar
                 }
-            }
-        }
+            }).apply { authenticate(promptInfo) }
     }
 
     fun dismissBiometricAuthenticationDisabledDialog() {
@@ -78,38 +78,6 @@ class LoginScreenStateHolder(
                 )
                 false
             }
-        }
-    }
-
-    private suspend fun awaitBiometricAuthenticationResult(): Boolean {
-        return suspendCoroutine { continuation ->
-            val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                .setTitle("")
-                .setSubtitle("")
-                .setNegativeButtonText("")
-                .build()
-
-            val executor = ContextCompat.getMainExecutor(context)
-
-            BiometricPrompt(
-                context as FragmentActivity,
-                executor,
-                object : BiometricPrompt.AuthenticationCallback() {
-                    override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                        super.onAuthenticationSucceeded(result)
-                        continuation.resume(true)
-                    }
-
-                    override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                        super.onAuthenticationError(errorCode, errString)
-                        continuation.resume(false)
-                    }
-
-                    override fun onAuthenticationFailed() {
-                        super.onAuthenticationFailed()
-                        continuation.resume(false)
-                    }
-                }).apply { authenticate(promptInfo) }
         }
     }
 }

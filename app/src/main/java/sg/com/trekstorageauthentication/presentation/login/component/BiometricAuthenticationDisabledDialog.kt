@@ -10,22 +10,25 @@ import sg.com.trekstorageauthentication.presentation.ui.common.Dialog
 @Composable
 fun BiometricAuthenticationDisabledDialog(
     state: State<BiometricAuthenticationReadyState>,
-    onNegativeEvent: () -> Unit
+    onNegativeEvent: () -> Unit,
+    onDismissRequest: (() -> Unit)? = null
 ) {
     when (state.value) {
         BiometricAuthenticationReadyState.NOT_ENROLLED -> {
             Dialog(
-                title = stringResource(R.string.dialog_biometric_authentication_ready_title),
+                title = stringResource(R.string.dialog_biometric_authentication_title),
                 content = stringResource(R.string.dialog_biometric_authentication_not_enrolled),
-                onNegativeClickEvent = { onNegativeEvent() }
+                onNegativeClickEvent = onNegativeEvent,
+                onDismissRequest = onDismissRequest
             )
         }
 
         BiometricAuthenticationReadyState.FAILED -> {
             Dialog(
-                title = stringResource(R.string.dialog_biometric_authentication_ready_title),
+                title = stringResource(R.string.dialog_biometric_authentication_title),
                 content = stringResource(R.string.dialog_biometric_authentication_failed),
-                onNegativeClickEvent = { onNegativeEvent() }
+                onNegativeClickEvent = onNegativeEvent,
+                onDismissRequest = onDismissRequest
             )
         }
 
