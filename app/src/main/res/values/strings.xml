@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Trek Storage Authentication</string>
+    <string name="enter_password">Enter Password…</string>
+    <string name="unlock">Unlock</string>
+    <string name="have_not_set_up_password_yet">Haven\'t set up your password yet?</string>
+    <string name="set_up_now">Set up now</string>
+    <string name="incorrect_password">Incorrect Password</string>
+    <string name="password_invalid_length">Password must be at least 8 characters</string>
+    <string name="dialog_biometric_authentication_ready_title">Biometric Authentication</string>
+    <string name="dialog_biometric_authentication_not_enrolled">You haven\'t set up biometric authentication yet. You can set up biometric authentication in the phone settings.</string>
+    <string name="dialog_biometric_authentication_failed">Oops!!! Unable to perform biometric authentication</string>
+    <string name="not_recognized">Not Recognized</string>
+    <string name="trek_storage_unlocked">Trek Storage Unlocked</string>
+    <string name="set_up">Set Up</string>
+    <string name="password">Password</string>
+    <string name="save">Save</string>
+</resources>
