@@ -12,6 +12,7 @@
     <string name="dialog_biometric_authentication_failed">Oops!!! Unable to utilize your phone biometric sensors.</string>
     <string name="trek_storage_unlocked">Trek Storage Unlocked</string>
     <string name="set_up">Set Up</string>
-    <string name="password">Password</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
     <string name="save">Save</string>
 </resources>

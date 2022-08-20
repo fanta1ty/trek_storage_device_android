@@ -2,27 +2,36 @@ package sg.com.trekstorageauthentication.presentation.register
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import sg.com.trekstorageauthentication.R
+import sg.com.trekstorageauthentication.presentation.register.state.RegisterScreenStateHolder
+import sg.com.trekstorageauthentication.presentation.ui.common.PasswordTextField
 
 @Composable
 fun RegisterScreen(navController: NavHostController) {
-    val textValue = remember { mutableStateOf("") }
+    val stateHolder = rememberRegisterScreenStateHolder()
 
     Column(
         modifier = Modifier
+            .verticalScroll(rememberScrollState())
             .fillMaxSize()
             .padding(10.dp)
     ) {
@@ -62,13 +71,23 @@ fun RegisterScreen(navController: NavHostController) {
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            OutlinedTextField(
-                value = textValue.value,
-                onValueChange = { newText -> textValue.value = newText },
+            PasswordTextField(
+                password = stateHolder.currentPassword,
+                onValueChange = stateHolder::setCurrentPassword,
+                label = stringResource(R.string.current_password),
                 modifier = Modifier.fillMaxWidth(),
-                maxLines = 1,
-                leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "") },
-                label = { Text(stringResource(R.string.password)) }
+                imeAction = ImeAction.Next,
+                keyboardActions = KeyboardActions { stateHolder.moveFocusDown() }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            PasswordTextField(
+                password = stateHolder.newPassword,
+                onValueChange = stateHolder::setNewPassword,
+                label = stringResource(R.string.new_password),
+                modifier = Modifier.fillMaxWidth(),
+                keyboardActions = KeyboardActions { stateHolder.clearFocus() }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -80,5 +99,16 @@ fun RegisterScreen(navController: NavHostController) {
                     .height(48.dp)
             ) { Text(stringResource(R.string.save)) }
         }
+    }
+}
+
+@Composable
+fun rememberRegisterScreenStateHolder(
+    focusManager: FocusManager = LocalFocusManager.current,
+    currentPassword: MutableState<String> = mutableStateOf(""),
+    newPassword: MutableState<String> = mutableStateOf("")
+): RegisterScreenStateHolder {
+    return remember {
+        RegisterScreenStateHolder(focusManager, currentPassword, newPassword)
     }
 }

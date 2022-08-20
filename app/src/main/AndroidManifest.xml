@@ -18,7 +18,8 @@
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.TrekStorageAuthentication">
+            android:theme="@style/Theme.TrekStorageAuthentication"
+            android:windowSoftInputMode="adjustResize">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
