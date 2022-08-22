@@ -61,7 +61,7 @@ class RegisterScreenStateHolder(
 
             if (newPasswordInput.length < 8)
                 throw RuntimeException(
-                    context.getString(R.string.error_password_not_enough_characters)
+                    context.getString(R.string.error_password_invalid_length)
                 )
 
             if (_newPassword.value.isError)

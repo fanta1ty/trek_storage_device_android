@@ -4,8 +4,6 @@
     <string name="unlock">Unlock</string>
     <string name="have_not_set_up_password_yet">Haven\'t set up your password yet?</string>
     <string name="set_up_now">Set up now</string>
-    <string name="incorrect_password">Incorrect Password</string>
-    <string name="password_invalid_length">Password must be at least 8 characters</string>
     <string name="dialog_biometric_authentication_title">Biometric Authentication</string>
     <string name="dialog_biometric_authentication_description">Please authenticate to unlock Trek storage device.</string>
     <string name="dialog_biometric_authentication_not_enrolled">You haven\'t set up biometric authentication yet. You can set up biometric authentication in the phone settings.</string>
@@ -15,7 +13,7 @@
     <string name="current_password">Current Password</string>
     <string name="new_password">New Password</string>
     <string name="error_field_empty">This field cannot be empty</string>
-    <string name="error_incorrect_password">Incorrect password</string>
-    <string name="error_password_not_enough_characters">Your password must be at least 8 characters</string>
+    <string name="error_password_incorrect">Incorrect password</string>
+    <string name="error_password_invalid_length">Your password must be at least 8 characters</string>
     <string name="save">Save</string>
 </resources>

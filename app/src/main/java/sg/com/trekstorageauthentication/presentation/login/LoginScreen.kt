@@ -3,15 +3,24 @@ package sg.com.trekstorageauthentication.presentation.login
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -25,6 +34,8 @@ import sg.com.trekstorageauthentication.presentation.login.component.AutoSizeTex
 import sg.com.trekstorageauthentication.presentation.login.component.BiometricAuthenticationDisabledDialog
 import sg.com.trekstorageauthentication.presentation.login.state.LoginScreenStateHolder
 import sg.com.trekstorageauthentication.presentation.ui.common.noRippleClickable
+import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextField
+import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextFieldState
 import sg.com.trekstorageauthentication.presentation.ui.navigation.Screen
 
 @Composable
@@ -33,7 +44,9 @@ fun LoginScreen(navController: NavHostController) {
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .fillMaxWidth()
+            .height(LocalConfiguration.current.screenHeightDp.dp)
             .padding(10.dp)
     ) {
         Image(
@@ -44,12 +57,12 @@ fun LoginScreen(navController: NavHostController) {
                 .height(250.dp)
         )
 
-        OutlinedTextField(
-            value = stateHolder.password.value,
-            onValueChange = { newText -> stateHolder.setPassword(newText) },
+        PasswordTextField(
+            state = stateHolder.password,
+            onValueChange = stateHolder::setPassword,
+            label = stringResource(R.string.enter_password),
             modifier = Modifier.fillMaxWidth(),
-            maxLines = 1,
-            label = { Text(stringResource(R.string.enter_password)) }
+            keyboardActions = KeyboardActions { stateHolder.clearFocus() }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -115,10 +128,11 @@ fun LoginScreen(navController: NavHostController) {
 @Composable
 fun rememberLoginScreenStateHolder(
     context: Context = LocalContext.current,
+    focusManager: FocusManager = LocalFocusManager.current,
     viewModel: LoginViewModel = hiltViewModel(),
-    password: MutableState<String> = mutableStateOf("")
+    password: MutableState<PasswordTextFieldState> = mutableStateOf(PasswordTextFieldState())
 ): LoginScreenStateHolder {
     return remember {
-        LoginScreenStateHolder(context, viewModel, password)
+        LoginScreenStateHolder(context, focusManager, viewModel, password)
     }
 }
