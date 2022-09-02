@@ -2,6 +2,7 @@
     <string name="app_name">Trek Storage Authentication</string>
     <string name="enter_password">Enter Password…</string>
     <string name="unlock">Unlock</string>
+    <string name="reset_password">Reset your password</string>
     <string name="have_not_set_up_password_yet">Haven\'t set up your password yet?</string>
     <string name="set_up_now">Set up now</string>
     <string name="dialog_biometric_authentication_title">Biometric Authentication</string>
@@ -16,4 +17,7 @@
     <string name="error_password_incorrect">Incorrect password</string>
     <string name="error_password_invalid_length">Your password must be at least 8 characters</string>
     <string name="save">Save</string>
+
+    <string name="permission_required">Permission Required</string>
+    <string name="permission_permanent_denied_msg">Without your permission to access location the app is unable to scan for nearby bluetooth devices.</string>
 </resources>

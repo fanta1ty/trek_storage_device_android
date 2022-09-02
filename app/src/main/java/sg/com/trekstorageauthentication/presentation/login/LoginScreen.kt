@@ -17,15 +17,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
 import sg.com.trekstorageauthentication.R
-import sg.com.trekstorageauthentication.presentation.login.component.AutoSizeText
 import sg.com.trekstorageauthentication.presentation.login.component.BiometricAuthenticationDisabledDialog
 import sg.com.trekstorageauthentication.presentation.login.state.LoginScreenStateHolder
 import sg.com.trekstorageauthentication.presentation.ui.common.Snackbar
@@ -52,7 +48,7 @@ fun LoginScreen(navController: NavHostController) {
                     .verticalScroll(rememberScrollState())
                     .fillMaxWidth()
                     .height(LocalConfiguration.current.screenHeightDp.dp)
-                    .padding(10.dp)
+                    .padding(16.dp)
             ) {
                 Image(
                     painter = painterResource(R.drawable.logo_login),
@@ -70,7 +66,22 @@ fun LoginScreen(navController: NavHostController) {
                     keyboardActions = KeyboardActions { stateHolder.clearFocus() }
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    Text(
+                        stringResource(R.string.reset_password),
+                        color = MaterialTheme.colors.primary,
+                        modifier = Modifier.noRippleClickable {
+                            navController.navigate(Screen.RegisterScreen.route)
+                        }
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
 
                 Row(
                     modifier = Modifier
@@ -82,14 +93,14 @@ fun LoginScreen(navController: NavHostController) {
                         onClick = { stateHolder.passwordAuthenticate() },
                         modifier = Modifier
                             .fillMaxHeight()
-                            .weight(7F),
+                            .weight(1F),
                     ) { Text(stringResource(R.string.unlock)) }
 
                     Box(
                         modifier = Modifier
                             .fillMaxHeight()
-                            .weight(3F),
-                        contentAlignment = Alignment.Center
+                            .width(90.dp),
+                        contentAlignment = Alignment.CenterEnd
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_face_id),
@@ -101,25 +112,6 @@ fun LoginScreen(navController: NavHostController) {
                                 .noRippleClickable { stateHolder.biometricAuthenticate() }
                         )
                     }
-                }
-
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.BottomCenter
-                ) {
-                    AutoSizeText(
-                        modifier = Modifier.noRippleClickable {
-                            navController.navigate(Screen.RegisterScreen.route)
-                        },
-                        text = buildAnnotatedString {
-                            append(stringResource(R.string.have_not_set_up_password_yet))
-                            append(' ')
-
-                            withStyle(style = SpanStyle(color = MaterialTheme.colors.primary)) {
-                                append(stringResource(R.string.set_up_now))
-                            }
-                            append('.')
-                        })
                 }
             }
         }
@@ -133,7 +125,7 @@ fun LoginScreen(navController: NavHostController) {
 }
 
 @Composable
-fun rememberLoginScreenStateHolder(
+private fun rememberLoginScreenStateHolder(
     context: Context = LocalContext.current,
     focusManager: FocusManager = LocalFocusManager.current,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),

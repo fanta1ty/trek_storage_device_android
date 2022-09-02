@@ -1,37 +1,61 @@
-package sg.com.trekstorageauthentication.ble
+package sg.com.trekstorageauthentication.service.ble
 
 import android.bluetooth.*
 import android.content.Context
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import android.location.LocationManager
+import android.util.Log
+import androidx.core.util.forEach
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat
 import no.nordicsemi.android.support.v18.scanner.ScanCallback
 import no.nordicsemi.android.support.v18.scanner.ScanResult
 import java.util.*
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class BleServiceImpl(private val context: Context) : BleService {
-    private val _response = MutableStateFlow(byteArrayOf())
-    val response = _response.asStateFlow()
-
     private val scanner = BluetoothLeScannerCompat.getScanner()
     private var gatt: BluetoothGatt? = null
-    private var scanCallback: ScanCallback? = null
     private var isConnected = false
+    private var isAlreadyScanning = false
+    private var scanCallback = object : ScanCallback() {
+        override fun onScanResult(callbackType: Int, result: ScanResult) {
+            val scanRecord = result.scanRecord ?: return
+
+
+            if(scanRecord.deviceName == "Trek_ble"){
+                scanner.stopScan(this)
+
+                Log.e("HuyTest", "bytes: ${bytesToHex(scanRecord.bytes!!)}")
+                Log.e("HuyTest", "manufacturerSpecificData: ${scanRecord.manufacturerSpecificData}")
+                Log.e("HuyTest", "serviceData: ${scanRecord.serviceData}")
+                Log.e("HuyTest", "serviceUuids: ${scanRecord.serviceUuids}")
+            }
+
+//            if (result.device.address == "58:11:D4:7B:34:B3") {
+//                scanner.stopScan(this)
+//                isAlreadyScanning = false
+//                gatt = result.device.connectGatt(context, false, getGattCallback())
+//            }
+        }
+
+        override fun onScanFailed(errorCode: Int) {
+            close()
+        }
+    }
 
     override fun isConnected() = isConnected
 
-    override fun connect() {
+    override suspend fun connect() {
+        if (isAlreadyScanning) return
 
+        isAlreadyScanning = true
+        scanner.startScan(scanCallback)
     }
 
     override fun close() {
-        scanCallback?.apply { scanner.stopScan(this) }
-        scanCallback = null
+        scanner.stopScan(scanCallback)
         gatt?.close()
         gatt = null
         isConnected = false
+        isAlreadyScanning = false
     }
 
     override fun read(uuid: String) {
@@ -50,22 +74,24 @@ class BleServiceImpl(private val context: Context) : BleService {
         gatt?.writeCharacteristic(characteristic)
     }
 
-    private suspend fun scan(): BluetoothDevice? {
-        return suspendCoroutine { continuation ->
-            scanCallback = object : ScanCallback() {
-                override fun onScanResult(callbackType: Int, result: ScanResult) {
-                    continuation.resume(result.device)
-                }
-
-                override fun onScanFailed(errorCode: Int) {
-                    continuation.resume(null)
-                }
-            }.apply { scanner.startScan(this) }
-        }
+    override fun isBluetoothEnabled(): Boolean {
+        val bluetoothManager =
+            context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        return bluetoothManager.adapter.isEnabled
     }
 
-    private fun connectGatt(device: BluetoothDevice) {
-        gatt = device.connectGatt(context, false, object : BluetoothGattCallback() {
+    override fun isLocationServiceEnabled(): Boolean {
+        val locationManager = context.getSystemService(LocationManager::class.java)
+        val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        val isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        return isGpsEnabled && isNetworkEnabled
+    }
+
+    //---------
+
+    private fun getGattCallback(): BluetoothGattCallback {
+        return object : BluetoothGattCallback() {
+
             override fun onConnectionStateChange(
                 gatt: BluetoothGatt?,
                 status: Int,
@@ -85,22 +111,15 @@ class BleServiceImpl(private val context: Context) : BleService {
                 }
             }
 
-            override fun onServicesDiscovered(
-                gatt: BluetoothGatt?,
-                status: Int
-            ) = Unit
-
-            override fun onCharacteristicRead(
-                gatt: BluetoothGatt?,
-                characteristic: BluetoothGattCharacteristic?,
-                status: Int
-            ) = Unit
+            override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
+                registerNotification()
+            }
 
             override fun onCharacteristicChanged(
                 gatt: BluetoothGatt?,
                 characteristic: BluetoothGattCharacteristic?
             ) = Unit
-        })
+        }
     }
 
     private fun registerNotification() {
@@ -112,5 +131,16 @@ class BleServiceImpl(private val context: Context) : BleService {
         descriptor.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
         gatt?.setCharacteristicNotification(characteristic, true)
         gatt?.writeDescriptor(descriptor)
+    }
+
+    private fun bytesToHex(data: ByteArray, prefix: String = ""): String {
+        val c = "0123456789ABCDEF".toCharArray()
+        var result = ""
+        data.forEach {
+            result += c[it.toInt() and 255 shr 4]
+            result += c[it.toInt() and 15]
+            //result += ' '
+        }
+        return prefix + result
     }
 }

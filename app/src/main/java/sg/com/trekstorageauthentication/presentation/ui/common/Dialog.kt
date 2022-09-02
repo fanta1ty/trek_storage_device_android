@@ -41,7 +41,7 @@ fun Dialog(
                 horizontalArrangement = Arrangement.End
             ) {
                 if (onNegativeClickEvent != null) {
-                    TextButton(onClick = { onNegativeClickEvent() }) {
+                    TextButton(onClick = onNegativeClickEvent) {
                         Text(stringResource(negativeButtonText))
                     }
 
@@ -51,7 +51,7 @@ fun Dialog(
                 }
 
                 if (onPositiveClickEvent != null) {
-                    TextButton(onClick = { onPositiveClickEvent() }) {
+                    TextButton(onClick = onPositiveClickEvent) {
                         Text(stringResource(positiveButtonText))
                     }
                 }
