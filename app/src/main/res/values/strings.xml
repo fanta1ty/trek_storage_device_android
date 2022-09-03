@@ -20,4 +20,7 @@
 
     <string name="permission_required">Permission Required</string>
     <string name="permission_permanent_denied_msg">Without your permission to access location the app is unable to scan for nearby bluetooth devices.</string>
+    <string name="connecting">Connecting</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="reconnect">Reconnect</string>
 </resources>

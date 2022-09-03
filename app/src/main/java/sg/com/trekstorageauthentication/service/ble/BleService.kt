@@ -1,7 +1,9 @@
 package sg.com.trekstorageauthentication.service.ble
 
+import kotlinx.coroutines.flow.StateFlow
+
 interface BleService {
-    suspend fun connect()
+    fun connect()
 
     fun close()
 
@@ -10,6 +12,8 @@ interface BleService {
     fun write(uuid: String, bytes: ByteArray)
 
     fun isConnected(): Boolean
+
+    fun getBleConnectionState(): StateFlow<BleConnectionState>
 
     fun isBluetoothEnabled(): Boolean
 

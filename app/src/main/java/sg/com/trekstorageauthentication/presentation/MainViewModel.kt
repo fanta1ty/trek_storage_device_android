@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import sg.com.trekstorageauthentication.presentation.main.state.MainState
 import sg.com.trekstorageauthentication.service.ble.BleService
 import sg.com.trekstorageauthentication.service.permission.PermissionService
@@ -19,6 +20,8 @@ class MainViewModel @Inject constructor(
     val mainState: State<MainState>
         get() = _mainState
 
+    private val _snackBarEvent = MutableSharedFlow<Int>()
+
     fun connectBle(permissionResult: Boolean) {
         if (!permissionResult) {
             _mainState.value = _mainState.value.copy(isPermissionsGranted = false)
@@ -30,17 +33,10 @@ class MainViewModel @Inject constructor(
                 resetMainState()
         }
 
-//        if (!bleService.isLocationServiceEnabled()) {
-//            setLocationServiceEnabled(false)
-//            return
-//        }
-
-//        if (shouldScan) {
-//            viewModelScope.launch {
-//                bleService.connect()
-//            }
-//        }
+        bleService.connect()
     }
+
+    fun getBleConnectionState() = bleService.getBleConnectionState()
 
     fun resetMainState() {
         _mainState.value = MainState()

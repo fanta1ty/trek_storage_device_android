@@ -1,17 +1,13 @@
 package sg.com.trekstorageauthentication.presentation.login.state
 
 import android.content.Context
-import android.util.Log
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
-import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.ui.focus.FocusManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.presentation.login.LoginViewModel
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextFieldState
@@ -19,8 +15,6 @@ import sg.com.trekstorageauthentication.presentation.ui.common.textfield.Passwor
 class LoginScreenStateHolder(
     private val context: Context,
     private val focusManager: FocusManager,
-    private val coroutineScope: CoroutineScope,
-    val scaffoldState: ScaffoldState,
     val viewModel: LoginViewModel,
     private val _password: MutableState<PasswordTextFieldState>
 ) {
@@ -33,7 +27,7 @@ class LoginScreenStateHolder(
 
     fun passwordAuthenticate() {
         if (isPasswordValid()) {
-            Log.d("HuyTest", "Unlock device")
+            TODO("Unlock device")
         }
     }
 
@@ -54,11 +48,7 @@ class LoginScreenStateHolder(
             executor,
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    coroutineScope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar(
-                            message = context.getString(R.string.trek_storage_unlocked)
-                        )
-                    }
+                    //TODO: Show snack bar trek storage unlock
                 }
             }).apply { authenticate(promptInfo) }
     }

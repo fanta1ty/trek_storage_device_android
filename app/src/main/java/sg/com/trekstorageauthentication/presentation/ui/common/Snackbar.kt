@@ -35,7 +35,7 @@ fun Snackbar(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-                    TextButton(onClick = { actionEvent() }) {
+                    TextButton(onClick = actionEvent) {
                         Text(actionLabel, color = actionColor)
                     }
                 }

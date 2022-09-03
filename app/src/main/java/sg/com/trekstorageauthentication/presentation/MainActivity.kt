@@ -8,6 +8,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
+import androidx.compose.material.SnackbarHost
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -21,7 +22,8 @@ import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
-import sg.com.trekstorageauthentication.presentation.main.component.BluetoothConnectionHandler
+import sg.com.trekstorageauthentication.presentation.main.component.MainLifecycleHandler
+import sg.com.trekstorageauthentication.presentation.main.component.MainSnackBar
 import sg.com.trekstorageauthentication.presentation.main.component.PermissionDeniedDialog
 import sg.com.trekstorageauthentication.presentation.main.state.MainStateHolder
 import sg.com.trekstorageauthentication.presentation.ui.navigation.NavGraph
@@ -34,12 +36,20 @@ class MainActivity : FragmentActivity() {
         requestedOrientation = Configuration.ORIENTATION_PORTRAIT
 
         setContent {
-            val stateHolder = rememberMainStateHolder()
-
-            BluetoothConnectionHandler(action = stateHolder::connectBle)
-
             TrekStorageAuthenticationTheme {
-                Scaffold(scaffoldState = stateHolder.scaffoldState) {
+                val stateHolder = rememberMainStateHolder()
+
+                Scaffold(
+                    scaffoldState = stateHolder.scaffoldState,
+                    snackbarHost = { hostState ->
+                        SnackbarHost(
+                            hostState = hostState,
+                            snackbar = { data -> MainSnackBar(data.message, stateHolder) }
+                        )
+                    },
+                ) {
+                    MainLifecycleHandler(action = stateHolder::connectBle)
+
                     NavGraph(rememberNavController())
 
                     PermissionDeniedDialog(
@@ -64,6 +74,12 @@ private fun rememberMainStateHolder(
     )
 ): MainStateHolder {
     return remember {
-        MainStateHolder(context, viewModel, coroutineScope, scaffoldState, multiplePermissionsState)
+        MainStateHolder(
+            context,
+            viewModel,
+            coroutineScope,
+            scaffoldState,
+            multiplePermissionsState
+        )
     }
 }

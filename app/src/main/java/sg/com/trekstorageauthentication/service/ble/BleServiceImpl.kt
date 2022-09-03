@@ -3,37 +3,32 @@ package sg.com.trekstorageauthentication.service.ble
 import android.bluetooth.*
 import android.content.Context
 import android.location.LocationManager
-import android.util.Log
-import androidx.core.util.forEach
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat
 import no.nordicsemi.android.support.v18.scanner.ScanCallback
 import no.nordicsemi.android.support.v18.scanner.ScanResult
 import java.util.*
 
 class BleServiceImpl(private val context: Context) : BleService {
+
     private val scanner = BluetoothLeScannerCompat.getScanner()
     private var gatt: BluetoothGatt? = null
     private var isConnected = false
     private var isAlreadyScanning = false
+    private val bleConnectionState = MutableStateFlow(BleConnectionState.CONNECTED)
     private var scanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
-            val scanRecord = result.scanRecord ?: return
-
-
-            if(scanRecord.deviceName == "Trek_ble"){
+            if (result.device.name == "TREK_BLE") {
                 scanner.stopScan(this)
+                isAlreadyScanning = false
+                gatt = result.device.connectGatt(context, false, getGattCallback())
 
-                Log.e("HuyTest", "bytes: ${bytesToHex(scanRecord.bytes!!)}")
-                Log.e("HuyTest", "manufacturerSpecificData: ${scanRecord.manufacturerSpecificData}")
-                Log.e("HuyTest", "serviceData: ${scanRecord.serviceData}")
-                Log.e("HuyTest", "serviceUuids: ${scanRecord.serviceUuids}")
+//                Log.e("HuyTest", "bytes: ${bytesToHex(scanRecord.bytes!!)}")
+//                Log.e("HuyTest", "manufacturerSpecificData: ${scanRecord.manufacturerSpecificData}")
+//                Log.e("HuyTest", "serviceData: ${scanRecord.serviceData}")
+//                Log.e("HuyTest", "serviceUuids: ${scanRecord.serviceUuids}")
             }
-
-//            if (result.device.address == "58:11:D4:7B:34:B3") {
-//                scanner.stopScan(this)
-//                isAlreadyScanning = false
-//                gatt = result.device.connectGatt(context, false, getGattCallback())
-//            }
         }
 
         override fun onScanFailed(errorCode: Int) {
@@ -43,10 +38,13 @@ class BleServiceImpl(private val context: Context) : BleService {
 
     override fun isConnected() = isConnected
 
-    override suspend fun connect() {
+    override fun getBleConnectionState() = bleConnectionState.asStateFlow()
+
+    override fun connect() {
         if (isAlreadyScanning) return
 
         isAlreadyScanning = true
+        bleConnectionState.value = BleConnectionState.CONNECTING
         scanner.startScan(scanCallback)
     }
 
@@ -56,6 +54,7 @@ class BleServiceImpl(private val context: Context) : BleService {
         gatt = null
         isConnected = false
         isAlreadyScanning = false
+        bleConnectionState.value = BleConnectionState.DISCONNECTED
     }
 
     override fun read(uuid: String) {
@@ -100,13 +99,12 @@ class BleServiceImpl(private val context: Context) : BleService {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     if (newState == BluetoothProfile.STATE_CONNECTED) {
                         isConnected = true
+                        bleConnectionState.value = BleConnectionState.CONNECTED
                         gatt?.apply { discoverServices() }
                     } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                        isConnected = false
                         close()
                     }
                 } else {
-                    isConnected = false
                     close()
                 }
             }
