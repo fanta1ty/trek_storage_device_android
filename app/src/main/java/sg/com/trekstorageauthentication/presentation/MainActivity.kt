@@ -12,7 +12,6 @@ import androidx.compose.material.SnackbarHost
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,10 +20,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import sg.com.trekstorageauthentication.presentation.main.component.MainLifecycleHandler
-import sg.com.trekstorageauthentication.presentation.main.component.MainSnackBar
-import sg.com.trekstorageauthentication.presentation.main.component.PermissionDeniedDialog
+import sg.com.trekstorageauthentication.presentation.main.component.*
 import sg.com.trekstorageauthentication.presentation.main.state.MainStateHolder
 import sg.com.trekstorageauthentication.presentation.ui.navigation.NavGraph
 import sg.com.trekstorageauthentication.presentation.ui.theme.TrekStorageAuthenticationTheme
@@ -44,17 +40,27 @@ class MainActivity : FragmentActivity() {
                     snackbarHost = { hostState ->
                         SnackbarHost(
                             hostState = hostState,
-                            snackbar = { data -> MainSnackBar(data.message, stateHolder) }
+                            snackbar = { data -> MainSnackbar(data.message, stateHolder) }
                         )
                     },
                 ) {
-                    MainLifecycleHandler(action = stateHolder::connectBle)
+                    MainLifecycleHandler(stateHolder)
 
                     NavGraph(rememberNavController())
 
                     PermissionDeniedDialog(
                         mainState = stateHolder.getMainState(),
                         onPositiveEvent = stateHolder::navigateToAppPermissionSettings
+                    )
+
+                    LocationServiceDisabledDialog(
+                        mainState = stateHolder.getMainState(),
+                        onPositiveEvent = stateHolder::navigateToLocationServiceSettings
+                    )
+
+                    BluetoothDisabledDialog(
+                        mainState = stateHolder.getMainState(),
+                        onPositiveEvent = stateHolder::dismissDialog
                     )
                 }
             }
@@ -66,20 +72,11 @@ class MainActivity : FragmentActivity() {
 private fun rememberMainStateHolder(
     context: Context = LocalContext.current,
     viewModel: MainViewModel = hiltViewModel(),
-    coroutineScope: CoroutineScope = rememberCoroutineScope(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     multiplePermissionsState: MultiplePermissionsState = rememberMultiplePermissionsState(
         permissions = viewModel.getRequiredPermissions(),
         onPermissionsResult = { viewModel.apply { connectBle(getPermissionResult(it)) } }
     )
 ): MainStateHolder {
-    return remember {
-        MainStateHolder(
-            context,
-            viewModel,
-            coroutineScope,
-            scaffoldState,
-            multiplePermissionsState
-        )
-    }
+    return remember { MainStateHolder(context, viewModel, scaffoldState, multiplePermissionsState) }
 }

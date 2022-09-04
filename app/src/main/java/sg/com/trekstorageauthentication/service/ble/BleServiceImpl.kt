@@ -3,8 +3,6 @@ package sg.com.trekstorageauthentication.service.ble
 import android.bluetooth.*
 import android.content.Context
 import android.location.LocationManager
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat
 import no.nordicsemi.android.support.v18.scanner.ScanCallback
 import no.nordicsemi.android.support.v18.scanner.ScanResult
@@ -16,7 +14,7 @@ class BleServiceImpl(private val context: Context) : BleService {
     private var gatt: BluetoothGatt? = null
     private var isConnected = false
     private var isAlreadyScanning = false
-    private val bleConnectionState = MutableStateFlow(BleConnectionState.CONNECTED)
+    private var bleConnectionListener: ((BleConnectionState) -> Unit)? = null
     private var scanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             if (result.device.name == "TREK_BLE") {
@@ -38,13 +36,11 @@ class BleServiceImpl(private val context: Context) : BleService {
 
     override fun isConnected() = isConnected
 
-    override fun getBleConnectionState() = bleConnectionState.asStateFlow()
-
     override fun connect() {
-        if (isAlreadyScanning) return
+        if (isAlreadyScanning || isConnected) return
 
         isAlreadyScanning = true
-        bleConnectionState.value = BleConnectionState.CONNECTING
+        bleConnectionListener?.invoke(BleConnectionState.CONNECTING)
         scanner.startScan(scanCallback)
     }
 
@@ -54,7 +50,7 @@ class BleServiceImpl(private val context: Context) : BleService {
         gatt = null
         isConnected = false
         isAlreadyScanning = false
-        bleConnectionState.value = BleConnectionState.DISCONNECTED
+        bleConnectionListener?.invoke(BleConnectionState.DISCONNECTED)
     }
 
     override fun read(uuid: String) {
@@ -86,6 +82,10 @@ class BleServiceImpl(private val context: Context) : BleService {
         return isGpsEnabled && isNetworkEnabled
     }
 
+    override fun setBleConnectionListener(listener: (BleConnectionState) -> Unit) {
+        bleConnectionListener = listener
+    }
+
     //---------
 
     private fun getGattCallback(): BluetoothGattCallback {
@@ -99,7 +99,7 @@ class BleServiceImpl(private val context: Context) : BleService {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     if (newState == BluetoothProfile.STATE_CONNECTED) {
                         isConnected = true
-                        bleConnectionState.value = BleConnectionState.CONNECTED
+                        bleConnectionListener?.invoke(BleConnectionState.CONNECTED)
                         gatt?.apply { discoverServices() }
                     } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                         close()
