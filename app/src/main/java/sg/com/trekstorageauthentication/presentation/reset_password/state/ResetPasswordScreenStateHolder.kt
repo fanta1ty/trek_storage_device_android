@@ -1,4 +1,4 @@
-package sg.com.trekstorageauthentication.presentation.register.state
+package sg.com.trekstorageauthentication.presentation.reset_password.state
 
 import android.content.Context
 import androidx.compose.runtime.MutableState
@@ -8,24 +8,24 @@ import androidx.compose.ui.focus.FocusManager
 import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextFieldState
 
-class RegisterScreenStateHolder(
+class ResetPasswordScreenStateHolder(
     private val context: Context,
     private val focusManager: FocusManager,
-    private val _currentPassword: MutableState<PasswordTextFieldState>,
-    private val _newPassword: MutableState<PasswordTextFieldState>,
+    private val _currentPasswordState: MutableState<PasswordTextFieldState>,
+    private val _newPasswordState: MutableState<PasswordTextFieldState>,
 ) {
-    val currentPassword: State<PasswordTextFieldState>
-        get() = _currentPassword
+    val currentPasswordState: State<PasswordTextFieldState>
+        get() = _currentPasswordState
 
-    val newPassword: State<PasswordTextFieldState>
-        get() = _newPassword
+    val newPasswordState: State<PasswordTextFieldState>
+        get() = _newPasswordState
 
     fun setCurrentPassword(value: String) {
-        _currentPassword.value = _currentPassword.value.copy(input = value)
+        _currentPasswordState.value = _currentPasswordState.value.copy(input = value)
     }
 
     fun setNewPassword(value: String) {
-        _newPassword.value = _newPassword.value.copy(input = value)
+        _newPasswordState.value = _newPasswordState.value.copy(input = value)
     }
 
     fun moveFocusDown() {
@@ -38,17 +38,17 @@ class RegisterScreenStateHolder(
     }
 
     fun save() {
-        val currentPasswordInput = _currentPassword.value.input
-        val newPasswordInput = _newPassword.value.input
+        val currentPasswordInput = _currentPasswordState.value.input
+        val newPasswordInput = _newPasswordState.value.input
 
         try {
             if (currentPasswordInput.isEmpty())
                 throw RuntimeException(context.getString(R.string.error_field_empty))
 
-            if (_currentPassword.value.isError)
-                _currentPassword.value = PasswordTextFieldState(input = currentPasswordInput)
+            if (_currentPasswordState.value.isError)
+                _currentPasswordState.value = PasswordTextFieldState(input = currentPasswordInput)
         } catch (e: RuntimeException) {
-            _currentPassword.value = _currentPassword.value.copy(
+            _currentPasswordState.value = _currentPasswordState.value.copy(
                 isError = true,
                 errorLabel = e.message!!
             )
@@ -64,10 +64,10 @@ class RegisterScreenStateHolder(
                     context.getString(R.string.error_password_invalid_length)
                 )
 
-            if (_newPassword.value.isError)
-                _newPassword.value = PasswordTextFieldState(input = newPasswordInput)
+            if (_newPasswordState.value.isError)
+                _newPasswordState.value = PasswordTextFieldState(input = newPasswordInput)
         } catch (e: RuntimeException) {
-            _newPassword.value = _newPassword.value.copy(
+            _newPasswordState.value = _newPasswordState.value.copy(
                 isError = true,
                 errorLabel = e.message!!
             )

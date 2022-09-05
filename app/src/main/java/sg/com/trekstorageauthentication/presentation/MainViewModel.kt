@@ -87,7 +87,10 @@ class MainViewModel @Inject constructor(
                 }
 
                 //BleConnectionState.CONNECTED
-                else -> _snackbarEvent.send(SnackbarEvent(""))
+                else -> {
+                    _snackbarEvent.send(SnackbarEvent(""))
+                    //TODO: show face id -> get PC password -> show register password or unlock usb
+                }
             }
         }
     }

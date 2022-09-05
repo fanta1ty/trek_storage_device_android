@@ -1,4 +1,4 @@
-package sg.com.trekstorageauthentication.presentation.register
+package sg.com.trekstorageauthentication.presentation.reset_password
 
 import android.content.Context
 import androidx.compose.foundation.Image
@@ -24,12 +24,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import sg.com.trekstorageauthentication.R
-import sg.com.trekstorageauthentication.presentation.register.state.RegisterScreenStateHolder
+import sg.com.trekstorageauthentication.presentation.reset_password.state.ResetPasswordScreenStateHolder
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextField
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextFieldState
 
 @Composable
-fun RegisterScreen(navController: NavHostController) {
+fun ResetPasswordScreen(navController: NavHostController) {
     val stateHolder = rememberRegisterScreenStateHolder()
 
     Column(
@@ -46,7 +46,7 @@ fun RegisterScreen(navController: NavHostController) {
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
-                contentDescription = "",
+                contentDescription = null,
                 modifier = Modifier
                     .width(32.dp)
                     .height(32.dp)
@@ -55,7 +55,7 @@ fun RegisterScreen(navController: NavHostController) {
 
         Image(
             painter = painterResource(R.drawable.logo_register),
-            contentDescription = "",
+            contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(250.dp)
@@ -64,7 +64,7 @@ fun RegisterScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            stringResource(R.string.set_up),
+            stringResource(R.string.reset_password),
             style = MaterialTheme.typography.h2
         )
 
@@ -75,7 +75,7 @@ fun RegisterScreen(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             PasswordTextField(
-                state = stateHolder.currentPassword,
+                state = stateHolder.currentPasswordState,
                 onValueChange = stateHolder::setCurrentPassword,
                 label = stringResource(R.string.current_password),
                 modifier = Modifier.fillMaxWidth(),
@@ -86,7 +86,7 @@ fun RegisterScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(16.dp))
 
             PasswordTextField(
-                state = stateHolder.newPassword,
+                state = stateHolder.newPasswordState,
                 onValueChange = stateHolder::setNewPassword,
                 label = stringResource(R.string.new_password),
                 modifier = Modifier.fillMaxWidth(),
@@ -109,10 +109,19 @@ fun RegisterScreen(navController: NavHostController) {
 fun rememberRegisterScreenStateHolder(
     context: Context = LocalContext.current,
     focusManager: FocusManager = LocalFocusManager.current,
-    currentPassword: MutableState<PasswordTextFieldState> = mutableStateOf(PasswordTextFieldState()),
-    newPassword: MutableState<PasswordTextFieldState> = mutableStateOf(PasswordTextFieldState()),
-): RegisterScreenStateHolder {
+    currentPasswordState: MutableState<PasswordTextFieldState> = mutableStateOf(
+        PasswordTextFieldState()
+    ),
+    newPasswordState: MutableState<PasswordTextFieldState> = mutableStateOf(
+        PasswordTextFieldState()
+    )
+): ResetPasswordScreenStateHolder {
     return remember {
-        RegisterScreenStateHolder(context, focusManager, currentPassword, newPassword)
+        ResetPasswordScreenStateHolder(
+            context,
+            focusManager,
+            currentPasswordState,
+            newPasswordState
+        )
     }
 }

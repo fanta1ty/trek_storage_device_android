@@ -22,7 +22,10 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import dagger.hilt.android.AndroidEntryPoint
-import sg.com.trekstorageauthentication.presentation.main.component.*
+import sg.com.trekstorageauthentication.presentation.main.component.MainDialog
+import sg.com.trekstorageauthentication.presentation.main.component.MainLifecycleHandler
+import sg.com.trekstorageauthentication.presentation.main.component.MainSnackbar
+import sg.com.trekstorageauthentication.presentation.main.component.MainSnackbarHandler
 import sg.com.trekstorageauthentication.presentation.main.state.MainStateHolder
 import sg.com.trekstorageauthentication.presentation.main.state.SnackbarEvent
 import sg.com.trekstorageauthentication.presentation.ui.navigation.NavGraph
@@ -58,19 +61,11 @@ class MainActivity : FragmentActivity() {
 
                     NavGraph(rememberNavController())
 
-                    PermissionDeniedDialog(
-                        mainState = stateHolder.getMainState(),
-                        onPositiveEvent = stateHolder::navigateToAppPermissionSettings
-                    )
-
-                    LocationServiceDisabledDialog(
-                        mainState = stateHolder.getMainState(),
-                        onPositiveEvent = stateHolder::navigateToLocationServiceSettings
-                    )
-
-                    BluetoothDisabledDialog(
-                        mainState = stateHolder.getMainState(),
-                        onPositiveEvent = stateHolder::dismissDialog
+                    MainDialog(
+                        state = stateHolder.getMainState(),
+                        stateHolder::navigateToAppPermissionSettings,
+                        stateHolder::navigateToLocationServiceSettings,
+                        stateHolder::dismissDialog
                     )
                 }
             }
@@ -88,5 +83,12 @@ private fun rememberMainStateHolder(
         onPermissionsResult = { viewModel.apply { connectBle(getPermissionResult(it)) } }
     )
 ): MainStateHolder {
-    return remember { MainStateHolder(context, viewModel, scaffoldState, multiplePermissionsState) }
+    return remember {
+        MainStateHolder(
+            context,
+            viewModel,
+            scaffoldState,
+            multiplePermissionsState
+        )
+    }
 }

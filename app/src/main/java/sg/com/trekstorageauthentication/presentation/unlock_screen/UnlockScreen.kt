@@ -1,34 +1,39 @@
-package sg.com.trekstorageauthentication.presentation.login.component
+package sg.com.trekstorageauthentication.presentation.unlock_screen
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import sg.com.trekstorageauthentication.R
-import sg.com.trekstorageauthentication.presentation.login.state.LoginScreenStateHolder
 import sg.com.trekstorageauthentication.presentation.ui.common.noRippleClickable
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextField
+import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextFieldState
 import sg.com.trekstorageauthentication.presentation.ui.navigation.Screen
+import sg.com.trekstorageauthentication.presentation.unlock_screen.state.UnlockScreenStateHolder
 
 @Composable
-fun LoginMainContent(
-    stateHolder: LoginScreenStateHolder,
-    navController: NavHostController
-) {
+fun UnlockScreen(navController: NavHostController) {
+    val stateHolder = rememberLoginScreenStateHolder()
+
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -45,8 +50,8 @@ fun LoginMainContent(
         )
 
         PasswordTextField(
-            state = stateHolder.password,
-            onValueChange = stateHolder::setPassword,
+            state = stateHolder.passwordState,
+            onValueChange = stateHolder::setPasswordState,
             label = stringResource(R.string.enter_password),
             modifier = Modifier.fillMaxWidth(),
             keyboardActions = KeyboardActions { stateHolder.clearFocus() }
@@ -59,45 +64,30 @@ fun LoginMainContent(
             contentAlignment = Alignment.CenterEnd
         ) {
             Text(
-                stringResource(R.string.reset_password),
+                stringResource(R.string.reset_your_password),
                 color = MaterialTheme.colors.primary,
                 modifier = Modifier.noRippleClickable {
-                    navController.navigate(Screen.RegisterScreen.route)
+                    navController.navigate(Screen.ResetPasswordScreen.route)
                 }
             )
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Row(
+        Button(
+            onClick = stateHolder::authenticate,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Button(
-                onClick = stateHolder::passwordAuthenticate,
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .weight(1F),
-            ) { Text(stringResource(R.string.unlock)) }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(90.dp),
-                contentAlignment = Alignment.CenterEnd
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_face_id),
-                    contentDescription = "",
-                    tint = Color.Unspecified,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width(48.dp)
-                        .noRippleClickable(onClick = stateHolder::biometricAuthenticate)
-                )
-            }
-        }
+                .height(48.dp)
+        ) { Text(stringResource(R.string.unlock)) }
     }
+}
+
+@Composable
+private fun rememberLoginScreenStateHolder(
+    context: Context = LocalContext.current,
+    focusManager: FocusManager = LocalFocusManager.current,
+    passwordState: MutableState<PasswordTextFieldState> = mutableStateOf(PasswordTextFieldState())
+): UnlockScreenStateHolder {
+    return remember { UnlockScreenStateHolder(context, focusManager, passwordState) }
 }
