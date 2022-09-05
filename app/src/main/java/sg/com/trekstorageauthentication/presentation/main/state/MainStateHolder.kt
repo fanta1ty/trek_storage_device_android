@@ -41,6 +41,8 @@ class MainStateHolder(
 
         if (!viewModel.isLocationServiceEnabled()) {
             context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+        } else {
+            viewModel.connectBle(true)
         }
     }
 

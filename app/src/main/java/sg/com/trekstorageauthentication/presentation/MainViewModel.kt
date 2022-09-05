@@ -2,7 +2,6 @@ package sg.com.trekstorageauthentication.presentation
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -75,8 +74,6 @@ class MainViewModel @Inject constructor(
     }
 
     private fun onBleConnectionEvent(connectionState: BleConnectionState) {
-        Log.e("HuyTest", "onBleConnectionEvent: $connectionState")
-
         viewModelScope.launch {
             when (connectionState) {
                 BleConnectionState.CONNECTING -> {

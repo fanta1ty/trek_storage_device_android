@@ -1,6 +1,5 @@
 package sg.com.trekstorageauthentication.presentation.main.component
 
-import android.util.Log
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -11,8 +10,6 @@ import sg.com.trekstorageauthentication.presentation.ui.common.Snackbar
 
 @Composable
 fun MainSnackbar(msg: String, stateHolder: MainStateHolder) {
-    Log.e("HuyTest", "Show Snackbar $msg//")
-
     when (msg) {
         stringResource(R.string.connecting) -> {
             Snackbar(msg, backgroundColor = MaterialTheme.colors.primary)
