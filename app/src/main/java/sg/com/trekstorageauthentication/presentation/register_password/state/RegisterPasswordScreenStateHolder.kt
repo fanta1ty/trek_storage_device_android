@@ -6,11 +6,14 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import sg.com.trekstorageauthentication.R
+import sg.com.trekstorageauthentication.common.Constants
+import sg.com.trekstorageauthentication.presentation.MainViewModel
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextFieldState
 
 class RegisterPasswordScreenStateHolder(
     private val context: Context,
     private val focusManager: FocusManager,
+    private val viewModel: MainViewModel,
     private val _passwordState: MutableState<PasswordTextFieldState>,
     private val _confirmPasswordState: MutableState<PasswordTextFieldState>
 ) {
@@ -37,19 +40,18 @@ class RegisterPasswordScreenStateHolder(
     }
 
     fun save() {
-        val passwordInput = _passwordState.value.input
-        val confirmPasswordInput = _confirmPasswordState.value.input
-
-        if (verifyPassword(passwordInput) &&
-            verifyConfirmPassword(confirmPasswordInput, passwordInput)
-        ) {
-            //TODO: Save password to local
-            //TODO: send password to PC
-            TODO()
-        }
+        viewModel.testNavigate2()
+//        val password = _passwordState.value.input
+//        if (verifyPassword() && verifyConfirmPassword()) {
+//            viewModel.sendBleData(
+//                Constants.SET_PASSWORD_CHARACTERISTIC_UUID,
+//                password.toByteArray()
+//            )
+//        }
     }
 
-    private fun verifyPassword(password: String): Boolean {
+    private fun verifyPassword(): Boolean {
+        val password = _passwordState.value.input
         return try {
             if (password.isEmpty())
                 throw RuntimeException(context.getString(R.string.error_field_empty))
@@ -71,7 +73,10 @@ class RegisterPasswordScreenStateHolder(
         }
     }
 
-    private fun verifyConfirmPassword(confirmPassword: String, password: String): Boolean {
+    private fun verifyConfirmPassword(): Boolean {
+        val password = _passwordState.value.input
+        val confirmPassword = _confirmPasswordState.value.input
+
         return try {
             if (confirmPassword.isEmpty())
                 throw RuntimeException(context.getString(R.string.error_field_empty))

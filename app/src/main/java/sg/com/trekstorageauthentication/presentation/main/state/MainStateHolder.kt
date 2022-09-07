@@ -4,15 +4,18 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import android.util.Log
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.State
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.NavHostController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import sg.com.trekstorageauthentication.R
+import sg.com.trekstorageauthentication.common.Constants
 import sg.com.trekstorageauthentication.presentation.MainViewModel
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -20,9 +23,9 @@ class MainStateHolder(
     private val context: Context,
     private val viewModel: MainViewModel,
     val scaffoldState: ScaffoldState,
+    val navController: NavHostController,
     private val multiplePermissionsState: MultiplePermissionsState
 ) {
-
     fun connectBle() {
         if (multiplePermissionsState.allPermissionsGranted) {
             viewModel.connectBle(true)
@@ -62,29 +65,52 @@ class MainStateHolder(
         return viewModel.mainState
     }
 
-    fun biometricAuthenticate() {
-        val isBiometricAuthenticationReady = canPerformBiometricAuthentication()
-        if (!isBiometricAuthenticationReady) return
+    suspend fun registerNavigationEvent() {
+        viewModel.navigationEvent.collect { event ->
+            Log.e("HuyTest", "Navigation Event collect")
 
-        val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle(context.getString(R.string.dialog_biometric_authentication_title))
-            .setDescription(context.getString(R.string.dialog_biometric_authentication_description))
-            .setNegativeButtonText(context.getString(android.R.string.cancel))
-            .build()
-
-        val executor = ContextCompat.getMainExecutor(context)
-
-        BiometricPrompt(
-            context as FragmentActivity,
-            executor,
-            object : BiometricPrompt.AuthenticationCallback() {
-                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    //TODO: Show snack bar trek storage unlock
+            val (route, popUpToRoute, isInclusive) = event
+            if (popUpToRoute.isEmpty()) {
+                navController.navigate(route)
+            } else {
+                navController.navigate(route) {
+                    popUpTo(popUpToRoute) { inclusive = isInclusive }
                 }
-            }).apply { authenticate(promptInfo) }
+            }
+        }
     }
 
-    private fun canPerformBiometricAuthentication(): Boolean {
+    suspend fun registerBiometricAuthEvent() {
+        viewModel.biometricAuthEvent.collect {
+            Log.e("HuyTest", "registerBiometricAuthEvent")
+
+            val isBiometricAuthenticationReady = isBiometricAuthenticationReady()
+            if (!isBiometricAuthenticationReady) {
+                viewModel.readBleData(Constants.READ_PASSWORD_CHARACTERISTIC_UUID)
+                return@collect
+            }
+
+            val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                .setTitle(context.getString(R.string.dialog_biometric_authentication_title))
+                .setDescription(context.getString(R.string.dialog_biometric_authentication_description))
+                .setNegativeButtonText(context.getString(android.R.string.cancel))
+                .build()
+
+            val executor = ContextCompat.getMainExecutor(context)
+
+            BiometricPrompt(
+                context as FragmentActivity,
+                executor,
+                object : BiometricPrompt.AuthenticationCallback() {
+                    override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                        //viewModel.readBleData(Constants.READ_PASSWORD_CHARACTERISTIC_UUID)
+                        viewModel.testNavigate()
+                    }
+                }).apply { authenticate(promptInfo) }
+        }
+    }
+
+    private fun isBiometricAuthenticationReady(): Boolean {
         val biometricManager = BiometricManager.from(context)
 
         return when (biometricManager.canAuthenticate(

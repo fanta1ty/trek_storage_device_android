@@ -11,17 +11,17 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import sg.com.trekstorageauthentication.presentation.main.component.MainDialog
 import sg.com.trekstorageauthentication.presentation.main.component.MainLifecycleHandler
 import sg.com.trekstorageauthentication.presentation.main.component.MainSnackbar
@@ -50,7 +50,18 @@ class MainActivity : FragmentActivity() {
                         )
                     },
                 ) {
+                    val coroutineScope = rememberCoroutineScope()
                     Log.e("HuyTest", "Scaffold recompose")
+
+                    LaunchedEffect(key1 = true) {
+                        coroutineScope.launch {
+                            stateHolder.registerBiometricAuthEvent()
+                        }
+
+                        coroutineScope.launch {
+                            stateHolder.registerNavigationEvent()
+                        }
+                    }
 
                     MainLifecycleHandler(stateHolder)
 
@@ -59,7 +70,7 @@ class MainActivity : FragmentActivity() {
                         stateHolder.scaffoldState
                     )
 
-                    NavGraph(rememberNavController())
+                    NavGraph(stateHolder.navController)
 
                     MainDialog(
                         state = stateHolder.getMainState(),
@@ -78,6 +89,7 @@ private fun rememberMainStateHolder(
     context: Context = LocalContext.current,
     viewModel: MainViewModel = hiltViewModel(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
+    navController: NavHostController = rememberNavController(),
     multiplePermissionsState: MultiplePermissionsState = rememberMultiplePermissionsState(
         permissions = viewModel.getRequiredPermissions(),
         onPermissionsResult = { viewModel.apply { connectBle(getPermissionResult(it)) } }
@@ -88,6 +100,7 @@ private fun rememberMainStateHolder(
             context,
             viewModel,
             scaffoldState,
+            navController,
             multiplePermissionsState
         )
     }

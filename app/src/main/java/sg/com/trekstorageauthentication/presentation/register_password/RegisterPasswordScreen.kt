@@ -22,14 +22,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
+import androidx.hilt.navigation.compose.hiltViewModel
 import sg.com.trekstorageauthentication.R
+import sg.com.trekstorageauthentication.presentation.MainViewModel
 import sg.com.trekstorageauthentication.presentation.register_password.state.RegisterPasswordScreenStateHolder
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextField
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextFieldState
 
 @Composable
-fun RegisterPasswordScreen(navController: NavHostController) {
+fun RegisterPasswordScreen() {
     val stateHolder = rememberRegisterPasswordScreenStateHolder()
 
     Column(
@@ -94,6 +95,7 @@ fun RegisterPasswordScreen(navController: NavHostController) {
 fun rememberRegisterPasswordScreenStateHolder(
     context: Context = LocalContext.current,
     focusManager: FocusManager = LocalFocusManager.current,
+    viewModel: MainViewModel = hiltViewModel(),
     passwordState: MutableState<PasswordTextFieldState> = mutableStateOf(PasswordTextFieldState()),
     confirmPasswordState: MutableState<PasswordTextFieldState> = mutableStateOf(
         PasswordTextFieldState()
@@ -103,6 +105,7 @@ fun rememberRegisterPasswordScreenStateHolder(
         RegisterPasswordScreenStateHolder(
             context,
             focusManager,
+            viewModel,
             passwordState,
             confirmPasswordState
         )

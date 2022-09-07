@@ -4,8 +4,7 @@
     <string name="unlock">Unlock</string>
     <string name="reset_your_password">Reset your password</string>
     <string name="dialog_biometric_authentication_title">Biometric Authentication</string>
-    <string name="dialog_biometric_authentication_description">Please authenticate to unlock Trek storage device.</string>
-    <string name="trek_storage_unlocked">Trek Storage Unlocked</string>
+    <string name="dialog_biometric_authentication_description">Please authenticate to continue.</string>
     <string name="current_password">Current Password</string>
     <string name="new_password">New Password</string>
     <string name="error_field_empty">This field cannot be empty</string>
@@ -26,4 +25,8 @@
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="confirm_password_not_match">Doesn\'t match the password above</string>
+    <string name="register_password_success">Your password has been registered</string>
+    <string name="register_password_fail">Oops! Something went wrong</string>
+    <string name="unlock_storage_success">Trek storage unlocked</string>
+    <string name="unlock_storage_fail">Failed to authenticate. Please re-enter your password</string>
 </resources>

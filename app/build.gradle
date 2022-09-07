@@ -63,7 +63,7 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-test-manifest:1.2.1'
 
     //Data Store
-    implementation "androidx.datastore:datastore-preferences-core:1.0.0"
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 
     //Biometric
     implementation "androidx.biometric:biometric:1.1.0"

@@ -1,4 +1,4 @@
-package sg.com.trekstorageauthentication.presentation.unlock_screen
+package sg.com.trekstorageauthentication.presentation.unlock
 
 import android.content.Context
 import androidx.compose.foundation.Image
@@ -22,13 +22,15 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import sg.com.trekstorageauthentication.R
+import sg.com.trekstorageauthentication.presentation.MainViewModel
 import sg.com.trekstorageauthentication.presentation.ui.common.noRippleClickable
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextField
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextFieldState
 import sg.com.trekstorageauthentication.presentation.ui.navigation.Screen
-import sg.com.trekstorageauthentication.presentation.unlock_screen.state.UnlockScreenStateHolder
+import sg.com.trekstorageauthentication.presentation.unlock.state.UnlockScreenStateHolder
 
 @Composable
 fun UnlockScreen(navController: NavHostController) {
@@ -87,7 +89,8 @@ fun UnlockScreen(navController: NavHostController) {
 private fun rememberLoginScreenStateHolder(
     context: Context = LocalContext.current,
     focusManager: FocusManager = LocalFocusManager.current,
+    viewModel: MainViewModel = hiltViewModel(),
     passwordState: MutableState<PasswordTextFieldState> = mutableStateOf(PasswordTextFieldState())
 ): UnlockScreenStateHolder {
-    return remember { UnlockScreenStateHolder(context, focusManager, passwordState) }
+    return remember { UnlockScreenStateHolder(context, focusManager, viewModel, passwordState) }
 }

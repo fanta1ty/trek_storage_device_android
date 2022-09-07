@@ -1,5 +1,6 @@
 package sg.com.trekstorageauthentication.presentation.main.component
 
+import android.util.Log
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,6 +16,7 @@ fun MainSnackbarHandler(
     LaunchedEffect(key1 = snackbarEvent) {
         val msg = snackbarEvent.msg
         val duration = snackbarEvent.duration
+        Log.e("HuyTest", "LaunchedEffect $msg")
         if (msg.isNotEmpty()) {
             scaffoldState.snackbarHostState.showSnackbar(msg, duration = duration)
         }

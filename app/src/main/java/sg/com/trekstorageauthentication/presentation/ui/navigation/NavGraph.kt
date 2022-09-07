@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import sg.com.trekstorageauthentication.presentation.register_password.RegisterPasswordScreen
 import sg.com.trekstorageauthentication.presentation.reset_password.ResetPasswordScreen
-import sg.com.trekstorageauthentication.presentation.unlock_screen.UnlockScreen
+import sg.com.trekstorageauthentication.presentation.unlock.UnlockScreen
 
 @Composable
 fun NavGraph(navController: NavHostController) {
@@ -19,7 +19,7 @@ fun NavGraph(navController: NavHostController) {
         }
 
         composable(route = Screen.RegisterPasswordScreen.route) {
-            RegisterPasswordScreen(navController)
+            RegisterPasswordScreen()
         }
 
         composable(route = Screen.ResetPasswordScreen.route) {

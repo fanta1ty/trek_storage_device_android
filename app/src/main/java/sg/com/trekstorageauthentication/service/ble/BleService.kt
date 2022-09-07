@@ -13,6 +13,8 @@ interface BleService {
 
     fun setBleConnectionListener(listener: (BleConnectionState) -> Unit)
 
+    fun setBleDataResponseListener(listener: (Pair<BleResponseType, ByteArray>) -> Unit)
+
     fun isBluetoothEnabled(): Boolean
 
     fun isLocationServiceEnabled(): Boolean

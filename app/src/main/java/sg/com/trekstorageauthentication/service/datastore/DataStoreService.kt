@@ -1,7 +1,9 @@
 package sg.com.trekstorageauthentication.service.datastore
 
-interface DataStoreService {
-    suspend fun <T> dataStoreRead(key: String): T?
+import android.content.Context
 
-    suspend fun <V> dataStoreWrite(key: String, value: V)
+interface DataStoreService {
+    suspend fun getStoredPassword(context: Context): String
+
+    suspend fun saveStoredPassword(context: Context, password: String)
 }
