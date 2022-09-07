@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import sg.com.trekstorageauthentication.R
@@ -89,7 +90,7 @@ fun UnlockScreen(navController: NavHostController) {
 private fun rememberLoginScreenStateHolder(
     context: Context = LocalContext.current,
     focusManager: FocusManager = LocalFocusManager.current,
-    viewModel: MainViewModel = hiltViewModel(),
+    viewModel: MainViewModel = hiltViewModel(context as FragmentActivity),
     passwordState: MutableState<PasswordTextFieldState> = mutableStateOf(PasswordTextFieldState())
 ): UnlockScreenStateHolder {
     return remember { UnlockScreenStateHolder(context, focusManager, viewModel, passwordState) }

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import android.util.Log
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.compose.material.ScaffoldState
@@ -67,8 +66,6 @@ class MainStateHolder(
 
     suspend fun registerNavigationEvent() {
         viewModel.navigationEvent.collect { event ->
-            Log.e("HuyTest", "Navigation Event collect")
-
             val (route, popUpToRoute, isInclusive) = event
             if (popUpToRoute.isEmpty()) {
                 navController.navigate(route)
@@ -82,8 +79,6 @@ class MainStateHolder(
 
     suspend fun registerBiometricAuthEvent() {
         viewModel.biometricAuthEvent.collect {
-            Log.e("HuyTest", "registerBiometricAuthEvent")
-
             val isBiometricAuthenticationReady = isBiometricAuthenticationReady()
             if (!isBiometricAuthenticationReady) {
                 viewModel.readBleData(Constants.READ_PASSWORD_CHARACTERISTIC_UUID)

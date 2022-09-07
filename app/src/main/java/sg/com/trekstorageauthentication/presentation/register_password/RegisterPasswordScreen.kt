@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.presentation.MainViewModel
@@ -95,7 +96,7 @@ fun RegisterPasswordScreen() {
 fun rememberRegisterPasswordScreenStateHolder(
     context: Context = LocalContext.current,
     focusManager: FocusManager = LocalFocusManager.current,
-    viewModel: MainViewModel = hiltViewModel(),
+    viewModel: MainViewModel = hiltViewModel(context as FragmentActivity),
     passwordState: MutableState<PasswordTextFieldState> = mutableStateOf(PasswordTextFieldState()),
     confirmPasswordState: MutableState<PasswordTextFieldState> = mutableStateOf(
         PasswordTextFieldState()

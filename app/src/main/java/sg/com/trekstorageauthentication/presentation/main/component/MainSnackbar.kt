@@ -5,11 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import sg.com.trekstorageauthentication.R
-import sg.com.trekstorageauthentication.presentation.main.state.MainStateHolder
 import sg.com.trekstorageauthentication.presentation.ui.common.Snackbar
 
 @Composable
-fun MainSnackbar(msg: String, stateHolder: MainStateHolder) {
+fun MainSnackbar(
+    msg: String,
+    connectBle: () -> Unit
+) {
     when (msg) {
         stringResource(R.string.connecting) -> {
             Snackbar(msg, backgroundColor = MaterialTheme.colors.primary)
@@ -21,7 +23,7 @@ fun MainSnackbar(msg: String, stateHolder: MainStateHolder) {
                 backgroundColor = Color.Red,
                 actionLabel = stringResource(R.string.reconnect),
                 actionColor = Color.Yellow,
-                actionEvent = stateHolder::connectBle
+                actionEvent = connectBle
             )
         }
     }

@@ -11,7 +11,9 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,11 +23,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import sg.com.trekstorageauthentication.presentation.main.component.MainDialog
-import sg.com.trekstorageauthentication.presentation.main.component.MainLifecycleHandler
-import sg.com.trekstorageauthentication.presentation.main.component.MainSnackbar
-import sg.com.trekstorageauthentication.presentation.main.component.MainSnackbarHandler
+import sg.com.trekstorageauthentication.presentation.main.component.*
 import sg.com.trekstorageauthentication.presentation.main.state.MainStateHolder
 import sg.com.trekstorageauthentication.presentation.main.state.SnackbarEvent
 import sg.com.trekstorageauthentication.presentation.ui.navigation.NavGraph
@@ -46,24 +44,20 @@ class MainActivity : FragmentActivity() {
                     snackbarHost = { hostState ->
                         SnackbarHost(
                             hostState = hostState,
-                            snackbar = { data -> MainSnackbar(data.message, stateHolder) }
+                            snackbar = { data ->
+                                MainSnackbar(data.message, stateHolder::connectBle)
+                            }
                         )
                     },
                 ) {
-                    val coroutineScope = rememberCoroutineScope()
                     Log.e("HuyTest", "Scaffold recompose")
 
-                    LaunchedEffect(key1 = true) {
-                        coroutineScope.launch {
-                            stateHolder.registerBiometricAuthEvent()
-                        }
+                    MainLifecycleHandler(stateHolder::connectBle)
 
-                        coroutineScope.launch {
-                            stateHolder.registerNavigationEvent()
-                        }
-                    }
-
-                    MainLifecycleHandler(stateHolder)
+                    MainEventRegisterHandler(
+                        stateHolder::registerBiometricAuthEvent,
+                        stateHolder::registerNavigationEvent
+                    )
 
                     MainSnackbarHandler(
                         stateHolder.getSnackbarEvent().collectAsState(SnackbarEvent("")),

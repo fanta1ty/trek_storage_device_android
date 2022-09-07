@@ -22,8 +22,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentActivity
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import sg.com.trekstorageauthentication.R
+import sg.com.trekstorageauthentication.presentation.MainViewModel
 import sg.com.trekstorageauthentication.presentation.reset_password.state.ResetPasswordScreenStateHolder
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextField
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextFieldState
@@ -109,6 +112,7 @@ fun ResetPasswordScreen(navController: NavHostController) {
 fun rememberRegisterScreenStateHolder(
     context: Context = LocalContext.current,
     focusManager: FocusManager = LocalFocusManager.current,
+    viewModel: MainViewModel = hiltViewModel(context as FragmentActivity),
     currentPasswordState: MutableState<PasswordTextFieldState> = mutableStateOf(
         PasswordTextFieldState()
     ),
@@ -120,6 +124,7 @@ fun rememberRegisterScreenStateHolder(
         ResetPasswordScreenStateHolder(
             context,
             focusManager,
+            viewModel,
             currentPasswordState,
             newPasswordState
         )

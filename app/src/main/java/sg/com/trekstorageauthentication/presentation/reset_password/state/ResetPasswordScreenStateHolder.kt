@@ -6,11 +6,13 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import sg.com.trekstorageauthentication.R
+import sg.com.trekstorageauthentication.presentation.MainViewModel
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextFieldState
 
 class ResetPasswordScreenStateHolder(
     private val context: Context,
     private val focusManager: FocusManager,
+    private val viewModel: MainViewModel,
     private val _currentPasswordState: MutableState<PasswordTextFieldState>,
     private val _newPasswordState: MutableState<PasswordTextFieldState>,
 ) {
@@ -29,7 +31,6 @@ class ResetPasswordScreenStateHolder(
     }
 
     fun moveFocusDown() {
-        //Set TextField enabled = false if that view shouldn't be allowed to receive focus
         focusManager.moveFocus(FocusDirection.Down)
     }
 
