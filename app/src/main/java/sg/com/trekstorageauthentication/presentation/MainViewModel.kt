@@ -43,7 +43,7 @@ class MainViewModel @Inject constructor(
     private val _snackbarEvent = Channel<SnackbarEvent>()
     val snackbarEvent = _snackbarEvent.receiveAsFlow()
 
-    private val _biometricAuthEvent = Channel<String>()
+    private val _biometricAuthEvent = Channel<Unit>()
     val biometricAuthEvent = _biometricAuthEvent.receiveAsFlow()
 
     private val _navigationEvent = Channel<NavigationEvent>()
@@ -56,25 +56,6 @@ class MainViewModel @Inject constructor(
             setBleConnectionListener(this@MainViewModel::onBleConnectionListener)
             setBleDataResponseListener(this@MainViewModel::onBleDataResponseListener)
         }
-    }
-
-    fun isLocationServiceEnabled() = bleService.isLocationServiceEnabled()
-
-    fun resetMainState() {
-        _mainState.value = MainState()
-    }
-
-    fun unlockTrekStorage(password: String) {
-        this.authPassword = password
-        sendBleData(Constants.VERIFY_PASSWORD_CHARACTERISTIC_UUID, password.toByteArray())
-    }
-
-    fun readBleData(uuid: String) {
-        bleService.read(uuid)
-    }
-
-    fun sendBleData(uuid: String, byteArray: ByteArray) {
-        bleService.write(uuid, byteArray)
     }
 
     fun connectBle(permissionResult: Boolean) {
@@ -102,7 +83,36 @@ class MainViewModel @Inject constructor(
             if (!_mainState.value.isBluetoothEnabled) resetMainState()
         }
 
-        bleService.connect()
+        if (!bleService.isConnected()) {
+            bleService.connect()
+        } else {
+            performBiometricAuth()
+        }
+    }
+
+    fun readBleData(uuid: String) {
+        bleService.read(uuid)
+    }
+
+    fun sendBleData(uuid: String, byteArray: ByteArray) {
+        bleService.write(uuid, byteArray)
+    }
+
+    fun isLocationServiceEnabled() = bleService.isLocationServiceEnabled()
+
+    fun resetMainState() {
+        _mainState.value = MainState()
+    }
+
+    fun unlockTrekStorage(password: String) {
+        this.authPassword = password
+        sendBleData(Constants.VERIFY_PASSWORD_CHARACTERISTIC_UUID, password.toByteArray())
+    }
+
+    fun navigate(route: String, popUpToRoute: String = "", isInclusive: Boolean = true) {
+        viewModelScope.launch {
+            _navigationEvent.send(NavigationEvent(route, popUpToRoute, isInclusive))
+        }
     }
 
     private fun onBleDataResponseListener(response: Pair<BleResponseType, ByteArray>) {
@@ -156,7 +166,7 @@ class MainViewModel @Inject constructor(
 
             else -> { //BleConnectionState.CONNECTED
                 showSnackbar(SnackbarEvent("")) //Send empty msg to dismiss snackbar
-                viewModelScope.launch { _biometricAuthEvent.send("") }
+                performBiometricAuth()
             }
         }
     }
@@ -168,9 +178,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun navigate(route: String, popUpToRoute: String = "", isInclusive: Boolean = true) {
-        viewModelScope.launch {
-            _navigationEvent.send(NavigationEvent(route, popUpToRoute, isInclusive))
-        }
+    private fun performBiometricAuth() {
+        viewModelScope.launch { _biometricAuthEvent.send(Unit) }
     }
 }

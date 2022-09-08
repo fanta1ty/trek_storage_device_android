@@ -15,7 +15,7 @@ fun NavGraph(navController: NavHostController) {
         startDestination = Screen.UnlockScreen.route
     ) {
         composable(route = Screen.UnlockScreen.route) {
-            UnlockScreen(navController)
+            UnlockScreen()
         }
 
         composable(route = Screen.RegisterPasswordScreen.route) {

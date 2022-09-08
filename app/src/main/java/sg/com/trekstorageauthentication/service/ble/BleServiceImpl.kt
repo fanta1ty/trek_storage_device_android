@@ -4,7 +4,6 @@ import android.bluetooth.*
 import android.content.Context
 import android.location.LocationManager
 import android.os.ParcelUuid
-import android.util.Log
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat
 import no.nordicsemi.android.support.v18.scanner.ScanCallback
 import no.nordicsemi.android.support.v18.scanner.ScanResult
@@ -36,10 +35,8 @@ class BleServiceImpl(private val context: Context) : BleService {
         }
     }
 
-    override fun isConnected() = isConnected
-
     override fun connect() {
-        if (isAlreadyScanning || isConnected) return
+        if (isAlreadyScanning) return
 
         isAlreadyScanning = true
         bleConnectionListener?.invoke(BleConnectionState.CONNECTING)
@@ -70,6 +67,8 @@ class BleServiceImpl(private val context: Context) : BleService {
         characteristic.value = bytes
         gatt?.writeCharacteristic(characteristic)
     }
+
+    override fun isConnected() = isConnected
 
     override fun isBluetoothEnabled(): Boolean {
         val bluetoothManager =
@@ -124,8 +123,6 @@ class BleServiceImpl(private val context: Context) : BleService {
                 characteristic: BluetoothGattCharacteristic?
             ) {
                 characteristic?.apply {
-                    Log.e("HuyTest", "onCharacteristicChanged ${String(value)}")
-
                     val response = when (String(value).toInt()) {
                         2 -> Pair(BleResponseType.SET_PASSWORD_SUCCESS, byteArrayOf())
                         3 -> Pair(BleResponseType.SET_PASSWORD_FAIL, byteArrayOf())
@@ -159,15 +156,4 @@ class BleServiceImpl(private val context: Context) : BleService {
         gatt?.setCharacteristicNotification(characteristic, true)
         gatt?.writeDescriptor(descriptor)
     }
-
-//    private fun bytesToHex(data: ByteArray, prefix: String = ""): String {
-//        val c = "0123456789ABCDEF".toCharArray()
-//        var result = ""
-//        data.forEach {
-//            result += c[it.toInt() and 255 shr 4]
-//            result += c[it.toInt() and 15]
-//            result += ' '
-//        }
-//        return prefix + result
-//    }
 }

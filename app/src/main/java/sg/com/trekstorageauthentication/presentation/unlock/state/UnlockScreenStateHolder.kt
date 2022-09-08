@@ -7,6 +7,7 @@ import androidx.compose.ui.focus.FocusManager
 import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.presentation.MainViewModel
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextFieldState
+import sg.com.trekstorageauthentication.presentation.ui.navigation.Screen
 
 class UnlockScreenStateHolder(
     private val context: Context,
@@ -29,6 +30,10 @@ class UnlockScreenStateHolder(
         if (isPasswordValid()) {
             viewModel.unlockTrekStorage(_passwordState.value.input)
         }
+    }
+
+    fun navigateResetPasswordScreen() {
+        viewModel.navigate(Screen.ResetPasswordScreen.route)
     }
 
     private fun isPasswordValid(): Boolean {

@@ -24,17 +24,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.presentation.MainViewModel
 import sg.com.trekstorageauthentication.presentation.ui.common.noRippleClickable
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextField
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextFieldState
-import sg.com.trekstorageauthentication.presentation.ui.navigation.Screen
 import sg.com.trekstorageauthentication.presentation.unlock.state.UnlockScreenStateHolder
 
 @Composable
-fun UnlockScreen(navController: NavHostController) {
+fun UnlockScreen() {
     val stateHolder = rememberLoginScreenStateHolder()
 
     Column(
@@ -69,9 +67,9 @@ fun UnlockScreen(navController: NavHostController) {
             Text(
                 stringResource(R.string.reset_your_password),
                 color = MaterialTheme.colors.primary,
-                modifier = Modifier.noRippleClickable {
-                    navController.navigate(Screen.ResetPasswordScreen.route)
-                }
+                modifier = Modifier.noRippleClickable(
+                    onClick = stateHolder::navigateResetPasswordScreen
+                )
             )
         }
 

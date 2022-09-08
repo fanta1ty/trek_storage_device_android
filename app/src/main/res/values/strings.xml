@@ -8,7 +8,6 @@
     <string name="current_password">Current Password</string>
     <string name="new_password">New Password</string>
     <string name="error_field_empty">This field cannot be empty</string>
-    <string name="error_password_incorrect">Incorrect password</string>
     <string name="error_password_invalid_length">Your password must be at least 8 characters</string>
     <string name="save">Save</string>
     <string name="permission_required">Permission Required</string>
