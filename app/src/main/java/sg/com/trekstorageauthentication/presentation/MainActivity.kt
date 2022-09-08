@@ -5,7 +5,6 @@ package sg.com.trekstorageauthentication.presentation
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
@@ -50,8 +49,6 @@ class MainActivity : FragmentActivity() {
                         )
                     },
                 ) {
-                    Log.e("HuyTest", "Scaffold recompose")
-
                     MainLifecycleHandler(stateHolder::connectBle)
 
                     MainEventRegisterHandler(

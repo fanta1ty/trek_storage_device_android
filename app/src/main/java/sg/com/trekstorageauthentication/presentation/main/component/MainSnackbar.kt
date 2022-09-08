@@ -17,7 +17,7 @@ fun MainSnackbar(
             Snackbar(msg, backgroundColor = MaterialTheme.colors.primary)
         }
 
-        else -> { //stringResource(R.string.disconnected)
+        stringResource(R.string.disconnected) -> {
             Snackbar(
                 msg,
                 backgroundColor = Color.Red,
@@ -26,5 +26,23 @@ fun MainSnackbar(
                 actionEvent = connectBle
             )
         }
+
+        stringResource(R.string.register_password_success) -> {
+            Snackbar(msg, backgroundColor = Color.Green)
+        }
+
+        stringResource(R.string.register_password_fail) -> {
+            Snackbar(msg, backgroundColor = Color.Red)
+        }
+
+        stringResource(R.string.unlock_storage_success) -> {
+            Snackbar(msg, backgroundColor = Color.Green)
+        }
+
+        stringResource(R.string.unlock_storage_fail) -> {
+            Snackbar(msg, backgroundColor = Color.Red)
+        }
+
+        else -> Unit
     }
 }

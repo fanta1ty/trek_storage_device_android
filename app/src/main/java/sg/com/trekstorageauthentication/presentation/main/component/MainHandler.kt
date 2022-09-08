@@ -1,7 +1,10 @@
 package sg.com.trekstorageauthentication.presentation.main.component
 
 import androidx.compose.material.ScaffoldState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -13,10 +16,9 @@ fun MainEventRegisterHandler(
     biometricAuthEvent: suspend () -> Unit,
     navigationEvent: suspend () -> Unit,
 ) {
-    val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(key1 = true) {
-        coroutineScope.launch { biometricAuthEvent() }
-        coroutineScope.launch { navigationEvent() }
+        launch { biometricAuthEvent() }
+        launch { navigationEvent() }
     }
 }
 
@@ -45,6 +47,7 @@ fun MainSnackbarHandler(
         val msg = snackbarEvent.msg
         val duration = snackbarEvent.duration
         if (msg.isNotEmpty()) {
+            //launch { scaffoldState.snackbarHostState.showSnackbar(msg, duration = duration) }
             scaffoldState.snackbarHostState.showSnackbar(msg, duration = duration)
         }
     }

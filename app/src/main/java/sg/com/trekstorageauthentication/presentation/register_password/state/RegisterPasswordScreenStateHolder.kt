@@ -40,14 +40,13 @@ class RegisterPasswordScreenStateHolder(
     }
 
     fun save() {
-        viewModel.testNavigate2()
-//        val password = _passwordState.value.input
-//        if (verifyPassword() && verifyConfirmPassword()) {
-//            viewModel.sendBleData(
-//                Constants.SET_PASSWORD_CHARACTERISTIC_UUID,
-//                password.toByteArray()
-//            )
-//        }
+        val password = _passwordState.value.input
+        if (verifyPassword() && verifyConfirmPassword()) {
+            viewModel.sendBleData(
+                Constants.SET_PASSWORD_CHARACTERISTIC_UUID,
+                password.toByteArray()
+            )
+        }
     }
 
     private fun verifyPassword(): Boolean {

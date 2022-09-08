@@ -38,7 +38,8 @@ class UnlockScreenStateHolder(
             if (password.isEmpty())
                 throw RuntimeException(context.getString(R.string.error_field_empty))
 
-            _passwordState.value = PasswordTextFieldState(input = password)
+            if (_passwordState.value.isError)
+                _passwordState.value = PasswordTextFieldState(input = password)
 
             true
         } catch (e: RuntimeException) {

@@ -25,7 +25,6 @@ class BleServiceImpl(private val context: Context) : BleService {
                 ?.contains(ParcelUuid.fromString(Constants.SERVICE_UUID)) ?: false
 
             if (isTrekBleDevice) {
-                Log.e("HuyTest", result.device.address)
                 scanner.stopScan(this)
                 isAlreadyScanning = false
                 gatt = result.device.connectGatt(context, false, getGattCallback())
@@ -43,9 +42,8 @@ class BleServiceImpl(private val context: Context) : BleService {
         if (isAlreadyScanning || isConnected) return
 
         isAlreadyScanning = true
-        bleConnectionListener?.invoke(BleConnectionState.CONNECTED)
-        //bleConnectionListener?.invoke(BleConnectionState.CONNECTING)
-        //scanner.startScan(scanCallback)
+        bleConnectionListener?.invoke(BleConnectionState.CONNECTING)
+        scanner.startScan(scanCallback)
     }
 
     override fun close() {
@@ -106,16 +104,13 @@ class BleServiceImpl(private val context: Context) : BleService {
             ) {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     if (newState == BluetoothProfile.STATE_CONNECTED) {
-                        Log.e("HuyTest", "STATE_CONNECTED")
                         isConnected = true
                         bleConnectionListener?.invoke(BleConnectionState.CONNECTED)
                         gatt?.apply { discoverServices() }
                     } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                        Log.e("HuyTest", "STATE_DISCONNECTED 1")
                         close()
                     }
                 } else {
-                    Log.e("HuyTest", "STATE_DISCONNECTED 2")
                     close()
                 }
             }
@@ -129,7 +124,16 @@ class BleServiceImpl(private val context: Context) : BleService {
                 characteristic: BluetoothGattCharacteristic?
             ) {
                 characteristic?.apply {
-                    Log.e("HuyTest", "onCharacteristicChanged: ${String(value)}")
+                    Log.e("HuyTest", "onCharacteristicChanged ${String(value)}")
+
+                    val response = when (String(value).toInt()) {
+                        2 -> Pair(BleResponseType.SET_PASSWORD_SUCCESS, byteArrayOf())
+                        3 -> Pair(BleResponseType.SET_PASSWORD_FAIL, byteArrayOf())
+                        4 -> Pair(BleResponseType.VERIFY_PASSWORD_SUCCESS, byteArrayOf())
+                        else -> Pair(BleResponseType.VERIFY_PASSWORD_FAIL, byteArrayOf())
+                    }
+
+                    bleDataResponseListener?.invoke(response)
                 }
             }
 
@@ -156,14 +160,14 @@ class BleServiceImpl(private val context: Context) : BleService {
         gatt?.writeDescriptor(descriptor)
     }
 
-    private fun bytesToHex(data: ByteArray, prefix: String = ""): String {
-        val c = "0123456789ABCDEF".toCharArray()
-        var result = ""
-        data.forEach {
-            result += c[it.toInt() and 255 shr 4]
-            result += c[it.toInt() and 15]
-            result += ' '
-        }
-        return prefix + result
-    }
+//    private fun bytesToHex(data: ByteArray, prefix: String = ""): String {
+//        val c = "0123456789ABCDEF".toCharArray()
+//        var result = ""
+//        data.forEach {
+//            result += c[it.toInt() and 255 shr 4]
+//            result += c[it.toInt() and 15]
+//            result += ' '
+//        }
+//        return prefix + result
+//    }
 }

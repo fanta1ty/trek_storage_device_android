@@ -98,8 +98,7 @@ class MainStateHolder(
                 executor,
                 object : BiometricPrompt.AuthenticationCallback() {
                     override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                        //viewModel.readBleData(Constants.READ_PASSWORD_CHARACTERISTIC_UUID)
-                        viewModel.testNavigate()
+                        viewModel.readBleData(Constants.READ_PASSWORD_CHARACTERISTIC_UUID)
                     }
                 }).apply { authenticate(promptInfo) }
         }

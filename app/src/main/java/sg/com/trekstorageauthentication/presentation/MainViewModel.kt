@@ -2,7 +2,7 @@ package sg.com.trekstorageauthentication.presentation
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
+import androidx.compose.material.SnackbarDuration
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -110,15 +110,7 @@ class MainViewModel @Inject constructor(
         when (type) {
             BleResponseType.SET_PASSWORD_SUCCESS -> {
                 showSnackbar(SnackbarEvent(context.getString(R.string.register_password_success)))
-                viewModelScope.launch {
-                    _navigationEvent.send(
-                        NavigationEvent(
-                            Screen.UnlockScreen.route,
-                            Screen.RegisterPasswordScreen.route,
-                            true
-                        )
-                    )
-                }
+                navigate(Screen.UnlockScreen.route, Screen.RegisterPasswordScreen.route)
             }
 
             BleResponseType.SET_PASSWORD_FAIL -> {
@@ -137,18 +129,10 @@ class MainViewModel @Inject constructor(
             else -> { //BleResponseType.PASSWORD
                 val password = String(data)
                 if (password.isEmpty()) {
-                    //Newly bought storage
-                    viewModelScope.launch {
-                        _navigationEvent.send(
-                            NavigationEvent(
-                                Screen.RegisterPasswordScreen.route,
-                                Screen.UnlockScreen.route,
-                                true
-                            )
-                        )
-                    }
+                    //Default password
+                    navigate(Screen.RegisterPasswordScreen.route, Screen.UnlockScreen.route)
                 } else {
-                    //Already set password
+                    //User defined password
                     viewModelScope.launch {
                         authPassword = getStoredPassword(context)
                         authPassword.takeIf { it.isNotEmpty() }?.let { unlockTrekStorage(it) }
@@ -159,62 +143,34 @@ class MainViewModel @Inject constructor(
     }
 
     private fun onBleConnectionListener(connectionState: BleConnectionState) {
-        viewModelScope.launch {
-            when (connectionState) {
-                BleConnectionState.CONNECTING -> {
-                    val msg = context.getString(R.string.connecting)
-//                    _snackbarEvent.send(SnackbarEvent(msg))
-//                    showSnackbar(SnackbarEvent(msg, SnackbarDuration.Indefinite))
-                }
+        when (connectionState) {
+            BleConnectionState.CONNECTING -> {
+                val msg = context.getString(R.string.connecting)
+                showSnackbar(SnackbarEvent(msg, SnackbarDuration.Indefinite))
+            }
 
-                BleConnectionState.DISCONNECTED -> {
-                    val msg = context.getString(R.string.disconnected)
-//                    _snackbarEvent.send(SnackbarEvent(msg))
-//                    showSnackbar(SnackbarEvent(msg, SnackbarDuration.Indefinite))
-                }
+            BleConnectionState.DISCONNECTED -> {
+                val msg = context.getString(R.string.disconnected)
+                showSnackbar(SnackbarEvent(msg, SnackbarDuration.Indefinite))
+            }
 
-                else -> { //BleConnectionState.CONNECTED
-//                    _snackbarEvent.send(SnackbarEvent(""))
-                    //showSnackbar(SnackbarEvent("")) //Send empty msg to dismiss snackbar
-                    _biometricAuthEvent.send("")
-                }
+            else -> { //BleConnectionState.CONNECTED
+                showSnackbar(SnackbarEvent("")) //Send empty msg to dismiss snackbar
+                viewModelScope.launch { _biometricAuthEvent.send("") }
             }
         }
     }
 
     private fun showSnackbar(event: SnackbarEvent) {
-        val (msg, duration) = event
-        Log.e("HuyTest", "showSnackbar $msg Start")
-
-        Log.e("HuyTest", "showSnackbar End")
-    }
-
-
-    fun testNavigate() {
         viewModelScope.launch {
-            Log.e("HuyTest", "testNavigate Start")
-            _navigationEvent.send(
-                NavigationEvent(
-                    Screen.RegisterPasswordScreen.route,
-                    Screen.UnlockScreen.route,
-                    true
-                )
-            )
-            Log.e("HuyTest", "testNavigate End")
+            val (msg, duration) = event
+            _snackbarEvent.send(SnackbarEvent(msg, duration))
         }
     }
 
-    fun testNavigate2() {
+    private fun navigate(route: String, popUpToRoute: String = "", isInclusive: Boolean = true) {
         viewModelScope.launch {
-            Log.e("HuyTest", "testNavigate Start")
-            _navigationEvent.send(
-                NavigationEvent(
-                    Screen.UnlockScreen.route,
-                    Screen.RegisterPasswordScreen.route,
-                    true
-                )
-            )
-            Log.e("HuyTest", "testNavigate End")
+            _navigationEvent.send(NavigationEvent(route, popUpToRoute, isInclusive))
         }
     }
 }
