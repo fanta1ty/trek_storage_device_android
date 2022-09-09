@@ -106,10 +106,10 @@ class MainViewModel @Inject constructor(
 
     fun unlockTrekStorage(password: String) {
         this.authPassword = password
-        sendBleData(Constants.VERIFY_PASSWORD_CHARACTERISTIC_UUID, password.toByteArray())
+        sendBleData(Constants.UNLOCK_PASSWORD_CHARACTERISTIC_UUID, password.toByteArray())
     }
 
-    fun navigate(route: String, popUpToRoute: String = "", isInclusive: Boolean = true) {
+    fun navigate(route: String = "", popUpToRoute: String = "", isInclusive: Boolean = true) {
         viewModelScope.launch {
             _navigationEvent.send(NavigationEvent(route, popUpToRoute, isInclusive))
         }
@@ -118,21 +118,29 @@ class MainViewModel @Inject constructor(
     private fun onBleDataResponseListener(response: Pair<BleResponseType, ByteArray>) {
         val (type, data) = response
         when (type) {
-            BleResponseType.SET_PASSWORD_SUCCESS -> {
+            BleResponseType.REGISTER_PASSWORD_SUCCESS -> {
                 showSnackbar(SnackbarEvent(context.getString(R.string.register_password_success)))
                 navigate(Screen.UnlockScreen.route, Screen.RegisterPasswordScreen.route)
             }
 
-            BleResponseType.SET_PASSWORD_FAIL -> {
+            BleResponseType.REGISTER_PASSWORD_FAIL -> {
                 showSnackbar(SnackbarEvent(context.getString(R.string.register_password_fail)))
             }
 
-            BleResponseType.VERIFY_PASSWORD_SUCCESS -> {
+            BleResponseType.RESET_PASSWORD_SUCCESS -> {
+                showSnackbar(SnackbarEvent(context.getString(R.string.reset_password_success)))
+            }
+
+            BleResponseType.RESET_PASSWORD_FAIL -> {
+                showSnackbar(SnackbarEvent(context.getString(R.string.reset_password_fail)))
+            }
+
+            BleResponseType.UNLOCK_PASSWORD_SUCCESS -> {
                 viewModelScope.launch { saveStoredPassword(context, authPassword) }
                 showSnackbar(SnackbarEvent(context.getString(R.string.unlock_storage_success)))
             }
 
-            BleResponseType.VERIFY_PASSWORD_FAIL -> {
+            BleResponseType.UNLOCK_PASSWORD_FAIL -> {
                 showSnackbar(SnackbarEvent(context.getString(R.string.unlock_storage_fail)))
             }
 

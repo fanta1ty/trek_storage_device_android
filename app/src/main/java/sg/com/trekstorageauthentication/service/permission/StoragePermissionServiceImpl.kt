@@ -9,6 +9,7 @@ class StoragePermissionServiceImpl : PermissionService {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             permissions.add(Manifest.permission.BLUETOOTH_SCAN)
+            permissions.add(Manifest.permission.BLUETOOTH_CONNECT)
         }
 
         return permissions.toList()

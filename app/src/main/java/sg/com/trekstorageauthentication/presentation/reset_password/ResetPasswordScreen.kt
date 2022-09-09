@@ -24,7 +24,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.presentation.MainViewModel
 import sg.com.trekstorageauthentication.presentation.reset_password.state.ResetPasswordScreenStateHolder
@@ -32,7 +31,7 @@ import sg.com.trekstorageauthentication.presentation.ui.common.textfield.Passwor
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextFieldState
 
 @Composable
-fun ResetPasswordScreen(navController: NavHostController) {
+fun ResetPasswordScreen() {
     val stateHolder = rememberRegisterScreenStateHolder()
 
     Column(
@@ -42,7 +41,7 @@ fun ResetPasswordScreen(navController: NavHostController) {
             .padding(10.dp)
     ) {
         IconButton(
-            onClick = { navController.navigateUp() },
+            onClick = { stateHolder.navigateBack() },
             modifier = Modifier
                 .width(44.dp)
                 .height(44.dp)

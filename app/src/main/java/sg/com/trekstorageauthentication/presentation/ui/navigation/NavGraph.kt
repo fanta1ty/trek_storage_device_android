@@ -23,7 +23,7 @@ fun NavGraph(navController: NavHostController) {
         }
 
         composable(route = Screen.ResetPasswordScreen.route) {
-            ResetPasswordScreen(navController)
+            ResetPasswordScreen()
         }
     }
 }

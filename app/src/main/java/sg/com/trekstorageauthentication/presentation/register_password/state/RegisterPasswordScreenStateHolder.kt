@@ -40,10 +40,11 @@ class RegisterPasswordScreenStateHolder(
     }
 
     fun save() {
-        val password = _passwordState.value.input
         if (verifyPassword() && verifyConfirmPassword()) {
+            clearFocus()
+            val password = _passwordState.value.input
             viewModel.sendBleData(
-                Constants.SET_PASSWORD_CHARACTERISTIC_UUID,
+                Constants.REGISTER_PASSWORD_CHARACTERISTIC_UUID,
                 password.toByteArray()
             )
         }

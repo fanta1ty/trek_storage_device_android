@@ -27,19 +27,15 @@ fun MainSnackbar(
             )
         }
 
-        stringResource(R.string.register_password_success) -> {
+        stringResource(R.string.register_password_success),
+        stringResource(R.string.unlock_storage_success),
+        stringResource(R.string.reset_password_success) -> {
             Snackbar(msg, backgroundColor = Color.Green)
         }
 
-        stringResource(R.string.register_password_fail) -> {
-            Snackbar(msg, backgroundColor = Color.Red)
-        }
-
-        stringResource(R.string.unlock_storage_success) -> {
-            Snackbar(msg, backgroundColor = Color.Green)
-        }
-
-        stringResource(R.string.unlock_storage_fail) -> {
+        stringResource(R.string.register_password_fail),
+        stringResource(R.string.unlock_storage_fail),
+        stringResource(R.string.reset_password_fail) -> {
             Snackbar(msg, backgroundColor = Color.Red)
         }
 

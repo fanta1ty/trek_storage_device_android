@@ -28,6 +28,7 @@ class UnlockScreenStateHolder(
 
     fun authenticate() {
         if (isPasswordValid()) {
+            clearFocus()
             viewModel.unlockTrekStorage(_passwordState.value.input)
         }
     }

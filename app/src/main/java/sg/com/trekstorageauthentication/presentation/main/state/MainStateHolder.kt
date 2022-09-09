@@ -67,6 +67,11 @@ class MainStateHolder(
     suspend fun registerNavigationEvent() {
         viewModel.navigationEvent.collect { event ->
             val (route, popUpToRoute, isInclusive) = event
+            if (route.isEmpty()) { //Navigate back
+                navController.navigateUp()
+                return@collect
+            }
+
             if (popUpToRoute.isEmpty()) {
                 navController.navigate(route)
             } else {

@@ -24,9 +24,11 @@ class BleServiceImpl(private val context: Context) : BleService {
                 ?.contains(ParcelUuid.fromString(Constants.SERVICE_UUID)) ?: false
 
             if (isTrekBleDevice) {
-                scanner.stopScan(this)
+                stopScan()
                 isAlreadyScanning = false
-                gatt = result.device.connectGatt(context, false, getGattCallback())
+                gatt = result.device.connectGatt(
+                    context, false, getGattCallback(), BluetoothDevice.TRANSPORT_LE
+                )
             }
         }
 
@@ -124,10 +126,12 @@ class BleServiceImpl(private val context: Context) : BleService {
             ) {
                 characteristic?.apply {
                     val response = when (String(value).toInt()) {
-                        2 -> Pair(BleResponseType.SET_PASSWORD_SUCCESS, byteArrayOf())
-                        3 -> Pair(BleResponseType.SET_PASSWORD_FAIL, byteArrayOf())
-                        4 -> Pair(BleResponseType.VERIFY_PASSWORD_SUCCESS, byteArrayOf())
-                        else -> Pair(BleResponseType.VERIFY_PASSWORD_FAIL, byteArrayOf())
+                        2 -> Pair(BleResponseType.REGISTER_PASSWORD_SUCCESS, byteArrayOf())
+                        3 -> Pair(BleResponseType.REGISTER_PASSWORD_FAIL, byteArrayOf())
+                        4 -> Pair(BleResponseType.UNLOCK_PASSWORD_SUCCESS, byteArrayOf())
+                        5 -> Pair(BleResponseType.UNLOCK_PASSWORD_FAIL, byteArrayOf())
+                        6 -> Pair(BleResponseType.RESET_PASSWORD_SUCCESS, byteArrayOf())
+                        else -> Pair(BleResponseType.RESET_PASSWORD_FAIL, byteArrayOf())
                     }
 
                     bleDataResponseListener?.invoke(response)
@@ -155,5 +159,9 @@ class BleServiceImpl(private val context: Context) : BleService {
         descriptor.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
         gatt?.setCharacteristicNotification(characteristic, true)
         gatt?.writeDescriptor(descriptor)
+    }
+
+    private fun stopScan() {
+        scanner.stopScan(scanCallback)
     }
 }
