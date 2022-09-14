@@ -30,4 +30,5 @@
     <string name="unlock_storage_fail">Failed to authenticate. Please re-enter your password</string>
     <string name="reset_password_success">Your password has been changed successfully</string>
     <string name="reset_password_fail">Your current password is incorrect</string>
+    <string name="no_trek_devices_found">No Trek devices found</string>
 </resources>

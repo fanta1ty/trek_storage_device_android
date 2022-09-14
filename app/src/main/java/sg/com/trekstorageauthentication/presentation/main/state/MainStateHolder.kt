@@ -86,7 +86,7 @@ class MainStateHolder(
         viewModel.biometricAuthEvent.collect {
             val isBiometricAuthenticationReady = isBiometricAuthenticationReady()
             if (!isBiometricAuthenticationReady) {
-                viewModel.readBleData(Constants.READ_PASSWORD_CHARACTERISTIC_UUID)
+                viewModel.readBleData(Constants.READ_PASSWORD_STATUS_CHARACTERISTIC_UUID)
                 return@collect
             }
 
@@ -103,7 +103,7 @@ class MainStateHolder(
                 executor,
                 object : BiometricPrompt.AuthenticationCallback() {
                     override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                        viewModel.readBleData(Constants.READ_PASSWORD_CHARACTERISTIC_UUID)
+                        viewModel.readBleData(Constants.READ_PASSWORD_STATUS_CHARACTERISTIC_UUID)
                     }
                 }).apply { authenticate(promptInfo) }
         }

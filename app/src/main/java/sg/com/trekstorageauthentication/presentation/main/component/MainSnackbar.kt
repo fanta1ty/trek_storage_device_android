@@ -35,7 +35,8 @@ fun MainSnackbar(
 
         stringResource(R.string.register_password_fail),
         stringResource(R.string.unlock_storage_fail),
-        stringResource(R.string.reset_password_fail) -> {
+        stringResource(R.string.reset_password_fail),
+        stringResource(R.string.no_trek_devices_found) -> {
             Snackbar(msg, backgroundColor = Color.Red)
         }
 

@@ -144,7 +144,7 @@ class BleServiceImpl(private val context: Context) : BleService {
                 status: Int
             ) {
                 characteristic?.apply {
-                    bleDataResponseListener?.invoke(Pair(BleResponseType.PASSWORD, value))
+                    bleDataResponseListener?.invoke(Pair(BleResponseType.PASSWORD_STATUS, value))
                 }
             }
         }

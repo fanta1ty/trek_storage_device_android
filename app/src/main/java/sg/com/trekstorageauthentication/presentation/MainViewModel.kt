@@ -144,16 +144,24 @@ class MainViewModel @Inject constructor(
                 showSnackbar(SnackbarEvent(context.getString(R.string.unlock_storage_fail)))
             }
 
-            else -> { //BleResponseType.PASSWORD
-                val password = String(data)
-                if (password.isEmpty()) {
-                    //Default password
-                    navigate(Screen.RegisterPasswordScreen.route, Screen.UnlockScreen.route)
-                } else {
-                    //User defined password
-                    viewModelScope.launch {
-                        authPassword = getStoredPassword(context)
-                        authPassword.takeIf { it.isNotEmpty() }?.let { unlockTrekStorage(it) }
+            else -> { //BleResponseType.PASSWORD_STATUS
+                when (String(data).toInt()) {
+                    0 -> {
+                        //User defined password
+                        viewModelScope.launch {
+                            authPassword = getStoredPassword(context)
+                            authPassword.takeIf { it.isNotEmpty() }?.let { unlockTrekStorage(it) }
+                        }
+                    }
+
+                    1 -> {
+                        //Default password
+                        navigate(Screen.RegisterPasswordScreen.route, Screen.UnlockScreen.route)
+                    }
+
+                    else -> {
+                        val msg = context.getString(R.string.no_trek_devices_found)
+                        showSnackbar(SnackbarEvent(msg))
                     }
                 }
             }
