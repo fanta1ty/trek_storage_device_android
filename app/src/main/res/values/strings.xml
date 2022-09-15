@@ -31,4 +31,7 @@
     <string name="reset_password_success">Your password has been changed successfully</string>
     <string name="reset_password_fail">Your current password is incorrect</string>
     <string name="no_trek_devices_found">No Trek devices found</string>
+    <string name="log_out">Log Out</string>
+    <string name="log_out_success">Log Out Success</string>
+    <string name="log_out_fail">Log Out Fail</string>
 </resources>

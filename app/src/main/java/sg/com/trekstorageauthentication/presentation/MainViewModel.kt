@@ -2,6 +2,7 @@ package sg.com.trekstorageauthentication.presentation
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -109,6 +110,10 @@ class MainViewModel @Inject constructor(
         sendBleData(Constants.UNLOCK_PASSWORD_CHARACTERISTIC_UUID, password.toByteArray())
     }
 
+    fun logOut() {
+        sendBleData(Constants.LOG_OUT_CHARACTERISTIC_UUID, "01".toByteArray())
+    }
+
     fun navigate(route: String = "", popUpToRoute: String = "", isInclusive: Boolean = true) {
         viewModelScope.launch {
             _navigationEvent.send(NavigationEvent(route, popUpToRoute, isInclusive))
@@ -117,6 +122,7 @@ class MainViewModel @Inject constructor(
 
     private fun onBleDataResponseListener(response: Pair<BleResponseType, ByteArray>) {
         val (type, data) = response
+        Log.d("Debug", "onBleDataResponseListener: ${type.name}")
         when (type) {
             BleResponseType.REGISTER_PASSWORD_SUCCESS -> {
                 showSnackbar(SnackbarEvent(context.getString(R.string.register_password_success)))
@@ -138,10 +144,20 @@ class MainViewModel @Inject constructor(
             BleResponseType.UNLOCK_PASSWORD_SUCCESS -> {
                 viewModelScope.launch { saveStoredPassword(context, authPassword) }
                 showSnackbar(SnackbarEvent(context.getString(R.string.unlock_storage_success)))
+                navigate(Screen.HomeScreen.route)
             }
 
             BleResponseType.UNLOCK_PASSWORD_FAIL -> {
                 showSnackbar(SnackbarEvent(context.getString(R.string.unlock_storage_fail)))
+            }
+
+            BleResponseType.LOG_OUT_SUCCESS -> {
+                showSnackbar(SnackbarEvent(context.getString(R.string.log_out_success)))
+                navigate(Screen.UnlockScreen.route)
+            }
+
+            BleResponseType.LOG_OUT_FAIL -> {
+                showSnackbar(SnackbarEvent(context.getString(R.string.log_out_fail)))
             }
 
             else -> { //BleResponseType.PASSWORD_STATUS

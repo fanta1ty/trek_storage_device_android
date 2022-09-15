@@ -131,7 +131,9 @@ class BleServiceImpl(private val context: Context) : BleService {
                         4 -> Pair(BleResponseType.UNLOCK_PASSWORD_SUCCESS, byteArrayOf())
                         5 -> Pair(BleResponseType.UNLOCK_PASSWORD_FAIL, byteArrayOf())
                         6 -> Pair(BleResponseType.RESET_PASSWORD_SUCCESS, byteArrayOf())
-                        else -> Pair(BleResponseType.RESET_PASSWORD_FAIL, byteArrayOf())
+                        7 -> Pair(BleResponseType.RESET_PASSWORD_FAIL, byteArrayOf())
+                        8 -> Pair(BleResponseType.LOG_OUT_SUCCESS, byteArrayOf())
+                        else -> Pair(BleResponseType.LOG_OUT_FAIL, byteArrayOf())
                     }
 
                     bleDataResponseListener?.invoke(response)
