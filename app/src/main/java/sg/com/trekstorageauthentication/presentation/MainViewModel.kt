@@ -53,6 +53,7 @@ class MainViewModel @Inject constructor(
     private var authPassword = ""
 
     init {
+        Log.d("Debug", "init mainviewmodel")
         bleService.apply {
             setBleConnectionListener(this@MainViewModel::onBleConnectionListener)
             setBleDataResponseListener(this@MainViewModel::onBleDataResponseListener)
@@ -135,6 +136,10 @@ class MainViewModel @Inject constructor(
 
             BleResponseType.RESET_PASSWORD_SUCCESS -> {
                 showSnackbar(SnackbarEvent(context.getString(R.string.reset_password_success)))
+                viewModelScope.launch {
+                    saveStoredPassword(context, "")
+                }
+                navigate(Screen.RegisterPasswordScreen.route, Screen.UnlockScreen.route, true)
             }
 
             BleResponseType.RESET_PASSWORD_FAIL -> {
@@ -144,7 +149,7 @@ class MainViewModel @Inject constructor(
             BleResponseType.UNLOCK_PASSWORD_SUCCESS -> {
                 viewModelScope.launch { saveStoredPassword(context, authPassword) }
                 showSnackbar(SnackbarEvent(context.getString(R.string.unlock_storage_success)))
-                navigate(Screen.HomeScreen.route)
+                navigate(Screen.HomeScreen.route, Screen.HomeScreen.route, true)
             }
 
             BleResponseType.UNLOCK_PASSWORD_FAIL -> {
@@ -153,7 +158,7 @@ class MainViewModel @Inject constructor(
 
             BleResponseType.LOG_OUT_SUCCESS -> {
                 showSnackbar(SnackbarEvent(context.getString(R.string.log_out_success)))
-                navigate(Screen.UnlockScreen.route)
+                navigate(Screen.UnlockScreen.route, Screen.UnlockScreen.route, true)
             }
 
             BleResponseType.LOG_OUT_FAIL -> {

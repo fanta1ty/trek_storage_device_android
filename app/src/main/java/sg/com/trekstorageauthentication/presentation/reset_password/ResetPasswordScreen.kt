@@ -66,44 +66,59 @@ fun ResetPasswordScreen() {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            stringResource(R.string.reset_password),
-            style = MaterialTheme.typography.h2
+            stringResource(id = R.string.reset_password_warning),
+            style = MaterialTheme.typography.body1,
+            color = MaterialTheme.colors.error
         )
 
-        Column(
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = stateHolder::resetPassword,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            PasswordTextField(
-                state = stateHolder.currentPasswordState,
-                onValueChange = stateHolder::setCurrentPassword,
-                label = stringResource(R.string.current_password),
-                modifier = Modifier.fillMaxWidth(),
-                imeAction = ImeAction.Next,
-                keyboardActions = KeyboardActions { stateHolder.moveFocusDown() }
-            )
+                .height(48.dp)
+        ) { Text(stringResource(R.string.confirm)) }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            PasswordTextField(
-                state = stateHolder.newPasswordState,
-                onValueChange = stateHolder::setNewPassword,
-                label = stringResource(R.string.new_password),
-                modifier = Modifier.fillMaxWidth(),
-                keyboardActions = KeyboardActions { stateHolder.clearFocus() }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = stateHolder::save,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp)
-            ) { Text(stringResource(R.string.save)) }
-        }
+//        Text(
+//            stringResource(R.string.reset_password),
+//            style = MaterialTheme.typography.h2
+//        )
+//
+//        Column(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(16.dp),
+//            horizontalAlignment = Alignment.CenterHorizontally
+//        ) {
+//            PasswordTextField(
+//                state = stateHolder.currentPasswordState,
+//                onValueChange = stateHolder::setCurrentPassword,
+//                label = stringResource(R.string.current_password),
+//                modifier = Modifier.fillMaxWidth(),
+//                imeAction = ImeAction.Next,
+//                keyboardActions = KeyboardActions { stateHolder.moveFocusDown() }
+//            )
+//
+//            Spacer(modifier = Modifier.height(16.dp))
+//
+//            PasswordTextField(
+//                state = stateHolder.newPasswordState,
+//                onValueChange = stateHolder::setNewPassword,
+//                label = stringResource(R.string.new_password),
+//                modifier = Modifier.fillMaxWidth(),
+//                keyboardActions = KeyboardActions { stateHolder.clearFocus() }
+//            )
+//
+//            Spacer(modifier = Modifier.height(16.dp))
+//
+//            Button(
+//                onClick = stateHolder::save,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(48.dp)
+//            ) { Text(stringResource(R.string.save)) }
+//        }
     }
 }
 

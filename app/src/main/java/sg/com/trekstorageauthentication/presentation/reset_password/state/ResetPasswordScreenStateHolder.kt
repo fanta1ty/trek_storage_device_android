@@ -43,6 +43,10 @@ class ResetPasswordScreenStateHolder(
         viewModel.navigate()
     }
 
+    fun resetPassword() {
+        viewModel.sendBleData(Constants.RESET_PASSWORD_CHARACTERISTIC_UUID, byteArrayOf())
+    }
+
     fun save() {
         if (verifyCurrentPassword() && verifyPassword()) {
             clearFocus()
