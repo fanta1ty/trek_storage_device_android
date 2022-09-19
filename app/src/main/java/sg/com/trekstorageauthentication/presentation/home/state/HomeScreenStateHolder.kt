@@ -13,6 +13,5 @@ class HomeScreenStateHolder(
     }
 
     fun navigateResetPasswordScreen() {
-        viewModel.navigate(Screen.ResetPasswordScreen.route)
     }
 }

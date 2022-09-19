@@ -53,7 +53,6 @@ class MainViewModel @Inject constructor(
     private var authPassword = ""
 
     init {
-        Log.d("Debug", "init mainviewmodel")
         bleService.apply {
             setBleConnectionListener(this@MainViewModel::onBleConnectionListener)
             setBleDataResponseListener(this@MainViewModel::onBleDataResponseListener)
@@ -106,7 +105,7 @@ class MainViewModel @Inject constructor(
         _mainState.value = MainState()
     }
 
-    fun unlockTrekStorage(password: String) {
+    fun logIn(password: String) {
         this.authPassword = password
         sendBleData(Constants.UNLOCK_PASSWORD_CHARACTERISTIC_UUID, password.toByteArray())
     }
@@ -123,7 +122,7 @@ class MainViewModel @Inject constructor(
 
     private fun onBleDataResponseListener(response: Pair<BleResponseType, ByteArray>) {
         val (type, data) = response
-        Log.d("Debug", "onBleDataResponseListener: ${type.name}")
+        Log.d("HuyTest", "onBleDataResponseListener: ${type.name}")
         when (type) {
             BleResponseType.REGISTER_PASSWORD_SUCCESS -> {
                 showSnackbar(SnackbarEvent(context.getString(R.string.register_password_success)))
@@ -171,7 +170,7 @@ class MainViewModel @Inject constructor(
                         //User defined password
                         viewModelScope.launch {
                             authPassword = getStoredPassword(context)
-                            authPassword.takeIf { it.isNotEmpty() }?.let { unlockTrekStorage(it) }
+                            authPassword.takeIf { it.isNotEmpty() }?.let { logIn(it) }
                         }
                     }
 

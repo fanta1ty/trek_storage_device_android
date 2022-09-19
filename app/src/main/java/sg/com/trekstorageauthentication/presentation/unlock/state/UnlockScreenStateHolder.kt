@@ -29,12 +29,11 @@ class UnlockScreenStateHolder(
     fun authenticate() {
         if (isPasswordValid()) {
             clearFocus()
-            viewModel.unlockTrekStorage(_passwordState.value.input)
+            viewModel.logIn(_passwordState.value.input)
         }
     }
 
     fun navigateResetPasswordScreen() {
-        viewModel.navigate(Screen.ResetPasswordScreen.route)
     }
 
     private fun isPasswordValid(): Boolean {

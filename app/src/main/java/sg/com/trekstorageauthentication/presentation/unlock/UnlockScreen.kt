@@ -80,7 +80,7 @@ fun UnlockScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
-        ) { Text(stringResource(R.string.unlock)) }
+        ) { Text(stringResource(R.string.log_in)) }
     }
 }
 
