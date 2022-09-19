@@ -210,10 +210,10 @@ class BleServiceImpl(private val context: Context) : BleService {
         return when (responseType) {
             2 -> Pair(BleResponseType.REGISTER_PASSWORD_SUCCESS, byteArrayOf())
             3 -> Pair(BleResponseType.REGISTER_PASSWORD_FAIL, byteArrayOf())
-            4 -> Pair(BleResponseType.UNLOCK_PASSWORD_SUCCESS, byteArrayOf())
-            5 -> Pair(BleResponseType.UNLOCK_PASSWORD_FAIL, byteArrayOf())
-            6 -> Pair(BleResponseType.RESET_PASSWORD_SUCCESS, byteArrayOf())
-            7 -> Pair(BleResponseType.RESET_PASSWORD_FAIL, byteArrayOf())
+            4 -> Pair(BleResponseType.LOG_IN_SUCCESS, byteArrayOf())
+            5 -> Pair(BleResponseType.LOG_IN_FAIL, byteArrayOf())
+            6 -> Pair(BleResponseType.RESET_SETTINGS_SUCCESS, byteArrayOf())
+            7 -> Pair(BleResponseType.RESET_SETTINGS_FAIL, byteArrayOf())
             8 -> Pair(BleResponseType.LOG_OUT_SUCCESS, byteArrayOf())
             else -> Pair(BleResponseType.LOG_OUT_FAIL, byteArrayOf())
         }

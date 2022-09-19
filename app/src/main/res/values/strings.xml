@@ -34,4 +34,6 @@
     <string name="log_out_fail">Log Out Fail</string>
     <string name="reset_password_warning">Are you sure you want to erase all data on the Flash Drive to default factory settings?</string>
     <string name="confirm">Confirm</string>
+    <string name="dialog_loading_title">Please Wait…</string>
+    <string name="dialog_loading_content">Loading…</string>
 </resources>

@@ -6,7 +6,6 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import sg.com.trekstorageauthentication.R
-import sg.com.trekstorageauthentication.common.Constants
 import sg.com.trekstorageauthentication.presentation.MainViewModel
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextFieldState
 
@@ -42,11 +41,7 @@ class RegisterPasswordScreenStateHolder(
     fun save() {
         if (verifyPassword() && verifyConfirmPassword()) {
             clearFocus()
-            val password = _passwordState.value.input
-            viewModel.sendBleData(
-                Constants.REGISTER_PASSWORD_CHARACTERISTIC_UUID,
-                password.toByteArray()
-            )
+            viewModel.registerPassword(_passwordState.value.input)
         }
     }
 

@@ -95,10 +95,6 @@ class MainViewModel @Inject constructor(
         bleService.read(uuid)
     }
 
-    fun sendBleData(uuid: String, byteArray: ByteArray) {
-        bleService.write(uuid, byteArray)
-    }
-
     fun isLocationServiceEnabled() = bleService.isLocationServiceEnabled()
 
     fun resetMainState() {
@@ -106,15 +102,31 @@ class MainViewModel @Inject constructor(
     }
 
     fun logIn(password: String) {
+        showLoading()
         this.authPassword = password
-        sendBleData(Constants.UNLOCK_PASSWORD_CHARACTERISTIC_UUID, password.toByteArray())
+        bleService.write(Constants.LOG_IN_CHARACTERISTIC_UUID, password.toByteArray())
     }
 
     fun logOut() {
-        sendBleData(Constants.LOG_OUT_CHARACTERISTIC_UUID, "01".toByteArray())
+        showLoading()
+        bleService.write(Constants.LOG_OUT_CHARACTERISTIC_UUID, "01".toByteArray())
     }
 
-    fun navigate(route: String = "", popUpToRoute: String = "", isInclusive: Boolean = true) {
+    fun registerPassword(password: String) {
+        showLoading()
+        bleService.write(Constants.REGISTER_PASSWORD_CHARACTERISTIC_UUID, password.toByteArray())
+    }
+
+//    fun resetSettings() {
+//        showLoading()
+//        bleService.write(Constants.RESET_SETTINGS_CHARACTERISTIC_UUID, "01".toByteArray())
+//    }
+
+    private fun navigate(
+        route: String = "",
+        popUpToRoute: String = "",
+        isInclusive: Boolean = true
+    ) {
         viewModelScope.launch {
             _navigationEvent.send(NavigationEvent(route, popUpToRoute, isInclusive))
         }
@@ -133,25 +145,22 @@ class MainViewModel @Inject constructor(
                 showSnackbar(SnackbarEvent(context.getString(R.string.register_password_fail)))
             }
 
-            BleResponseType.RESET_PASSWORD_SUCCESS -> {
+            BleResponseType.RESET_SETTINGS_SUCCESS -> {
                 showSnackbar(SnackbarEvent(context.getString(R.string.reset_password_success)))
-                viewModelScope.launch {
-                    saveStoredPassword(context, "")
-                }
                 navigate(Screen.RegisterPasswordScreen.route, Screen.UnlockScreen.route, true)
             }
 
-            BleResponseType.RESET_PASSWORD_FAIL -> {
+            BleResponseType.RESET_SETTINGS_FAIL -> {
                 showSnackbar(SnackbarEvent(context.getString(R.string.reset_password_fail)))
             }
 
-            BleResponseType.UNLOCK_PASSWORD_SUCCESS -> {
+            BleResponseType.LOG_IN_SUCCESS -> {
                 viewModelScope.launch { saveStoredPassword(context, authPassword) }
                 showSnackbar(SnackbarEvent(context.getString(R.string.unlock_storage_success)))
                 navigate(Screen.HomeScreen.route, Screen.HomeScreen.route, true)
             }
 
-            BleResponseType.UNLOCK_PASSWORD_FAIL -> {
+            BleResponseType.LOG_IN_FAIL -> {
                 showSnackbar(SnackbarEvent(context.getString(R.string.unlock_storage_fail)))
             }
 
@@ -186,6 +195,8 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+
+        resetMainState()
     }
 
     private fun onBleConnectionListener(connectionState: BleConnectionState) {
@@ -216,5 +227,9 @@ class MainViewModel @Inject constructor(
 
     private fun performBiometricAuth() {
         viewModelScope.launch { _biometricAuthEvent.send(Unit) }
+    }
+
+    private fun showLoading() {
+        _mainState.value = _mainState.value.copy(isLoading = true)
     }
 }

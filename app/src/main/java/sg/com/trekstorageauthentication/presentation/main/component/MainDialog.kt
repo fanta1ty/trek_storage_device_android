@@ -42,4 +42,12 @@ fun MainDialog(
             onPositiveClickEvent = onBluetoothDisabledPositiveEvent
         )
     }
+
+    if (value.isLoading) {
+        LoadingDialog(
+            title = stringResource(R.string.dialog_loading_title),
+            content = stringResource(R.string.dialog_loading_content),
+            isCancellable = false
+        )
+    }
 }
