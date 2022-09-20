@@ -11,7 +11,6 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.FragmentActivity
@@ -24,7 +23,6 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import dagger.hilt.android.AndroidEntryPoint
 import sg.com.trekstorageauthentication.presentation.main.component.*
 import sg.com.trekstorageauthentication.presentation.main.state.MainStateHolder
-import sg.com.trekstorageauthentication.presentation.main.state.SnackbarEvent
 import sg.com.trekstorageauthentication.presentation.ui.navigation.NavGraph
 import sg.com.trekstorageauthentication.presentation.ui.theme.TrekStorageAuthenticationTheme
 
@@ -51,15 +49,9 @@ class MainActivity : FragmentActivity() {
                 ) {
                     MainLifecycleHandler(stateHolder::connectBle)
 
-                    MainEventRegisterHandler(
-                        stateHolder::registerBiometricAuthEvent,
-                        stateHolder::registerNavigationEvent
-                    )
+                    MainEventRegisterHandler(stateHolder::registerNavigationEvent)
 
-                    MainSnackbarHandler(
-                        stateHolder.getSnackbarEvent().collectAsState(SnackbarEvent("")),
-                        stateHolder.scaffoldState
-                    )
+                    MainSnackbarHandler(stateHolder.getSnackbarEvent(), stateHolder.scaffoldState)
 
                     NavGraph(stateHolder.navController)
 

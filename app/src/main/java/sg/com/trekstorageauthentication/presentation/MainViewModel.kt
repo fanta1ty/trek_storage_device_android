@@ -11,6 +11,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import sg.com.trekstorageauthentication.R
@@ -44,8 +46,8 @@ class MainViewModel @Inject constructor(
     private val _snackbarEvent = Channel<SnackbarEvent>()
     val snackbarEvent = _snackbarEvent.receiveAsFlow()
 
-    private val _biometricAuthEvent = Channel<Unit>()
-    val biometricAuthEvent = _biometricAuthEvent.receiveAsFlow()
+    private val _biometricAuthEvent = MutableSharedFlow<Unit>()
+    val biometricAuthEvent = _biometricAuthEvent.asSharedFlow()
 
     private val _navigationEvent = Channel<NavigationEvent>()
     val navigationEvent = _navigationEvent.receiveAsFlow()
@@ -91,14 +93,15 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun readBleData(uuid: String) {
-        bleService.read(uuid)
-    }
-
     fun isLocationServiceEnabled() = bleService.isLocationServiceEnabled()
 
     fun resetMainState() {
         _mainState.value = MainState()
+    }
+
+    fun getPasswordStatus() {
+        showLoading()
+        bleService.read(Constants.READ_PASSWORD_STATUS_CHARACTERISTIC_UUID)
     }
 
     fun logIn(password: String) {
@@ -175,20 +178,18 @@ class MainViewModel @Inject constructor(
 
             else -> { //BleResponseType.PASSWORD_STATUS
                 when (String(data).toInt()) {
-                    0 -> {
-                        //User defined password
+                    0 -> { //User defined password
                         viewModelScope.launch {
                             authPassword = getStoredPassword(context)
                             authPassword.takeIf { it.isNotEmpty() }?.let { logIn(it) }
                         }
                     }
 
-                    1 -> {
-                        //Default password
+                    1 -> { //Default password
                         navigate(Screen.RegisterPasswordScreen.route, Screen.UnlockScreen.route)
                     }
 
-                    else -> {
+                    else -> { //Not Trek device
                         val msg = context.getString(R.string.no_trek_devices_found)
                         showSnackbar(SnackbarEvent(msg))
                     }
@@ -219,14 +220,11 @@ class MainViewModel @Inject constructor(
     }
 
     private fun showSnackbar(event: SnackbarEvent) {
-        viewModelScope.launch {
-            val (msg, duration) = event
-            _snackbarEvent.send(SnackbarEvent(msg, duration))
-        }
+        viewModelScope.launch { _snackbarEvent.send(event) }
     }
 
     private fun performBiometricAuth() {
-        viewModelScope.launch { _biometricAuthEvent.send(Unit) }
+        viewModelScope.launch { _biometricAuthEvent.emit(Unit) }
     }
 
     private fun showLoading() {

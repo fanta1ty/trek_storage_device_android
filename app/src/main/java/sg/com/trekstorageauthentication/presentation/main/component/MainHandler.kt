@@ -4,22 +4,17 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import sg.com.trekstorageauthentication.presentation.main.state.SnackbarEvent
 
 @Composable
-fun MainEventRegisterHandler(
-    biometricAuthEvent: suspend () -> Unit,
-    navigationEvent: suspend () -> Unit,
-) {
-    LaunchedEffect(key1 = true) {
-        launch { biometricAuthEvent() }
-        launch { navigationEvent() }
-    }
+fun MainEventRegisterHandler(navigationEvent: suspend () -> Unit) {
+    LaunchedEffect(key1 = true) { launch { navigationEvent() } }
 }
 
 @Composable
@@ -39,16 +34,18 @@ fun MainLifecycleHandler(connectBle: () -> Unit) {
 
 @Composable
 fun MainSnackbarHandler(
-    snackbarEventState: State<SnackbarEvent>,
+    snackbarEvent: Flow<SnackbarEvent>,
     scaffoldState: ScaffoldState
 ) {
-    val snackbarEvent = snackbarEventState.value
-    LaunchedEffect(key1 = snackbarEvent) {
-        val msg = snackbarEvent.msg
-        val duration = snackbarEvent.duration
-        if (msg.isNotEmpty()) {
-            //launch { scaffoldState.snackbarHostState.showSnackbar(msg, duration = duration) }
-            scaffoldState.snackbarHostState.showSnackbar(msg, duration = duration)
+    LaunchedEffect(key1 = true) {
+        var job: Job? = null
+        snackbarEvent.collect { (msg, duration) ->
+            job?.cancel()
+            if (msg.isNotEmpty()) {
+                job = launch {
+                    scaffoldState.snackbarHostState.showSnackbar(msg, duration = duration)
+                }
+            }
         }
     }
 }
