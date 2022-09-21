@@ -99,9 +99,8 @@ class MainViewModel @Inject constructor(
         _mainState.value = MainState()
     }
 
-    fun getPasswordStatus() {
-        showLoading()
-        bleService.read(Constants.READ_PASSWORD_STATUS_CHARACTERISTIC_UUID)
+    fun checkAlreadyLogIn() {
+        bleService.read(Constants.NOTIFICATION_CHARACTERISTIC_UUID)
     }
 
     fun logIn(password: String) {
@@ -136,9 +135,21 @@ class MainViewModel @Inject constructor(
     }
 
     private fun onBleDataResponseListener(response: Pair<BleResponseType, ByteArray>) {
+        resetMainState()
         val (type, data) = response
+
         Log.d("HuyTest", "onBleDataResponseListener: ${type.name}")
+
         when (type) {
+            BleResponseType.ALREADY_LOG_IN -> {
+                navigate(Screen.HomeScreen.route, Screen.UnlockScreen.route)
+            }
+
+            BleResponseType.NOT_ALREADY_LOG_IN -> {
+                showLoading()
+                bleService.read(Constants.READ_PASSWORD_STATUS_CHARACTERISTIC_UUID)
+            }
+
             BleResponseType.REGISTER_PASSWORD_SUCCESS -> {
                 showSnackbar(SnackbarEvent(context.getString(R.string.register_password_success)))
                 navigate(Screen.UnlockScreen.route, Screen.RegisterPasswordScreen.route)
@@ -195,8 +206,6 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
-
-        resetMainState()
     }
 
     private fun onBleConnectionListener(connectionState: BleConnectionState) {
@@ -229,8 +238,13 @@ class MainViewModel @Inject constructor(
     private fun showLoading() {
         _mainState.value = _mainState.value.copy(isLoading = true)
     }
+
+    override fun onCleared() {
+        bleService.close()
+        super.onCleared()
+    }
 }
 
 //TODO: Check register password pattern
 //TODO: Check Trek storage not found dialog
-//TODO: Check BleService custom coroutine scope (research)
+//TODO: Research BleService custom coroutine scope

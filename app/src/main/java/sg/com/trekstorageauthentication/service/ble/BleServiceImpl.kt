@@ -163,9 +163,7 @@ class BleServiceImpl(private val context: Context) : BleService {
                 characteristic: BluetoothGattCharacteristic?,
                 status: Int
             ) {
-                characteristic?.apply {
-                    bleDataResponseListener?.invoke(Pair(BleResponseType.PASSWORD_STATUS, value))
-                }
+                characteristic?.apply { onCharacteristicReadResponse(uuid.toString(), value) }
             }
 
             //Android 13 API
@@ -175,15 +173,7 @@ class BleServiceImpl(private val context: Context) : BleService {
                 value: ByteArray,
                 status: Int
             ) {
-                bleDataResponseListener?.invoke(Pair(BleResponseType.PASSWORD_STATUS, value))
-            }
-
-            override fun onCharacteristicWrite(
-                gatt: BluetoothGatt?,
-                characteristic: BluetoothGattCharacteristic?,
-                status: Int
-            ) {
-                if (status != 0) close()
+                onCharacteristicReadResponse(characteristic.uuid.toString(), value)
             }
         }
     }
@@ -216,6 +206,25 @@ class BleServiceImpl(private val context: Context) : BleService {
             7 -> Pair(BleResponseType.RESET_SETTINGS_FAIL, byteArrayOf())
             8 -> Pair(BleResponseType.LOG_OUT_SUCCESS, byteArrayOf())
             else -> Pair(BleResponseType.LOG_OUT_FAIL, byteArrayOf())
+        }
+    }
+
+    private fun onCharacteristicReadResponse(uuid: String, value: ByteArray) {
+        when (uuid) {
+            Constants.NOTIFICATION_CHARACTERISTIC_UUID -> {
+                val responseType = if (String(value).toInt() == 4)
+                    BleResponseType.ALREADY_LOG_IN
+                else
+                    BleResponseType.NOT_ALREADY_LOG_IN
+
+                bleDataResponseListener?.invoke(Pair(responseType, byteArrayOf()))
+            }
+
+            Constants.READ_PASSWORD_STATUS_CHARACTERISTIC_UUID -> {
+                bleDataResponseListener?.invoke(Pair(BleResponseType.PASSWORD_STATUS, value))
+            }
+
+            else -> Unit
         }
     }
 

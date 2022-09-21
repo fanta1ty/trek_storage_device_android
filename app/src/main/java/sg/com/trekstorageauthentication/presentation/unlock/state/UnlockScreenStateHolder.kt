@@ -40,7 +40,7 @@ class UnlockScreenStateHolder(
         viewModel.biometricAuthEvent.collect {
             val isBiometricAuthenticationReady = isBiometricAuthenticationReady()
             if (!isBiometricAuthenticationReady) {
-                viewModel.getPasswordStatus()
+                viewModel.checkAlreadyLogIn()
                 return@collect
             }
 
@@ -57,7 +57,7 @@ class UnlockScreenStateHolder(
                 executor,
                 object : BiometricPrompt.AuthenticationCallback() {
                     override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                        viewModel.getPasswordStatus()
+                        viewModel.checkAlreadyLogIn()
                     }
                 }).apply { authenticate(promptInfo) }
         }
