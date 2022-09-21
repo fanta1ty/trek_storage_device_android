@@ -7,10 +7,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalConfiguration
@@ -24,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.presentation.MainViewModel
-import sg.com.trekstorageauthentication.presentation.ui.common.noRippleClickable
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextField
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextFieldState
 import sg.com.trekstorageauthentication.presentation.unlock.state.UnlockScreenStateHolder
@@ -57,21 +54,6 @@ fun UnlockScreen() {
             modifier = Modifier.fillMaxWidth(),
             keyboardActions = KeyboardActions { stateHolder.clearFocus() }
         )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.CenterEnd
-        ) {
-            Text(
-                stringResource(R.string.reset_your_password),
-                color = MaterialTheme.colors.primary,
-                modifier = Modifier.noRippleClickable(
-                    onClick = stateHolder::resetSettings
-                )
-            )
-        }
 
         Spacer(modifier = Modifier.height(24.dp))
 

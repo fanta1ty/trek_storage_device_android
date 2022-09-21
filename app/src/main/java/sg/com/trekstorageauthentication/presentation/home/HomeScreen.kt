@@ -3,14 +3,13 @@ package sg.com.trekstorageauthentication.presentation.home
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -19,7 +18,9 @@ import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.presentation.MainViewModel
+import sg.com.trekstorageauthentication.presentation.home.component.HomeDialog
 import sg.com.trekstorageauthentication.presentation.home.state.HomeScreenStateHolder
+import sg.com.trekstorageauthentication.presentation.home.state.HomeState
 
 @Composable
 fun HomeScreen() {
@@ -27,9 +28,7 @@ fun HomeScreen() {
 
     Column(
         modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .fillMaxWidth()
-            .height(LocalConfiguration.current.screenHeightDp.dp)
+            .fillMaxSize()
             .padding(16.dp)
     ) {
         Image(
@@ -41,7 +40,7 @@ fun HomeScreen() {
         )
 
         Button(
-            onClick = stateHolder::logOut,
+            onClick = stateHolder::showConfirmLogOutDialog,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
@@ -50,18 +49,26 @@ fun HomeScreen() {
         Spacer(modifier = Modifier.height(12.dp))
 
         Button(
-            onClick = stateHolder::navigateResetPasswordScreen,
+            onClick = stateHolder::showConfirmResetSettingsDialog,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
         ) { Text(stringResource(R.string.reset_password)) }
+
+        HomeDialog(
+            stateHolder.homeState,
+            stateHolder::logOut,
+            stateHolder::resetSettings,
+            stateHolder::resetHomeState
+        )
     }
 }
 
 @Composable
 private fun rememberHomeScreenStateHolder(
     context: Context = LocalContext.current,
-    viewModel: MainViewModel = hiltViewModel(context as FragmentActivity)
+    viewModel: MainViewModel = hiltViewModel(context as FragmentActivity),
+    homeState: MutableState<HomeState> = mutableStateOf(HomeState())
 ): HomeScreenStateHolder {
-    return remember { HomeScreenStateHolder(context, viewModel) }
+    return remember { HomeScreenStateHolder(viewModel, homeState) }
 }

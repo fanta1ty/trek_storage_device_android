@@ -36,10 +36,6 @@ class UnlockScreenStateHolder(
         }
     }
 
-    fun resetSettings() {
-        //Show reset settings confirm dialog
-    }
-
     suspend fun registerBiometricAuthEvent() {
         viewModel.biometricAuthEvent.collect {
             val isBiometricAuthenticationReady = isBiometricAuthenticationReady()

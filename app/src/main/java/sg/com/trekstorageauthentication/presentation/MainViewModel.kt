@@ -149,18 +149,18 @@ class MainViewModel @Inject constructor(
             }
 
             BleResponseType.RESET_SETTINGS_SUCCESS -> {
-                showSnackbar(SnackbarEvent(context.getString(R.string.reset_password_success)))
-                navigate(Screen.RegisterPasswordScreen.route, Screen.UnlockScreen.route, true)
+                viewModelScope.launch { saveStoredPassword(context, "") }
+                navigate(Screen.RegisterPasswordScreen.route, Screen.HomeScreen.route)
             }
 
             BleResponseType.RESET_SETTINGS_FAIL -> {
-                showSnackbar(SnackbarEvent(context.getString(R.string.reset_password_fail)))
+                showSnackbar(SnackbarEvent(context.getString(R.string.reset_settings_fail)))
             }
 
             BleResponseType.LOG_IN_SUCCESS -> {
                 viewModelScope.launch { saveStoredPassword(context, authPassword) }
                 showSnackbar(SnackbarEvent(context.getString(R.string.unlock_storage_success)))
-                navigate(Screen.HomeScreen.route, Screen.HomeScreen.route, true)
+                navigate(Screen.HomeScreen.route, Screen.UnlockScreen.route)
             }
 
             BleResponseType.LOG_IN_FAIL -> {
@@ -168,8 +168,7 @@ class MainViewModel @Inject constructor(
             }
 
             BleResponseType.LOG_OUT_SUCCESS -> {
-                showSnackbar(SnackbarEvent(context.getString(R.string.log_out_success)))
-                navigate(Screen.UnlockScreen.route, Screen.UnlockScreen.route, true)
+                navigate(Screen.UnlockScreen.route, Screen.HomeScreen.route)
             }
 
             BleResponseType.LOG_OUT_FAIL -> {
@@ -231,3 +230,7 @@ class MainViewModel @Inject constructor(
         _mainState.value = _mainState.value.copy(isLoading = true)
     }
 }
+
+//TODO: Check register password pattern
+//TODO: Check Trek storage not found dialog
+//TODO: Check BleService custom coroutine scope (research)
