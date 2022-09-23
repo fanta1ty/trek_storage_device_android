@@ -245,6 +245,5 @@ class MainViewModel @Inject constructor(
     }
 }
 
-//TODO: Check register password pattern
 //TODO: Check Trek storage not found dialog
 //TODO: Research BleService custom coroutine scope

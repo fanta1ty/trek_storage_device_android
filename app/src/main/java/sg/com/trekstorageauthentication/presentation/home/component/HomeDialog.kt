@@ -20,7 +20,8 @@ fun HomeDialog(
             content = stringResource(R.string.dialog_log_out_content),
             positiveButtonText = R.string.confirm,
             onPositiveClickEvent = logOut,
-            onNegativeClickEvent = dismissDialog
+            onNegativeClickEvent = dismissDialog,
+            onDismissRequest = dismissDialog
         )
     }
 
@@ -30,7 +31,8 @@ fun HomeDialog(
             content = stringResource(R.string.dialog_reset_settings_content),
             positiveButtonText = R.string.confirm,
             onPositiveClickEvent = resetSettings,
-            onNegativeClickEvent = dismissDialog
+            onNegativeClickEvent = dismissDialog,
+            onDismissRequest = dismissDialog
         )
     }
 }

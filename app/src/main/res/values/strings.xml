@@ -6,6 +6,8 @@
     <string name="dialog_biometric_authentication_description">Please authenticate to continue.</string>
     <string name="error_field_empty">This field cannot be empty</string>
     <string name="error_password_invalid_length">Your password must be at least 8 characters</string>
+    <string name="error_password_invalid_space">Password cannot contain empty spaces</string>
+    <string name="error_password_invalid_pattern">Password must contain a mix of alphanumeric, upper/lowercase and special characters</string>
     <string name="save">Save</string>
     <string name="permission_required">Permission Required</string>
     <string name="permission_permanent_denied_msg">Without your permission to access location the app is unable to scan for nearby bluetooth devices.\nPlease grant the required permissions in the app settings.</string>
@@ -32,7 +34,7 @@
     <string name="dialog_log_out_title">Log Out Confirmation</string>
     <string name="dialog_log_out_content">Are you sure you want to lock your Trek device and return to log in screen?</string>
     <string name="dialog_reset_settings_title">Reset Settings Confirmation</string>
-    <string name="dialog_reset_settings_content">Are you sure you want to erase all data on the Flash Drive to default factory settings?</string>
+    <string name="dialog_reset_settings_content">Are you sure you want to erase all data on your Trek device and reset it back to default factory settings?</string>
     <string name="confirm">Confirm</string>
     <string name="dialog_loading_title">Please Wait…</string>
     <string name="dialog_loading_content">Loading…</string>

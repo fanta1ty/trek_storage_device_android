@@ -8,6 +8,7 @@ import androidx.compose.ui.focus.FocusManager
 import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.presentation.MainViewModel
 import sg.com.trekstorageauthentication.presentation.ui.common.textfield.PasswordTextFieldState
+import java.util.regex.Pattern
 
 class RegisterPasswordScreenStateHolder(
     private val context: Context,
@@ -21,6 +22,10 @@ class RegisterPasswordScreenStateHolder(
 
     val confirmPasswordState: State<PasswordTextFieldState>
         get() = _confirmPasswordState
+
+    private val passwordPattern = Pattern.compile(
+        "(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[`~!@#$%^&*()-_+={}|;:',.<>/?\\[\\]\"\\\\])"
+    )
 
     fun setPasswordStateValue(value: String) {
         _passwordState.value = _passwordState.value.copy(input = value)
@@ -53,6 +58,12 @@ class RegisterPasswordScreenStateHolder(
 
             if (password.length < 8)
                 throw RuntimeException(context.getString(R.string.error_password_invalid_length))
+
+            if (password.contains(' '))
+                throw RuntimeException(context.getString(R.string.error_password_invalid_space))
+
+            if (!passwordPattern.matcher(password).find())
+                throw RuntimeException(context.getString(R.string.error_password_invalid_pattern))
 
             if (_passwordState.value.isError)
                 _passwordState.value = PasswordTextFieldState(input = password)
