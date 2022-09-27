@@ -18,9 +18,9 @@ import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.presentation.MainViewModel
-import sg.com.trekstorageauthentication.presentation.home.component.HomeDialog
 import sg.com.trekstorageauthentication.presentation.home.state.HomeScreenStateHolder
 import sg.com.trekstorageauthentication.presentation.home.state.HomeState
+import sg.com.trekstorageauthentication.presentation.ui.common.Dialog
 
 @Composable
 fun HomeScreen() {
@@ -46,21 +46,16 @@ fun HomeScreen() {
                 .height(48.dp)
         ) { Text(stringResource(R.string.log_out)) }
 
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Button(
-            onClick = stateHolder::showConfirmResetSettingsDialog,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp)
-        ) { Text(stringResource(R.string.reset_password)) }
-
-        HomeDialog(
-            stateHolder.homeState,
-            stateHolder::logOut,
-            stateHolder::resetSettings,
-            stateHolder::resetHomeState
-        )
+        if (stateHolder.homeState.value.isShowConfirmLogOutDialog) {
+            Dialog(
+                title = stringResource(R.string.dialog_log_out_title),
+                content = stringResource(R.string.dialog_log_out_content),
+                positiveButtonText = R.string.confirm,
+                onPositiveClickEvent = stateHolder::logOut,
+                onNegativeClickEvent = stateHolder::resetHomeState,
+                onDismissRequest = stateHolder::resetHomeState
+            )
+        }
     }
 }
 

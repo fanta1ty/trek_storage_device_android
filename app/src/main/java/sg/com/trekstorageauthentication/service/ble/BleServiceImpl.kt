@@ -89,6 +89,7 @@ class BleServiceImpl(private val context: Context) : BleService {
     override fun isBluetoothEnabled(): Boolean {
         val bluetoothManager =
             context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+
         return bluetoothManager.adapter.isEnabled
     }
 

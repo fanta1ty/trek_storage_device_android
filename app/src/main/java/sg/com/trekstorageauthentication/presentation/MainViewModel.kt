@@ -52,8 +52,6 @@ class MainViewModel @Inject constructor(
     private val _navigationEvent = Channel<NavigationEvent>()
     val navigationEvent = _navigationEvent.receiveAsFlow()
 
-    private var authPassword = ""
-
     init {
         bleService.apply {
             setBleConnectionListener(this@MainViewModel::onBleConnectionListener)
@@ -105,7 +103,6 @@ class MainViewModel @Inject constructor(
 
     fun logIn(password: String) {
         showLoading()
-        this.authPassword = password
         bleService.write(Constants.LOG_IN_CHARACTERISTIC_UUID, password.toByteArray())
     }
 
@@ -116,7 +113,10 @@ class MainViewModel @Inject constructor(
 
     fun registerPassword(password: String) {
         showLoading()
-        bleService.write(Constants.REGISTER_PASSWORD_CHARACTERISTIC_UUID, password.toByteArray())
+        val uniqueId = generateUniqueIdentifier()
+        viewModelScope.launch { saveStoredPassword(context, uniqueId) }
+        val request = "$password\r\n$uniqueId".toByteArray()
+        bleService.write(Constants.REGISTER_PASSWORD_CHARACTERISTIC_UUID, request)
     }
 
 //    fun resetSettings() {
@@ -152,7 +152,7 @@ class MainViewModel @Inject constructor(
 
             BleResponseType.REGISTER_PASSWORD_SUCCESS -> {
                 showSnackbar(SnackbarEvent(context.getString(R.string.register_password_success)))
-                navigate(Screen.UnlockScreen.route, Screen.RegisterPasswordScreen.route)
+                navigate(Screen.HomeScreen.route, Screen.RegisterPasswordScreen.route)
             }
 
             BleResponseType.REGISTER_PASSWORD_FAIL -> {
@@ -169,7 +169,6 @@ class MainViewModel @Inject constructor(
             }
 
             BleResponseType.LOG_IN_SUCCESS -> {
-                viewModelScope.launch { saveStoredPassword(context, authPassword) }
                 showSnackbar(SnackbarEvent(context.getString(R.string.unlock_storage_success)))
                 navigate(Screen.HomeScreen.route, Screen.UnlockScreen.route)
             }
@@ -188,14 +187,13 @@ class MainViewModel @Inject constructor(
 
             else -> { //BleResponseType.PASSWORD_STATUS
                 when (String(data).toInt()) {
-                    0 -> { //User defined password
+                    0 -> { ////User have already set their own password
                         viewModelScope.launch {
-                            authPassword = getStoredPassword(context)
-                            authPassword.takeIf { it.isNotEmpty() }?.let { logIn(it) }
+                            getStoredPassword(context).takeIf { it.isNotEmpty() }?.let { logIn(it) }
                         }
                     }
 
-                    1 -> { //Default password
+                    1 -> { //User haven't set their own password
                         navigate(Screen.RegisterPasswordScreen.route, Screen.UnlockScreen.route)
                     }
 
@@ -246,4 +244,3 @@ class MainViewModel @Inject constructor(
 }
 
 //TODO: Check Trek storage not found dialog
-//TODO: Research BleService custom coroutine scope

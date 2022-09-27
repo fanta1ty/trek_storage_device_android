@@ -19,7 +19,7 @@
     <string name="disconnected">Disconnected</string>
     <string name="reconnect">Reconnect</string>
     <string name="reset_password">Reset Password</string>
-    <string name="register_password">Register Password</string>
+    <string name="register_password">Register Reset Password</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="confirm_password_not_match">Doesn\'t match the password above</string>
