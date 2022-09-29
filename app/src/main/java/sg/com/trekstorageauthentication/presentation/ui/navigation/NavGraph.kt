@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import sg.com.trekstorageauthentication.presentation.device_selection.DeviceSelectionScreen
 import sg.com.trekstorageauthentication.presentation.home.HomeScreen
 import sg.com.trekstorageauthentication.presentation.register_password.RegisterPasswordScreen
 import sg.com.trekstorageauthentication.presentation.reset.ResetScreen
@@ -15,6 +16,10 @@ fun NavGraph(navController: NavHostController) {
         navController = navController,
         startDestination = Screen.UnlockScreen.route
     ) {
+        composable(route = Screen.DeviceSelectionScreen.route) {
+            DeviceSelectionScreen()
+        }
+
         composable(route = Screen.RegisterPasswordScreen.route) {
             RegisterPasswordScreen()
         }
