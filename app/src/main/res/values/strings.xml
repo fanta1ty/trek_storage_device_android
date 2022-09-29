@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Trek Storage Authentication</string>
     <string name="enter_password">Enter Password</string>
-    <string name="log_in">Log In</string>
+    <string name="login">Login</string>
     <string name="dialog_biometric_authentication_title">Biometric Authentication</string>
     <string name="dialog_biometric_authentication_description">Please authenticate to continue.</string>
     <string name="error_field_empty">This field cannot be empty</string>
@@ -18,6 +18,7 @@
     <string name="connecting">Connecting</string>
     <string name="disconnected">Disconnected</string>
     <string name="reconnect">Reconnect</string>
+    <string name="reset">Reset</string>
     <string name="reset_password">Reset Password</string>
     <string name="register_password">Register Reset Password</string>
     <string name="password">Password</string>

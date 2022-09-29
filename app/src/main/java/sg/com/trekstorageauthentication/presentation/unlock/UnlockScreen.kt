@@ -49,25 +49,16 @@ fun UnlockScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
-        ) { Text(stringResource(R.string.log_in)) }
+        ) { Text(stringResource(R.string.login)) }
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = stateHolder::authenticate,
+            onClick = stateHolder::navigateResetScreen,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
-        ) { Text(stringResource(R.string.log_in)) }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            onClick = stateHolder::authenticate,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp)
-        ) { Text(stringResource(R.string.log_in)) }
+        ) { Text(stringResource(R.string.reset)) }
     }
 }
 

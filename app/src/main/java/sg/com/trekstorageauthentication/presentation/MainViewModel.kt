@@ -124,7 +124,7 @@ class MainViewModel @Inject constructor(
 //        bleService.write(Constants.RESET_SETTINGS_CHARACTERISTIC_UUID, "01".toByteArray())
 //    }
 
-    private fun navigate(
+    fun navigate(
         route: String = "",
         popUpToRoute: String = "",
         isInclusive: Boolean = true
@@ -187,7 +187,7 @@ class MainViewModel @Inject constructor(
 
             else -> { //BleResponseType.PASSWORD_STATUS
                 when (String(data).toInt()) {
-                    0 -> { ////User have already set their own password
+                    0 -> { //User have already set their own password
                         viewModelScope.launch {
                             getStoredPassword(context).takeIf { it.isNotEmpty() }?.let { logIn(it) }
                         }

@@ -3,9 +3,11 @@
 package sg.com.trekstorageauthentication.presentation
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarHost
@@ -28,9 +30,12 @@ import sg.com.trekstorageauthentication.presentation.ui.theme.TrekStorageAuthent
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
+    private lateinit var passcodeActivityResultLauncher: ActivityResultLauncher<Intent>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestedOrientation = Configuration.ORIENTATION_PORTRAIT
+        registerPasscodeActivityResultLauncher()
 
         setContent {
             TrekStorageAuthenticationTheme {
@@ -65,6 +70,15 @@ class MainActivity : FragmentActivity() {
             }
         }
     }
+
+    override fun onDestroy() {
+        passcodeActivityResultLauncher.unregister()
+        super.onDestroy()
+    }
+
+    private fun registerPasscodeActivityResultLauncher() {
+
+    }
 }
 
 @Composable
@@ -79,12 +93,6 @@ private fun rememberMainStateHolder(
     )
 ): MainStateHolder {
     return remember {
-        MainStateHolder(
-            context,
-            viewModel,
-            scaffoldState,
-            navController,
-            multiplePermissionsState
-        )
+        MainStateHolder(context, viewModel, scaffoldState, navController, multiplePermissionsState)
     }
 }
