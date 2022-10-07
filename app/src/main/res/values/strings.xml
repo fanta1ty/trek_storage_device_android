@@ -39,4 +39,7 @@
     <string name="confirm">Confirm</string>
     <string name="dialog_loading_title">Please Wait…</string>
     <string name="dialog_loading_content">Loading…</string>
+
+    <string name="scanning_devices">Scanning Devices</string>
+    <string name="start_scanning">Start Scanning</string>
 </resources>

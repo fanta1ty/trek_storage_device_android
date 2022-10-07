@@ -242,5 +242,3 @@ class MainViewModel @Inject constructor(
         super.onCleared()
     }
 }
-
-//TODO: Check Trek storage not found dialog

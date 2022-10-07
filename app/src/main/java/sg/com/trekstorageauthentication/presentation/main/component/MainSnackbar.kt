@@ -9,23 +9,10 @@ import sg.com.trekstorageauthentication.presentation.ui.common.Snackbar
 import sg.com.trekstorageauthentication.presentation.ui.theme.GreenA400
 
 @Composable
-fun MainSnackbar(
-    msg: String,
-    connectBle: () -> Unit
-) {
+fun MainSnackbar(msg: String) {
     when (msg) {
         stringResource(R.string.connecting) -> {
             Snackbar(msg, backgroundColor = MaterialTheme.colors.primary)
-        }
-
-        stringResource(R.string.disconnected) -> {
-            Snackbar(
-                msg,
-                backgroundColor = Color.Red,
-                actionLabel = stringResource(R.string.reconnect),
-                actionColor = Color.Yellow,
-                actionEvent = connectBle
-            )
         }
 
         stringResource(R.string.register_password_success),

@@ -1,9 +1,44 @@
 package sg.com.trekstorageauthentication.presentation.device_selection.state
 
-import sg.com.trekstorageauthentication.presentation.MainViewModel
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.MultiplePermissionsState
+import sg.com.trekstorageauthentication.presentation.device_selection.DeviceSelectionViewModel
 
+@OptIn(ExperimentalPermissionsApi::class)
 class DeviceSelectionScreenStateHolder(
-    private val viewModel: MainViewModel
+    private val context: Context,
+    val viewModel: DeviceSelectionViewModel,
+    private val multiplePermissionsState: MultiplePermissionsState
 ) {
+    fun connectBle() {
+        if (multiplePermissionsState.allPermissionsGranted) {
+            viewModel.connectBle(true)
+        } else {
+            multiplePermissionsState.launchMultiplePermissionRequest()
+        }
+    }
 
+    fun navigateToAppPermissionSettings() {
+        //dismissDialog()
+        val intent = Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.parse("package:${context.packageName}")
+        )
+        intent.addCategory(Intent.CATEGORY_DEFAULT)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+    }
+
+    fun navigateToLocationServiceSettings() {
+        //dismissDialog()
+        if (!viewModel.isLocationServiceEnabled()) {
+            context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+        } else {
+            viewModel.connectBle(true)
+        }
+    }
 }

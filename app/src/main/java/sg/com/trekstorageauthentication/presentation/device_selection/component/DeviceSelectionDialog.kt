@@ -1,4 +1,4 @@
-package sg.com.trekstorageauthentication.presentation.main.component
+package sg.com.trekstorageauthentication.presentation.device_selection.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -8,7 +8,7 @@ import sg.com.trekstorageauthentication.presentation.main.state.MainState
 import sg.com.trekstorageauthentication.presentation.ui.common.Dialog
 
 @Composable
-fun MainDialog(
+fun DeviceSelectionDialog(
     state: State<MainState>,
     onPermissionPositiveEvent: () -> Unit,
     onLocationDisabledPositiveEvent: () -> Unit,
@@ -40,14 +40,6 @@ fun MainDialog(
             content = stringResource(R.string.bluetooth_disabled_msg),
             isCancellable = false,
             onPositiveClickEvent = onBluetoothDisabledPositiveEvent
-        )
-    }
-
-    if (value.isLoading) {
-        LoadingDialog(
-            title = stringResource(R.string.dialog_loading_title),
-            content = stringResource(R.string.dialog_loading_content),
-            isCancellable = false
         )
     }
 }

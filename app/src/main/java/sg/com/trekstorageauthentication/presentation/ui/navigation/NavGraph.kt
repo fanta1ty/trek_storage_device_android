@@ -14,7 +14,7 @@ import sg.com.trekstorageauthentication.presentation.unlock.UnlockScreen
 fun NavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Screen.UnlockScreen.route
+        startDestination = Screen.DeviceSelectionScreen.route
     ) {
         composable(route = Screen.DeviceSelectionScreen.route) {
             DeviceSelectionScreen()
