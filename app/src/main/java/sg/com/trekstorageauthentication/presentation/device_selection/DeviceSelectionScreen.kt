@@ -5,6 +5,7 @@ package sg.com.trekstorageauthentication.presentation.device_selection
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -27,27 +28,46 @@ fun DeviceSelectionScreen() {
     val stateHolder = rememberDeviceSelectionScreenStateHolder()
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxSize()
+    ) {
 
-        ) {
-
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
                 .background(color = MaterialTheme.colors.primary)
                 .padding(horizontal = 16.dp),
-            contentAlignment = Alignment.CenterStart
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(stringResource(R.string.scanning_devices))
-        }
+            Text(
+                stringResource(R.string.scanning_devices),
+                style = MaterialTheme.typography.h4,
+                color = MaterialTheme.colors.onPrimary
+            )
 
-        TextButton(onClick = {
-            stateHolder.connectBle()
-        }) {
-            Text(stringResource(R.string.start_scanning))
+            Row(
+                modifier = Modifier.fillMaxHeight(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .width(24.dp)
+                        .height(24.dp),
+                    color = MaterialTheme.colors.onPrimary,
+                    strokeWidth = 2.dp
+                )
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                TextButton(onClick = { }) {
+                    Text(
+                        "SCAN",
+                        style = MaterialTheme.typography.h4,
+                        color = MaterialTheme.colors.onPrimary
+                    )
+                }
+            }
         }
 
 //        LazyColumn(content = {
@@ -56,13 +76,6 @@ fun DeviceSelectionScreen() {
 //            }
 //        })
     }
-
-//    DeviceSelectionDialog(
-//        state =,
-//        onPermissionPositiveEvent = { },
-//        onLocationDisabledPositiveEvent = { },
-//        onBluetoothDisabledPositiveEvent = { }
-//    )
 }
 
 @Composable

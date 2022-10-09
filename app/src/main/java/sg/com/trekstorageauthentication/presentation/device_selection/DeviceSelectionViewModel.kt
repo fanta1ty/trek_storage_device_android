@@ -3,12 +3,10 @@ package sg.com.trekstorageauthentication.presentation.device_selection
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.content.Context
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.*
-import sg.com.trekstorageauthentication.presentation.device_selection.state.DeviceSelectionDialogState
 import sg.com.trekstorageauthentication.service.ble.BleService
 import sg.com.trekstorageauthentication.service.permission.PermissionService
 import sg.com.trekstorageauthentication.service.permission.StoragePermissionServiceImpl
@@ -21,18 +19,12 @@ class DeviceSelectionViewModel @Inject constructor(
     private val bleService: BleService
 ) : ViewModel(), PermissionService by StoragePermissionServiceImpl() {
 
-    private val dialogHandler = MutableStateFlow(DeviceSelectionDialogState())
-    private val isScanning = MutableStateFlow(false)
-    private val _deviceList = MutableStateFlow(mutableListOf<BluetoothDevice>())
-    val deviceList = _deviceList.asStateFlow()
-
-    val deviceSelectionState =
-        combine(dialogHandler, isScanning, _deviceList) { dialogState, scanningState, devices ->
-
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    private val bleDevices = mutableStateListOf<BluetoothDevice>()
 
     fun connectBle(permissionResult: Boolean) {
-
+        if (permissionResult) {
+            bleService.connect()
+        }
     }
 
     fun isLocationServiceEnabled() = bleService.isLocationServiceEnabled()

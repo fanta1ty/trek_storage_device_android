@@ -1,31 +1,35 @@
 package sg.com.trekstorageauthentication.presentation
 
-import android.content.res.Configuration
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import sg.com.trekstorageauthentication.presentation.main.component.MainEventRegisterHandler
 import sg.com.trekstorageauthentication.presentation.main.component.MainSnackbar
-import sg.com.trekstorageauthentication.presentation.main.component.MainSnackbarHandler
 import sg.com.trekstorageauthentication.presentation.main.state.MainStateHolder
 import sg.com.trekstorageauthentication.presentation.ui.navigation.NavGraph
 import sg.com.trekstorageauthentication.presentation.ui.theme.TrekStorageAuthenticationTheme
 
+@SuppressLint("SourceLockedOrientationActivity")
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestedOrientation = Configuration.ORIENTATION_PORTRAIT
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         setContent {
             TrekStorageAuthenticationTheme {
@@ -39,12 +43,22 @@ class MainActivity : FragmentActivity() {
                             snackbar = { data -> MainSnackbar(data.message) }
                         )
                     },
-                ) {
-                    MainEventRegisterHandler(stateHolder::registerNavigationEvent)
+                ) { padding ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(padding)
+                    ) {
+//                        MainEventRegisterHandler(stateHolder::registerNavigationEvent)
+//
+//                        MainSnackbarHandler(
+//                            stateHolder.getSnackbarEvent(),
+//                            stateHolder.scaffoldState
+//                        )
 
-                    MainSnackbarHandler(stateHolder.getSnackbarEvent(), stateHolder.scaffoldState)
+                        NavGraph(stateHolder.navController)
+                    }
 
-                    NavGraph(stateHolder.navController)
                 }
             }
         }

@@ -2,9 +2,6 @@ package sg.com.trekstorageauthentication.presentation
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,14 +12,10 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.common.Constants
 import sg.com.trekstorageauthentication.presentation.main.state.MainState
 import sg.com.trekstorageauthentication.presentation.main.state.NavigationEvent
 import sg.com.trekstorageauthentication.presentation.main.state.SnackbarEvent
-import sg.com.trekstorageauthentication.presentation.ui.navigation.Screen
-import sg.com.trekstorageauthentication.service.ble.BleConnectionState
-import sg.com.trekstorageauthentication.service.ble.BleResponseType
 import sg.com.trekstorageauthentication.service.ble.BleService
 import sg.com.trekstorageauthentication.service.datastore.DataStoreService
 import sg.com.trekstorageauthentication.service.datastore.DataStoreServiceImpl
@@ -40,8 +33,6 @@ class MainViewModel @Inject constructor(
     DataStoreService by DataStoreServiceImpl() {
 
     private val _mainState = mutableStateOf(MainState())
-    val mainState: State<MainState>
-        get() = _mainState
 
     private val _snackbarEvent = Channel<SnackbarEvent>()
     val snackbarEvent = _snackbarEvent.receiveAsFlow()
@@ -52,63 +43,8 @@ class MainViewModel @Inject constructor(
     private val _navigationEvent = Channel<NavigationEvent>()
     val navigationEvent = _navigationEvent.receiveAsFlow()
 
-    init {
-        bleService.apply {
-            setBleConnectionListener(this@MainViewModel::onBleConnectionListener)
-            setBleDataResponseListener(this@MainViewModel::onBleDataResponseListener)
-        }
-    }
-
-    fun connectBle(permissionResult: Boolean) {
-        if (!permissionResult) {
-            _mainState.value = _mainState.value.copy(isPermissionsGranted = false)
-            return
-        } else {
-            //Permission denied dialog is still showing
-            //after user has granted permissions in the Settings
-            if (!_mainState.value.isPermissionsGranted) resetMainState()
-        }
-
-        if (!bleService.isLocationServiceEnabled()) {
-            _mainState.value = _mainState.value.copy(isLocationServiceEnabled = false)
-            return
-        } else {
-            if (!_mainState.value.isLocationServiceEnabled) resetMainState()
-        }
-
-        if (!bleService.isBluetoothEnabled()) {
-            _mainState.value = _mainState.value.copy(isBluetoothEnabled = false)
-            onBleConnectionListener(BleConnectionState.DISCONNECTED)
-            return
-        } else {
-            if (!_mainState.value.isBluetoothEnabled) resetMainState()
-        }
-
-        if (!bleService.isConnected()) {
-            bleService.connect()
-        } else {
-            performBiometricAuth()
-        }
-    }
-
-    fun isLocationServiceEnabled() = bleService.isLocationServiceEnabled()
-
-    fun resetMainState() {
-        _mainState.value = MainState()
-    }
-
     fun checkAlreadyLogIn() {
         bleService.read(Constants.NOTIFICATION_CHARACTERISTIC_UUID)
-    }
-
-    fun logIn(password: String) {
-        showLoading()
-        bleService.write(Constants.LOG_IN_CHARACTERISTIC_UUID, password.toByteArray())
-    }
-
-    fun logOut() {
-        showLoading()
-        bleService.write(Constants.LOG_OUT_CHARACTERISTIC_UUID, "01".toByteArray())
     }
 
     fun registerPassword(password: String) {
@@ -119,11 +55,6 @@ class MainViewModel @Inject constructor(
         bleService.write(Constants.REGISTER_PASSWORD_CHARACTERISTIC_UUID, request)
     }
 
-//    fun resetSettings() {
-//        showLoading()
-//        bleService.write(Constants.RESET_SETTINGS_CHARACTERISTIC_UUID, "01".toByteArray())
-//    }
-
     fun navigate(
         route: String = "",
         popUpToRoute: String = "",
@@ -132,105 +63,6 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             _navigationEvent.send(NavigationEvent(route, popUpToRoute, isInclusive))
         }
-    }
-
-    private fun onBleDataResponseListener(response: Pair<BleResponseType, ByteArray>) {
-        resetMainState()
-        val (type, data) = response
-
-        Log.d("HuyTest", "onBleDataResponseListener: ${type.name}")
-
-        when (type) {
-            BleResponseType.ALREADY_LOG_IN -> {
-                navigate(Screen.HomeScreen.route, Screen.UnlockScreen.route)
-            }
-
-            BleResponseType.NOT_ALREADY_LOG_IN -> {
-                showLoading()
-                bleService.read(Constants.READ_PASSWORD_STATUS_CHARACTERISTIC_UUID)
-            }
-
-            BleResponseType.REGISTER_PASSWORD_SUCCESS -> {
-                showSnackbar(SnackbarEvent(context.getString(R.string.register_password_success)))
-                navigate(Screen.HomeScreen.route, Screen.RegisterPasswordScreen.route)
-            }
-
-            BleResponseType.REGISTER_PASSWORD_FAIL -> {
-                showSnackbar(SnackbarEvent(context.getString(R.string.register_password_fail)))
-            }
-
-            BleResponseType.RESET_SETTINGS_SUCCESS -> {
-                viewModelScope.launch { saveStoredPassword(context, "") }
-                navigate(Screen.RegisterPasswordScreen.route, Screen.HomeScreen.route)
-            }
-
-            BleResponseType.RESET_SETTINGS_FAIL -> {
-                showSnackbar(SnackbarEvent(context.getString(R.string.reset_settings_fail)))
-            }
-
-            BleResponseType.LOG_IN_SUCCESS -> {
-                showSnackbar(SnackbarEvent(context.getString(R.string.unlock_storage_success)))
-                navigate(Screen.HomeScreen.route, Screen.UnlockScreen.route)
-            }
-
-            BleResponseType.LOG_IN_FAIL -> {
-                showSnackbar(SnackbarEvent(context.getString(R.string.unlock_storage_fail)))
-            }
-
-            BleResponseType.LOG_OUT_SUCCESS -> {
-                navigate(Screen.UnlockScreen.route, Screen.HomeScreen.route)
-            }
-
-            BleResponseType.LOG_OUT_FAIL -> {
-                showSnackbar(SnackbarEvent(context.getString(R.string.log_out_fail)))
-            }
-
-            else -> { //BleResponseType.PASSWORD_STATUS
-                when (String(data).toInt()) {
-                    0 -> { //User have already set their own password
-                        viewModelScope.launch {
-                            getStoredPassword(context).takeIf { it.isNotEmpty() }?.let { logIn(it) }
-                        }
-                    }
-
-                    1 -> { //User haven't set their own password
-                        navigate(Screen.RegisterPasswordScreen.route, Screen.UnlockScreen.route)
-                    }
-
-                    else -> { //Not Trek device
-                        val msg = context.getString(R.string.no_trek_devices_found)
-                        showSnackbar(SnackbarEvent(msg))
-                    }
-                }
-            }
-        }
-    }
-
-    private fun onBleConnectionListener(connectionState: BleConnectionState) {
-        when (connectionState) {
-            BleConnectionState.CONNECTING -> {
-                val msg = context.getString(R.string.connecting)
-                showSnackbar(SnackbarEvent(msg, SnackbarDuration.Indefinite))
-            }
-
-            BleConnectionState.DISCONNECTED -> {
-                val msg = context.getString(R.string.disconnected)
-                showSnackbar(SnackbarEvent(msg, SnackbarDuration.Indefinite))
-            }
-
-            else -> { //BleConnectionState.CONNECTED
-                showSnackbar(SnackbarEvent("")) //Send empty msg to dismiss snackbar
-                performBiometricAuth()
-            }
-        }
-    }
-
-    private fun showSnackbar(event: SnackbarEvent) {
-        viewModelScope.launch { _snackbarEvent.send(event) }
-    }
-
-    private fun performBiometricAuth() {
-        viewModelScope.launch { _biometricAuthEvent.emit(Unit) }
     }
 
     private fun showLoading() {

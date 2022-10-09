@@ -1,10 +1,10 @@
 package sg.com.trekstorageauthentication.service.ble
 
+import android.annotation.SuppressLint
 import android.bluetooth.*
 import android.content.Context
 import android.location.LocationManager
 import android.os.Build
-import android.os.ParcelUuid
 import android.util.Log
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat
 import no.nordicsemi.android.support.v18.scanner.ScanCallback
@@ -12,30 +12,31 @@ import no.nordicsemi.android.support.v18.scanner.ScanResult
 import sg.com.trekstorageauthentication.common.Constants
 import java.util.*
 
+@SuppressLint("MissingPermission")
 @Suppress("DEPRECATION")
 class BleServiceImpl(private val context: Context) : BleService {
 
+    private val trekDeviceAddressCodes = mutableListOf<Int>()
     private val scanner = BluetoothLeScannerCompat.getScanner()
     private var gatt: BluetoothGatt? = null
     private var isConnected = false
     private var isAlreadyScanning = false
-    private var bleConnectionListener: ((BleConnectionState) -> Unit)? = null
-    private var bleDataResponseListener: ((Pair<BleResponseType, ByteArray>) -> Unit)? = null
     private var scanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
-            val isTrekBleDevice = result.scanRecord?.serviceUuids
-                ?.contains(ParcelUuid.fromString(Constants.SERVICE_UUID)) ?: false
+//            val isTrekBleDevice = result.scanRecord?.serviceUuids
+//                ?.contains(ParcelUuid.fromString(Constants.SERVICE_UUID)) ?: false
+            val isTrekBleDevice = result.device.name == "TREK_BLE"
 
-            if (isTrekBleDevice) {
-                scanner.stopScan(this)
-                isAlreadyScanning = false
-                gatt = result.device.connectGatt(
-                    context, false, getGattCallback(), BluetoothDevice.TRANSPORT_LE
-                )
+            if (isTrekBleDevice && !trekDeviceAddressCodes.contains(result.device.address.hashCode())) {
+                //trekDeviceAddressCodes.add()
+                Log.d("HuyTest", "${result.device}")
+                //scanner.stopScan(this)
+                //isAlreadyScanning = false
             }
         }
 
         override fun onScanFailed(errorCode: Int) {
+            Log.d("HuyTest", "onScanFailed")
             close()
         }
     }
@@ -44,7 +45,7 @@ class BleServiceImpl(private val context: Context) : BleService {
         if (isAlreadyScanning) return
 
         isAlreadyScanning = true
-        bleConnectionListener?.invoke(BleConnectionState.CONNECTING)
+        //bleConnectionListener?.invoke(BleConnectionState.CONNECTING)
         scanner.startScan(scanCallback)
     }
 
@@ -54,7 +55,7 @@ class BleServiceImpl(private val context: Context) : BleService {
         gatt = null
         isConnected = false
         isAlreadyScanning = false
-        bleConnectionListener?.invoke(BleConnectionState.DISCONNECTED)
+        //bleConnectionListener?.invoke(BleConnectionState.DISCONNECTED)
     }
 
     override fun read(uuid: String) {
@@ -100,14 +101,6 @@ class BleServiceImpl(private val context: Context) : BleService {
         return isGpsEnabled && isNetworkEnabled
     }
 
-    override fun setBleConnectionListener(listener: (BleConnectionState) -> Unit) {
-        bleConnectionListener = listener
-    }
-
-    override fun setBleDataResponseListener(listener: (Pair<BleResponseType, ByteArray>) -> Unit) {
-        bleDataResponseListener = listener
-    }
-
     //---------
 
     private fun getGattCallback(): BluetoothGattCallback {
@@ -121,7 +114,7 @@ class BleServiceImpl(private val context: Context) : BleService {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     if (newState == BluetoothProfile.STATE_CONNECTED) {
                         isConnected = true
-                        bleConnectionListener?.invoke(BleConnectionState.CONNECTED)
+                        //bleConnectionListener?.invoke(BleConnectionState.CONNECTED)
                         gatt?.apply { discoverServices() }
                     } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                         close()
@@ -141,9 +134,9 @@ class BleServiceImpl(private val context: Context) : BleService {
                 characteristic: BluetoothGattCharacteristic?
             ) {
                 characteristic?.apply {
-                    bleDataResponseListener?.invoke(
-                        onCharacteristicChangedResponse(String(value).toInt())
-                    )
+//                    bleDataResponseListener?.invoke(
+//                        onCharacteristicChangedResponse(String(value).toInt())
+//                    )
                 }
             }
 
@@ -153,9 +146,9 @@ class BleServiceImpl(private val context: Context) : BleService {
                 characteristic: BluetoothGattCharacteristic,
                 value: ByteArray
             ) {
-                bleDataResponseListener?.invoke(
-                    onCharacteristicChangedResponse(String(value).toInt())
-                )
+//                bleDataResponseListener?.invoke(
+//                    onCharacteristicChangedResponse(String(value).toInt())
+//                )
             }
 
             @Deprecated("Deprecated in Android 13")
@@ -204,9 +197,7 @@ class BleServiceImpl(private val context: Context) : BleService {
             4 -> Pair(BleResponseType.LOG_IN_SUCCESS, byteArrayOf())
             5 -> Pair(BleResponseType.LOG_IN_FAIL, byteArrayOf())
             6 -> Pair(BleResponseType.RESET_SETTINGS_SUCCESS, byteArrayOf())
-            7 -> Pair(BleResponseType.RESET_SETTINGS_FAIL, byteArrayOf())
-            8 -> Pair(BleResponseType.LOG_OUT_SUCCESS, byteArrayOf())
-            else -> Pair(BleResponseType.LOG_OUT_FAIL, byteArrayOf())
+            else -> Pair(BleResponseType.RESET_SETTINGS_FAIL, byteArrayOf())
         }
     }
 
@@ -218,11 +209,11 @@ class BleServiceImpl(private val context: Context) : BleService {
                 else
                     BleResponseType.NOT_ALREADY_LOG_IN
 
-                bleDataResponseListener?.invoke(Pair(responseType, byteArrayOf()))
+                //bleDataResponseListener?.invoke(Pair(responseType, byteArrayOf()))
             }
 
             Constants.READ_PASSWORD_STATUS_CHARACTERISTIC_UUID -> {
-                bleDataResponseListener?.invoke(Pair(BleResponseType.PASSWORD_STATUS, value))
+                //bleDataResponseListener?.invoke(Pair(BleResponseType.PASSWORD_STATUS, value))
             }
 
             else -> Unit

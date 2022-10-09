@@ -9,7 +9,5 @@ enum class BleResponseType {
     RESET_SETTINGS_FAIL,
     LOG_IN_SUCCESS,
     LOG_IN_FAIL,
-    LOG_OUT_SUCCESS,
-    LOG_OUT_FAIL,
     PASSWORD_STATUS
 }

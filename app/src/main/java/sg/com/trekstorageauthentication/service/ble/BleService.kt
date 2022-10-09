@@ -9,10 +9,6 @@ interface BleService {
 
     fun write(uuid: String, bytes: ByteArray)
 
-    fun setBleConnectionListener(listener: (BleConnectionState) -> Unit)
-
-    fun setBleDataResponseListener(listener: (Pair<BleResponseType, ByteArray>) -> Unit)
-
     fun isConnected(): Boolean
 
     fun isBluetoothEnabled(): Boolean
