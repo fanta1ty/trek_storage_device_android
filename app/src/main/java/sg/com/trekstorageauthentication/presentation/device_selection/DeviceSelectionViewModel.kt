@@ -5,8 +5,13 @@ import android.bluetooth.BluetoothDevice
 import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import sg.com.trekstorageauthentication.presentation.device_selection.state.DeviceSelectionDialogState
 import sg.com.trekstorageauthentication.service.ble.BleService
 import sg.com.trekstorageauthentication.service.permission.PermissionService
 import sg.com.trekstorageauthentication.service.permission.StoragePermissionServiceImpl
@@ -19,13 +24,55 @@ class DeviceSelectionViewModel @Inject constructor(
     private val bleService: BleService
 ) : ViewModel(), PermissionService by StoragePermissionServiceImpl() {
 
-    private val bleDevices = mutableStateListOf<BluetoothDevice>()
+    private val _dialogState = MutableStateFlow(DeviceSelectionDialogState())
+    val dialogState = _dialogState.asStateFlow()
 
-    fun connectBle(permissionResult: Boolean) {
-        if (permissionResult) {
-            bleService.connect()
+    private val _trekDevices = mutableStateListOf<BluetoothDevice>()
+    val trekDevice: List<BluetoothDevice> = _trekDevices
+
+    init {
+        registerTrekDeviceEmittedEvent()
+    }
+
+    fun startScan(permissionResult: Boolean) {
+        if (!permissionResult) {
+            _dialogState.apply { value = value.copy(isShowPermissionsRequestDialog = true) }
+            return
+        } else {
+            if (_dialogState.value.isShowPermissionsRequestDialog) dismissDialog()
         }
+
+        if (!bleService.isLocationServiceEnabled()) {
+            _dialogState.apply { value = value.copy(isShowLocationServiceDisabledDialog = true) }
+            return
+        } else {
+            if (_dialogState.value.isShowLocationServiceDisabledDialog) dismissDialog()
+        }
+
+        if (!bleService.isBluetoothEnabled()) {
+            _dialogState.apply { value = value.copy(isShowBluetoothDisabledDialog = true) }
+            return
+        } else {
+            if (_dialogState.value.isShowBluetoothDisabledDialog) dismissDialog()
+        }
+
+        _trekDevices.clear()
+        bleService.startScan()
     }
 
     fun isLocationServiceEnabled() = bleService.isLocationServiceEnabled()
+
+    fun dismissDialog() {
+        _dialogState.value = DeviceSelectionDialogState()
+    }
+
+    fun getIsScanningState() = bleService.getIsScanningState()
+
+    private fun registerTrekDeviceEmittedEvent() {
+        viewModelScope.launch {
+            bleService.getTrekDeviceEmitEvent().collect { _trekDevices.add(it) }
+        }
+    }
 }
+
+//Show device list

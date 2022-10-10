@@ -5,7 +5,13 @@ import android.bluetooth.*
 import android.content.Context
 import android.location.LocationManager
 import android.os.Build
+import android.os.ParcelUuid
 import android.util.Log
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat
 import no.nordicsemi.android.support.v18.scanner.ScanCallback
 import no.nordicsemi.android.support.v18.scanner.ScanResult
@@ -16,46 +22,58 @@ import java.util.*
 @Suppress("DEPRECATION")
 class BleServiceImpl(private val context: Context) : BleService {
 
-    private val trekDeviceAddressCodes = mutableListOf<Int>()
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    private val alreadyEmittedDevices = mutableListOf<Int>()
+    private val trekDeviceEmitEvent = Channel<BluetoothDevice>()
+    private val isScanning = MutableStateFlow(false)
+
     private val scanner = BluetoothLeScannerCompat.getScanner()
     private var gatt: BluetoothGatt? = null
     private var isConnected = false
-    private var isAlreadyScanning = false
     private var scanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
-//            val isTrekBleDevice = result.scanRecord?.serviceUuids
-//                ?.contains(ParcelUuid.fromString(Constants.SERVICE_UUID)) ?: false
-            val isTrekBleDevice = result.device.name == "TREK_BLE"
+            val isTrekBleDevice = result.scanRecord?.serviceUuids
+                ?.contains(ParcelUuid.fromString(Constants.SERVICE_UUID)) ?: false
+            val addressCodes = result.device.address.hashCode()
 
-            if (isTrekBleDevice && !trekDeviceAddressCodes.contains(result.device.address.hashCode())) {
-                //trekDeviceAddressCodes.add()
-                Log.d("HuyTest", "${result.device}")
-                //scanner.stopScan(this)
-                //isAlreadyScanning = false
+            if (isTrekBleDevice && !alreadyEmittedDevices.contains(addressCodes)) {
+                alreadyEmittedDevices.add(addressCodes)
+                coroutineScope.launch { trekDeviceEmitEvent.send(result.device) }
             }
         }
 
         override fun onScanFailed(errorCode: Int) {
-            Log.d("HuyTest", "onScanFailed")
             close()
         }
     }
 
-    override fun connect() {
-        if (isAlreadyScanning) return
-
-        isAlreadyScanning = true
-        //bleConnectionListener?.invoke(BleConnectionState.CONNECTING)
+    override fun startScan() {
+        if (isScanning.value) return
+        isScanning.value = true
         scanner.startScan(scanCallback)
+
+        coroutineScope.launch {
+            delay(15000)
+            stopScan()
+        }
+    }
+
+    override fun stopScan() {
+        if (isScanning.value) {
+            isScanning.value = false
+            scanner.stopScan(scanCallback)
+        }
+    }
+
+    override fun connect() {
+
     }
 
     override fun close() {
-        scanner.stopScan(scanCallback)
+        stopScan()
         gatt?.close()
         gatt = null
         isConnected = false
-        isAlreadyScanning = false
-        //bleConnectionListener?.invoke(BleConnectionState.DISCONNECTED)
     }
 
     override fun read(uuid: String) {
@@ -85,8 +103,6 @@ class BleServiceImpl(private val context: Context) : BleService {
         }
     }
 
-    override fun isConnected() = isConnected
-
     override fun isBluetoothEnabled(): Boolean {
         val bluetoothManager =
             context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
@@ -100,6 +116,12 @@ class BleServiceImpl(private val context: Context) : BleService {
         val isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
         return isGpsEnabled && isNetworkEnabled
     }
+
+    override fun isConnected() = isConnected
+
+    override fun getIsScanningState() = isScanning.asStateFlow()
+
+    override fun getTrekDeviceEmitEvent() = trekDeviceEmitEvent.receiveAsFlow()
 
     //---------
 

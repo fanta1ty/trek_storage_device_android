@@ -4,19 +4,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.res.stringResource
 import sg.com.trekstorageauthentication.R
-import sg.com.trekstorageauthentication.presentation.main.state.MainState
+import sg.com.trekstorageauthentication.presentation.device_selection.state.DeviceSelectionDialogState
 import sg.com.trekstorageauthentication.presentation.ui.common.Dialog
 
 @Composable
 fun DeviceSelectionDialog(
-    state: State<MainState>,
+    state: State<DeviceSelectionDialogState>,
     onPermissionPositiveEvent: () -> Unit,
     onLocationDisabledPositiveEvent: () -> Unit,
     onBluetoothDisabledPositiveEvent: () -> Unit
 ) {
     val value = state.value
 
-    if (!value.isPermissionsGranted) {
+    if (value.isShowPermissionsRequestDialog) {
         Dialog(
             title = stringResource(R.string.permission_required),
             content = stringResource(R.string.permission_permanent_denied_msg),
@@ -25,7 +25,7 @@ fun DeviceSelectionDialog(
         )
     }
 
-    if (!value.isLocationServiceEnabled) {
+    if (value.isShowLocationServiceDisabledDialog) {
         Dialog(
             title = stringResource(R.string.location_required),
             content = stringResource(R.string.location_disabled_msg),
@@ -34,7 +34,7 @@ fun DeviceSelectionDialog(
         )
     }
 
-    if (!value.isBluetoothEnabled) {
+    if (value.isShowBluetoothDisabledDialog) {
         Dialog(
             title = stringResource(R.string.bluetooth_required),
             content = stringResource(R.string.bluetooth_disabled_msg),

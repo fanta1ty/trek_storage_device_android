@@ -14,16 +14,17 @@ class DeviceSelectionScreenStateHolder(
     val viewModel: DeviceSelectionViewModel,
     private val multiplePermissionsState: MultiplePermissionsState
 ) {
-    fun connectBle() {
+    fun startScan() {
         if (multiplePermissionsState.allPermissionsGranted) {
-            viewModel.connectBle(true)
+            viewModel.startScan(true)
         } else {
             multiplePermissionsState.launchMultiplePermissionRequest()
         }
     }
 
     fun navigateToAppPermissionSettings() {
-        //dismissDialog()
+        viewModel.dismissDialog()
+
         val intent = Intent(
             Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
             Uri.parse("package:${context.packageName}")
@@ -34,11 +35,12 @@ class DeviceSelectionScreenStateHolder(
     }
 
     fun navigateToLocationServiceSettings() {
-        //dismissDialog()
+        viewModel.dismissDialog()
+
         if (!viewModel.isLocationServiceEnabled()) {
             context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
         } else {
-            viewModel.connectBle(true)
+            viewModel.startScan(true)
         }
     }
 }
