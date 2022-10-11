@@ -14,11 +14,15 @@ class DeviceSelectionScreenStateHolder(
     val viewModel: DeviceSelectionViewModel,
     private val multiplePermissionsState: MultiplePermissionsState
 ) {
-    fun startScan() {
-        if (multiplePermissionsState.allPermissionsGranted) {
-            viewModel.startScan(true)
-        } else {
-            multiplePermissionsState.launchMultiplePermissionRequest()
+    fun toggleScanningOnOff() {
+        if (!viewModel.getIsScanningState().value) { //Start scan
+            if (multiplePermissionsState.allPermissionsGranted) {
+                viewModel.startScan(true)
+            } else {
+                multiplePermissionsState.launchMultiplePermissionRequest()
+            }
+        } else { //Stop scan
+            viewModel.stopScan()
         }
     }
 

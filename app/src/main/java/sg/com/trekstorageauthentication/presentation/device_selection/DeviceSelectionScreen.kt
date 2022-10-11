@@ -69,9 +69,10 @@ fun DeviceSelectionScreen() {
                     Spacer(modifier = Modifier.width(16.dp))
                 }
 
-                TextButton(onClick = stateHolder::startScan) {
+                TextButton(onClick = stateHolder::toggleScanningOnOff) {
+                    val stringId = if (isScanningState.value) R.string.stop else R.string.scan
                     Text(
-                        if (isScanningState.value) "STOP" else "SCAN",
+                        stringResource(stringId),
                         style = MaterialTheme.typography.h4,
                         color = MaterialTheme.colors.onPrimary
                     )

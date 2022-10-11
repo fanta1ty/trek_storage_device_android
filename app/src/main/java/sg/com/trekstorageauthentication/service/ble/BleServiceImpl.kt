@@ -50,6 +50,7 @@ class BleServiceImpl(private val context: Context) : BleService {
     override fun startScan() {
         if (isScanning.value) return
         isScanning.value = true
+        alreadyEmittedDevices.clear()
         scanner.startScan(scanCallback)
 
         coroutineScope.launch {

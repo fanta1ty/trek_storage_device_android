@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Trek Storage Authentication</string>
-    <string name="enter_password">Enter Password</string>
-    <string name="login">Login</string>
     <string name="dialog_biometric_authentication_title">Biometric Authentication</string>
     <string name="dialog_biometric_authentication_description">Please authenticate to continue.</string>
     <string name="error_field_empty">This field cannot be empty</string>
@@ -16,10 +14,6 @@
     <string name="bluetooth_required">Bluetooth Required</string>
     <string name="bluetooth_disabled_msg">This app needs bluetooth to be turned on to establish connection.</string>
     <string name="connecting">Connecting</string>
-    <string name="disconnected">Disconnected</string>
-    <string name="reconnect">Reconnect</string>
-    <string name="reset">Reset</string>
-    <string name="reset_password">Reset Password</string>
     <string name="register_password">Register Reset Password</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
@@ -30,16 +24,10 @@
     <string name="unlock_storage_fail">Failed to authenticate. Please re-enter your password</string>
     <string name="no_trek_devices_found">No Trek devices found</string>
     <string name="reset_settings_fail">Failed to reset settings</string>
-    <string name="log_out">Log Out</string>
-    <string name="log_out_fail">Failed to log out</string>
-    <string name="dialog_log_out_title">Log Out Confirmation</string>
-    <string name="dialog_log_out_content">Are you sure you want to lock your Trek device and return to log in screen?</string>
-    <string name="dialog_reset_settings_title">Reset Settings Confirmation</string>
-    <string name="dialog_reset_settings_content">Are you sure you want to erase all data on your Trek device and reset it back to default factory settings?</string>
     <string name="confirm">Confirm</string>
     <string name="dialog_loading_title">Please Wait…</string>
     <string name="dialog_loading_content">Loading…</string>
-
     <string name="scanning_devices">Scanning Devices</string>
-    <string name="start_scanning">Start Scanning</string>
+    <string name="scan">SCAN</string>
+    <string name="stop">STOP</string>
 </resources>

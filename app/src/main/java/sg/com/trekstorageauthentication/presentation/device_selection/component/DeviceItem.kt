@@ -13,12 +13,12 @@ fun DeviceItem(deviceName: String) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp, horizontal = 8.dp)
+            .padding(vertical = 16.dp, horizontal = 32.dp)
     ) {
         Text(deviceName)
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Divider(color = Color.DarkGray)
+        Divider(color = Color.LightGray)
     }
 }

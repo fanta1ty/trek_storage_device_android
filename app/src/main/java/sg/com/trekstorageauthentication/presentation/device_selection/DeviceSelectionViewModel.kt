@@ -60,7 +60,9 @@ class DeviceSelectionViewModel @Inject constructor(
         bleService.startScan()
     }
 
-    fun isLocationServiceEnabled() = bleService.isLocationServiceEnabled()
+    fun stopScan() {
+        bleService.stopScan()
+    }
 
     fun dismissDialog() {
         _dialogState.value = DeviceSelectionDialogState()
@@ -68,11 +70,11 @@ class DeviceSelectionViewModel @Inject constructor(
 
     fun getIsScanningState() = bleService.getIsScanningState()
 
+    fun isLocationServiceEnabled() = bleService.isLocationServiceEnabled()
+
     private fun registerTrekDeviceEmittedEvent() {
         viewModelScope.launch {
             bleService.getTrekDeviceEmitEvent().collect { _trekDevices.add(it) }
         }
     }
 }
-
-//Show device list
