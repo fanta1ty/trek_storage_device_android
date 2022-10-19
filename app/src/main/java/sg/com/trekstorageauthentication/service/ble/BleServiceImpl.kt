@@ -66,8 +66,9 @@ class BleServiceImpl(private val context: Context) : BleService {
         }
     }
 
-    override fun connect() {
-
+    override fun connect(device: BluetoothDevice) {
+        close()
+        gatt = device.connectGatt(context, false, getGattCallback())
     }
 
     override fun close() {
@@ -137,12 +138,15 @@ class BleServiceImpl(private val context: Context) : BleService {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     if (newState == BluetoothProfile.STATE_CONNECTED) {
                         isConnected = true
+                        Log.d("HuyTest", "BLE Connected")
                         //bleConnectionListener?.invoke(BleConnectionState.CONNECTED)
-                        gatt?.apply { discoverServices() }
+                        //gatt?.apply { discoverServices() }
                     } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                        Log.d("HuyTest", "BLE Disconnected 1")
                         close()
                     }
                 } else {
+                    Log.d("HuyTest", "BLE Disconnected 2")
                     close()
                 }
             }

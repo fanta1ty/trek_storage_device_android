@@ -19,9 +19,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import sg.com.trekstorageauthentication.presentation.main.component.MainSnackbar
-import sg.com.trekstorageauthentication.presentation.main.state.MainStateHolder
-import sg.com.trekstorageauthentication.presentation.ui.navigation.NavGraph
+import sg.com.trekstorageauthentication.presentation.component.MainSnackbar
+import sg.com.trekstorageauthentication.presentation.navigation.NavGraph
+import sg.com.trekstorageauthentication.presentation.state.MainStateHolder
 import sg.com.trekstorageauthentication.presentation.ui.theme.TrekStorageAuthenticationTheme
 
 @SuppressLint("SourceLockedOrientationActivity")
@@ -48,17 +48,7 @@ class MainActivity : FragmentActivity() {
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(padding)
-                    ) {
-//                        MainEventRegisterHandler(stateHolder::registerNavigationEvent)
-//
-//                        MainSnackbarHandler(
-//                            stateHolder.getSnackbarEvent(),
-//                            stateHolder.scaffoldState
-//                        )
-
-                        NavGraph(stateHolder.navController)
-                    }
-
+                    ) { NavGraph(stateHolder.navController) }
                 }
             }
         }

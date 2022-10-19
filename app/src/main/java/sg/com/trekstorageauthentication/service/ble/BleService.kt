@@ -9,7 +9,7 @@ interface BleService {
 
     fun stopScan()
 
-    fun connect()
+    fun connect(device: BluetoothDevice)
 
     fun close()
 

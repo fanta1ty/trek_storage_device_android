@@ -13,9 +13,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import sg.com.trekstorageauthentication.common.Constants
-import sg.com.trekstorageauthentication.presentation.main.state.MainState
-import sg.com.trekstorageauthentication.presentation.main.state.NavigationEvent
-import sg.com.trekstorageauthentication.presentation.main.state.SnackbarEvent
+import sg.com.trekstorageauthentication.presentation.state.MainState
+import sg.com.trekstorageauthentication.presentation.state.NavigationEvent
+import sg.com.trekstorageauthentication.presentation.state.SnackbarEvent
 import sg.com.trekstorageauthentication.service.ble.BleService
 import sg.com.trekstorageauthentication.service.datastore.DataStoreService
 import sg.com.trekstorageauthentication.service.datastore.DataStoreServiceImpl
