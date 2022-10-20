@@ -25,5 +25,9 @@ interface BleService {
 
     fun getTrekDeviceEmitEvent(): Flow<BluetoothDevice>
 
+    fun getBleConnectionEvent(): Flow<BleConnectionState>
+
+    fun getDataResponseEvent(): Flow<Pair<BleResponseType, ByteArray>>
+
     fun isConnected(): Boolean
 }

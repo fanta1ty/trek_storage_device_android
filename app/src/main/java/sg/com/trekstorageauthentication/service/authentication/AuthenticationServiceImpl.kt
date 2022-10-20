@@ -8,6 +8,7 @@ import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import sg.com.trekstorageauthentication.R
 
 class AuthenticationServiceImpl(private val context: Context) : AuthenticationService {
     override fun authenticate(
@@ -18,20 +19,16 @@ class AuthenticationServiceImpl(private val context: Context) : AuthenticationSe
             if (isPasscodeAuthenticationReady()) {
                 onBiometricAuthenticationFail()
             } else {
-                Toast.makeText(
-                    context,
-                    "You haven't set up any security measures on your phone's settings.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                val msg = context.getString(R.string.settings_authentication_disabled)
+                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
             }
-
             return
         }
 
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Authentication")
-            .setDescription("Please authenticate")
-            .setNegativeButtonText("Use passcode")
+            .setTitle(context.getString(R.string.biometric_authentication_title))
+            .setDescription(context.getString(R.string.authentication_description))
+            .setNegativeButtonText(context.getString(R.string.use_passcode))
 
         val executor = ContextCompat.getMainExecutor(context)
 
@@ -55,8 +52,8 @@ class AuthenticationServiceImpl(private val context: Context) : AuthenticationSe
     override fun getPasscodeAuthenticationIntent(): Intent {
         val keyguardManager = context.getSystemService(KeyguardManager::class.java)
         return keyguardManager.createConfirmDeviceCredentialIntent(
-            "Passcode Authentication",
-            "Please enter passcode"
+            context.getString(R.string.passcode_authentication_title),
+            context.getString(R.string.authentication_description)
         )
     }
 

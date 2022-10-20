@@ -13,12 +13,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import kotlinx.coroutines.CoroutineScope
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.component.DeviceItem
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.component.DeviceSelectionDialog
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.component.DeviceSelectionToolbar
@@ -26,10 +29,10 @@ import sg.com.trekstorageauthentication.presentation.screen.device_selection.sta
 
 @SuppressLint("MissingPermission")
 @Composable
-fun DeviceSelectionScreen() {
+fun DeviceSelectionScreen(navController: NavHostController) {
     Log.d("HuyTest", "DeviceSelectionScreen recompose")
 
-    val stateHolder = rememberDeviceSelectionScreenStateHolder()
+    val stateHolder = rememberDeviceSelectionScreenStateHolder(navController)
     val trekDevice = stateHolder.viewModel.trekDevice
 
     Column(
@@ -68,15 +71,19 @@ fun DeviceSelectionScreen() {
 
 @Composable
 private fun rememberDeviceSelectionScreenStateHolder(
+    navController: NavHostController,
     context: Context = LocalContext.current,
     viewModel: DeviceSelectionViewModel = hiltViewModel(),
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
     multiplePermissionsState: MultiplePermissionsState = rememberMultiplePermissionsState(
         permissions = viewModel.getRequiredPermissions(),
         onPermissionsResult = { viewModel.apply { startScan(getPermissionResult(it)) } }
     )
 ): DeviceSelectionScreenStateHolder {
     val stateHolder = remember {
-        DeviceSelectionScreenStateHolder(context, viewModel, multiplePermissionsState)
+        DeviceSelectionScreenStateHolder(
+            context, viewModel, navController, coroutineScope, multiplePermissionsState
+        )
     }
 
     val activityResultLauncher = rememberLauncherForActivityResult(

@@ -5,22 +5,31 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.navigation.NavHostController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import sg.com.trekstorageauthentication.presentation.navigation.Screen
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.DeviceSelectionViewModel
 import sg.com.trekstorageauthentication.service.authentication.AuthenticationService
 import sg.com.trekstorageauthentication.service.authentication.AuthenticationServiceImpl
+import sg.com.trekstorageauthentication.service.ble.BleResponseType
 
 @OptIn(ExperimentalPermissionsApi::class)
 class DeviceSelectionScreenStateHolder(
     private val context: Context,
     val viewModel: DeviceSelectionViewModel,
+    private val navController: NavHostController,
+    private val coroutineScope: CoroutineScope,
     private val multiplePermissionsState: MultiplePermissionsState
 ) : AuthenticationService by AuthenticationServiceImpl(context) {
 
     init {
         Log.d("HuyTest", "DeviceSelectionScreenStateHolder init")
+        registerDataResponseEvent()
     }
 
     private var activityResultLauncher: ActivityResultLauncher<Intent>? = null
@@ -74,5 +83,47 @@ class DeviceSelectionScreenStateHolder(
 
     fun setSelectedItemPosition(position: Int) {
         selectedItemPosition = position
+    }
+
+    private fun registerDataResponseEvent() {
+        coroutineScope.launch {
+            viewModel.getDataResponseEvent().collect {
+                val (type, data) = it
+                when (type) {
+                    BleResponseType.PASSWORD_STATUS -> {
+                        when (String(data).toInt()) {
+                            0 -> {
+                                //USB already have password
+                                viewModel.login()
+                            }
+
+                            1 -> { //USB doesn't have password
+                                navController.navigate(Screen.RegisterPasswordScreen.route) {
+                                    popUpTo(Screen.DeviceSelectionScreen.route) { inclusive = true }
+                                }
+                            }
+
+                            else -> { //Not Trek device
+                                Toast.makeText(context, "Not Trek device", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+
+                    BleResponseType.LOG_IN_SUCCESS -> {
+                        navController.navigate(Screen.AuthSuccessScreen.route) {
+                            popUpTo(Screen.DeviceSelectionScreen.route) { inclusive = true }
+                        }
+                    }
+
+                    BleResponseType.LOG_IN_FAIL -> {
+                        navController.navigate(Screen.AuthFailureScreen.route) {
+                            popUpTo(Screen.DeviceSelectionScreen.route) { inclusive = true }
+                        }
+                    }
+
+                    else -> Unit
+                }
+            }
+        }
     }
 }

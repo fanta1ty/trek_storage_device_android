@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import sg.com.trekstorageauthentication.presentation.screen.auth_failure.AuthFailureScreen
+import sg.com.trekstorageauthentication.presentation.screen.auth_success.AuthSuccessScreen
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.DeviceSelectionScreen
 import sg.com.trekstorageauthentication.presentation.screen.recovery.ResetScreen
 import sg.com.trekstorageauthentication.presentation.screen.register_password.RegisterPasswordScreen
@@ -12,10 +14,19 @@ import sg.com.trekstorageauthentication.presentation.screen.register_password.Re
 fun NavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Screen.DeviceSelectionScreen.route
+        //startDestination = Screen.DeviceSelectionScreen.route
+        startDestination = Screen.RegisterPasswordScreen.route
     ) {
         composable(route = Screen.DeviceSelectionScreen.route) {
-            DeviceSelectionScreen()
+            DeviceSelectionScreen(navController)
+        }
+
+        composable(route = Screen.AuthSuccessScreen.route) {
+            AuthSuccessScreen()
+        }
+
+        composable(route = Screen.AuthFailureScreen.route) {
+            AuthFailureScreen()
         }
 
         composable(route = Screen.RegisterPasswordScreen.route) {

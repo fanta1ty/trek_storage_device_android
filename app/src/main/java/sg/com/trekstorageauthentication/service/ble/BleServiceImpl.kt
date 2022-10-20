@@ -25,6 +25,8 @@ class BleServiceImpl(private val context: Context) : BleService {
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private val alreadyEmittedDevices = mutableListOf<Int>()
     private val trekDeviceEmitEvent = Channel<BluetoothDevice>()
+    private val bleConnectionEvent = Channel<BleConnectionState>()
+    private val dataResponseEvent = Channel<Pair<BleResponseType, ByteArray>>()
     private val isScanning = MutableStateFlow(false)
 
     private val scanner = BluetoothLeScannerCompat.getScanner()
@@ -44,6 +46,7 @@ class BleServiceImpl(private val context: Context) : BleService {
 
         override fun onScanFailed(errorCode: Int) {
             close()
+            coroutineScope.launch { bleConnectionEvent.send(BleConnectionState.ERROR) }
         }
     }
 
@@ -54,7 +57,7 @@ class BleServiceImpl(private val context: Context) : BleService {
         scanner.startScan(scanCallback)
 
         coroutineScope.launch {
-            delay(15000)
+            delay(30000)
             stopScan()
         }
     }
@@ -94,9 +97,7 @@ class BleServiceImpl(private val context: Context) : BleService {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             gatt?.writeCharacteristic(
-                characteristic,
-                bytes,
-                BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+                characteristic, bytes, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
             )
         } else {
             characteristic.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
@@ -125,6 +126,10 @@ class BleServiceImpl(private val context: Context) : BleService {
 
     override fun getTrekDeviceEmitEvent() = trekDeviceEmitEvent.receiveAsFlow()
 
+    override fun getBleConnectionEvent() = bleConnectionEvent.receiveAsFlow()
+
+    override fun getDataResponseEvent() = dataResponseEvent.receiveAsFlow()
+
     //---------
 
     private fun getGattCallback(): BluetoothGattCallback {
@@ -138,32 +143,35 @@ class BleServiceImpl(private val context: Context) : BleService {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     if (newState == BluetoothProfile.STATE_CONNECTED) {
                         isConnected = true
-                        Log.d("HuyTest", "BLE Connected")
-                        //bleConnectionListener?.invoke(BleConnectionState.CONNECTED)
-                        //gatt?.apply { discoverServices() }
+                        gatt?.apply { discoverServices() }
                     } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                        Log.d("HuyTest", "BLE Disconnected 1")
                         close()
+                        coroutineScope.launch { bleConnectionEvent.send(BleConnectionState.ERROR) }
                     }
                 } else {
-                    Log.d("HuyTest", "BLE Disconnected 2")
                     close()
+                    coroutineScope.launch { bleConnectionEvent.send(BleConnectionState.ERROR) }
                 }
             }
 
             override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
-                registerNotification()
+                coroutineScope.launch {
+                    registerNotification()
+                    delay(1000)
+                    bleConnectionEvent.send(BleConnectionState.CONNECTED)
+                }
             }
 
-            @Deprecated("Deprecated in Android 13")
+            @Deprecated("Android 12 and lower")
             override fun onCharacteristicChanged(
                 gatt: BluetoothGatt?,
                 characteristic: BluetoothGattCharacteristic?
             ) {
                 characteristic?.apply {
-//                    bleDataResponseListener?.invoke(
-//                        onCharacteristicChangedResponse(String(value).toInt())
-//                    )
+                    coroutineScope.launch {
+                        val responseType = String(value).toInt()
+                        dataResponseEvent.send(onCharacteristicChangedResponse(responseType))
+                    }
                 }
             }
 
@@ -173,12 +181,12 @@ class BleServiceImpl(private val context: Context) : BleService {
                 characteristic: BluetoothGattCharacteristic,
                 value: ByteArray
             ) {
-//                bleDataResponseListener?.invoke(
-//                    onCharacteristicChangedResponse(String(value).toInt())
-//                )
+                coroutineScope.launch {
+                    dataResponseEvent.send(onCharacteristicChangedResponse(String(value).toInt()))
+                }
             }
 
-            @Deprecated("Deprecated in Android 13")
+            @Deprecated("Android 12 and lower")
             override fun onCharacteristicRead(
                 gatt: BluetoothGatt?,
                 characteristic: BluetoothGattCharacteristic?,
@@ -230,17 +238,11 @@ class BleServiceImpl(private val context: Context) : BleService {
 
     private fun onCharacteristicReadResponse(uuid: String, value: ByteArray) {
         when (uuid) {
-            Constants.NOTIFICATION_CHARACTERISTIC_UUID -> {
-                val responseType = if (String(value).toInt() == 4)
-                    BleResponseType.ALREADY_LOG_IN
-                else
-                    BleResponseType.NOT_ALREADY_LOG_IN
-
-                //bleDataResponseListener?.invoke(Pair(responseType, byteArrayOf()))
-            }
-
             Constants.READ_PASSWORD_STATUS_CHARACTERISTIC_UUID -> {
-                //bleDataResponseListener?.invoke(Pair(BleResponseType.PASSWORD_STATUS, value))
+                coroutineScope.launch {
+                    val data = Pair(BleResponseType.PASSWORD_STATUS, value)
+                    dataResponseEvent.send(data)
+                }
             }
 
             else -> Unit

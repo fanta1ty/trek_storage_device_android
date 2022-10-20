@@ -1,23 +1,27 @@
 <resources>
     <string name="app_name">Trek Storage Authentication</string>
-    <string name="dialog_biometric_authentication_title">Biometric Authentication</string>
-    <string name="dialog_biometric_authentication_description">Please authenticate to continue.</string>
-    <string name="error_field_empty">This field cannot be empty</string>
-    <string name="error_password_invalid_length">Your password must be at least 8 characters</string>
-    <string name="error_password_invalid_space">Password cannot contain empty spaces</string>
-    <string name="error_password_invalid_pattern">Password must contain a mix of alphanumeric, upper/lowercase and special characters</string>
-    <string name="save">Save</string>
+
     <string name="permission_required">Permission Required</string>
     <string name="permission_permanent_denied_msg">Without your permission to access location the app is unable to scan for nearby bluetooth devices.\nPlease grant the required permissions in the app settings.</string>
     <string name="location_required">Location Service Required</string>
     <string name="location_disabled_msg">This app needs access to location service to scan for nearby bluetooth devices.</string>
     <string name="bluetooth_required">Bluetooth Required</string>
     <string name="bluetooth_disabled_msg">This app needs bluetooth to be turned on to establish connection.</string>
+    <string name="biometric_authentication_title">Biometric Authentication</string>
+    <string name="passcode_authentication_title">Passcode Authentication</string>
+    <string name="authentication_description">Please authenticate to continue.</string>
+    <string name="settings_authentication_disabled">You haven\'t set up any security measures on your phone\'s settings.</string>
+    <string name="use_passcode">Use Passcode</string>
+    <string name="register_recovery_pin">Register Recovery Pin</string>
+    <string name="recovery_pin">Recovery Pin</string>
+    <string name="confirm_recovery_pin">Confirm Recovery Pin</string>
+    <string name="error_field_empty">This field cannot be empty</string>
+    <string name="error_pin_invalid_length">Your pin must be at least 8 characters</string>
+    <string name="error_pin_invalid_space">Pin cannot contain empty spaces</string>
+    <string name="confirm_pin_not_match">Doesn\'t match the pin above</string>
+    <string name="save">Save</string>
+
     <string name="connecting">Connecting</string>
-    <string name="register_password">Register Reset Password</string>
-    <string name="password">Password</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="confirm_password_not_match">Doesn\'t match the password above</string>
     <string name="register_password_success">Your password has been registered</string>
     <string name="register_password_fail">Failed to register password</string>
     <string name="unlock_storage_success">Trek storage unlocked</string>

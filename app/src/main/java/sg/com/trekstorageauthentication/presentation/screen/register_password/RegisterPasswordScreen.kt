@@ -1,7 +1,6 @@
 package sg.com.trekstorageauthentication.presentation.screen.register_password
 
 import android.content.Context
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -16,9 +15,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -37,21 +36,14 @@ fun RegisterPasswordScreen() {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .fillMaxSize()
-            .padding(10.dp)
+            .fillMaxWidth()
+            .height(LocalConfiguration.current.screenHeightDp.dp)
+            .padding(10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Image(
-            painter = painterResource(R.drawable.logo_register),
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
         Text(
-            stringResource(R.string.register_password),
+            stringResource(R.string.register_recovery_pin),
             style = MaterialTheme.typography.h2
         )
 
@@ -64,7 +56,7 @@ fun RegisterPasswordScreen() {
             PasswordTextField(
                 state = stateHolder.passwordState,
                 onValueChange = stateHolder::setPasswordStateValue,
-                label = stringResource(R.string.password),
+                label = stringResource(R.string.recovery_pin),
                 modifier = Modifier.fillMaxWidth(),
                 imeAction = ImeAction.Next,
                 keyboardActions = KeyboardActions { stateHolder.moveFocusDown() }
@@ -75,7 +67,7 @@ fun RegisterPasswordScreen() {
             PasswordTextField(
                 state = stateHolder.confirmPasswordState,
                 onValueChange = stateHolder::setConfirmPasswordStateValue,
-                label = stringResource(R.string.confirm_password),
+                label = stringResource(R.string.confirm_recovery_pin),
                 modifier = Modifier.fillMaxWidth(),
                 keyboardActions = KeyboardActions { stateHolder.clearFocus() }
             )
@@ -93,7 +85,7 @@ fun RegisterPasswordScreen() {
 }
 
 @Composable
-fun rememberRegisterPasswordScreenStateHolder(
+private fun rememberRegisterPasswordScreenStateHolder(
     context: Context = LocalContext.current,
     focusManager: FocusManager = LocalFocusManager.current,
     viewModel: MainViewModel = hiltViewModel(context as FragmentActivity),
@@ -104,11 +96,7 @@ fun rememberRegisterPasswordScreenStateHolder(
 ): RegisterPasswordScreenStateHolder {
     return remember {
         RegisterPasswordScreenStateHolder(
-            context,
-            focusManager,
-            viewModel,
-            passwordState,
-            confirmPasswordState
+            context, focusManager, viewModel, passwordState, confirmPasswordState
         )
     }
 }

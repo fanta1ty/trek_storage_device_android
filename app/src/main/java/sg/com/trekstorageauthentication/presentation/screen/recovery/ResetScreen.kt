@@ -45,7 +45,7 @@ fun ResetScreen() {
         PasswordTextField(
             state = stateHolder.passwordState,
             onValueChange = stateHolder::setPasswordStateValue,
-            label = stringResource(R.string.password),
+            label = stringResource(R.string.recovery_pin),
             modifier = Modifier.fillMaxWidth(),
             imeAction = ImeAction.Next,
             keyboardActions = KeyboardActions { stateHolder.clearFocus() }
