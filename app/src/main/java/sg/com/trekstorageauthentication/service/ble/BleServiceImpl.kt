@@ -227,8 +227,8 @@ class BleServiceImpl(private val context: Context) : BleService {
         responseType: Int
     ): Pair<BleResponseType, ByteArray> {
         return when (responseType) {
-            2 -> Pair(BleResponseType.REGISTER_PASSWORD_SUCCESS, byteArrayOf())
-            3 -> Pair(BleResponseType.REGISTER_PASSWORD_FAIL, byteArrayOf())
+            2 -> Pair(BleResponseType.REGISTER_PIN_SUCCESS, byteArrayOf())
+            3 -> Pair(BleResponseType.REGISTER_PIN_FAIL, byteArrayOf())
             4 -> Pair(BleResponseType.LOG_IN_SUCCESS, byteArrayOf())
             5 -> Pair(BleResponseType.LOG_IN_FAIL, byteArrayOf())
             6 -> Pair(BleResponseType.RESET_SETTINGS_SUCCESS, byteArrayOf())
@@ -238,9 +238,9 @@ class BleServiceImpl(private val context: Context) : BleService {
 
     private fun onCharacteristicReadResponse(uuid: String, value: ByteArray) {
         when (uuid) {
-            Constants.READ_PASSWORD_STATUS_CHARACTERISTIC_UUID -> {
+            Constants.READ_PIN_STATUS_CHARACTERISTIC_UUID -> {
                 coroutineScope.launch {
-                    val data = Pair(BleResponseType.PASSWORD_STATUS, value)
+                    val data = Pair(BleResponseType.PIN_STATUS, value)
                     dataResponseEvent.send(data)
                 }
             }

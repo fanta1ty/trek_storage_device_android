@@ -90,15 +90,15 @@ class DeviceSelectionScreenStateHolder(
             viewModel.getDataResponseEvent().collect {
                 val (type, data) = it
                 when (type) {
-                    BleResponseType.PASSWORD_STATUS -> {
+                    BleResponseType.PIN_STATUS -> {
                         when (String(data).toInt()) {
                             0 -> {
-                                //USB already have password
+                                //USB already have a pin
                                 viewModel.login()
                             }
 
-                            1 -> { //USB doesn't have password
-                                navController.navigate(Screen.RegisterPasswordScreen.route) {
+                            1 -> { //USB doesn't have a pin
+                                navController.navigate(Screen.RegisterPinScreen.route) {
                                     popUpTo(Screen.DeviceSelectionScreen.route) { inclusive = true }
                                 }
                             }

@@ -50,9 +50,9 @@ class MainViewModel @Inject constructor(
     fun registerPassword(password: String) {
         showLoading()
         val uniqueId = generateUniqueIdentifier()
-        viewModelScope.launch { saveStoredPassword(context, uniqueId) }
+        viewModelScope.launch { saveStoredPin(context, uniqueId) }
         val request = "$password\r\n$uniqueId".toByteArray()
-        bleService.write(Constants.REGISTER_PASSWORD_CHARACTERISTIC_UUID, request)
+        bleService.write(Constants.REGISTER_PIN_CHARACTERISTIC_UUID, request)
     }
 
     fun navigate(

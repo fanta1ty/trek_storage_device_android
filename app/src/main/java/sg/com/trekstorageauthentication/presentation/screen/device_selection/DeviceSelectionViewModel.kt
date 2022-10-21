@@ -88,13 +88,13 @@ class DeviceSelectionViewModel @Inject constructor(
 
     fun login() {
         viewModelScope.launch {
-            val data = getStoredPassword(context).toByteArray()
+            val data = getStoredPin(context).toByteArray()
             bleService.write(Constants.LOG_IN_CHARACTERISTIC_UUID, data)
         }
     }
 
-    private fun readPasswordStatus() {
-        bleService.read(Constants.READ_PASSWORD_STATUS_CHARACTERISTIC_UUID)
+    private fun readPinStatus() {
+        bleService.read(Constants.READ_PIN_STATUS_CHARACTERISTIC_UUID)
     }
 
     private fun registerTrekDeviceEmittedEvent() {
@@ -108,7 +108,7 @@ class DeviceSelectionViewModel @Inject constructor(
             bleService.getBleConnectionEvent().collect { connectionState ->
                 when (connectionState) {
                     BleConnectionState.CONNECTED -> {
-                        readPasswordStatus()
+                        readPinStatus()
                     }
 
                     BleConnectionState.ERROR -> {

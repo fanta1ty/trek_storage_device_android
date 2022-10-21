@@ -1,11 +1,11 @@
 package sg.com.trekstorageauthentication.service.ble
 
 enum class BleResponseType {
-    REGISTER_PASSWORD_SUCCESS,
-    REGISTER_PASSWORD_FAIL,
+    REGISTER_PIN_SUCCESS,
+    REGISTER_PIN_FAIL,
     RESET_SETTINGS_SUCCESS,
     RESET_SETTINGS_FAIL,
     LOG_IN_SUCCESS,
     LOG_IN_FAIL,
-    PASSWORD_STATUS
+    PIN_STATUS
 }

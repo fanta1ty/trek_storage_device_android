@@ -21,8 +21,8 @@ import sg.com.trekstorageauthentication.R
 fun PasswordTextField(
     state: State<PasswordTextFieldState>,
     onValueChange: (String) -> Unit,
-    label: String = "",
     modifier: Modifier = Modifier,
+    label: String = "",
     imeAction: ImeAction = ImeAction.Done,
     keyboardActions: KeyboardActions = KeyboardActions { }
 ) {

@@ -8,14 +8,14 @@ import sg.com.trekstorageauthentication.presentation.screen.auth_failure.AuthFai
 import sg.com.trekstorageauthentication.presentation.screen.auth_success.AuthSuccessScreen
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.DeviceSelectionScreen
 import sg.com.trekstorageauthentication.presentation.screen.recovery.ResetScreen
-import sg.com.trekstorageauthentication.presentation.screen.register_password.RegisterPasswordScreen
+import sg.com.trekstorageauthentication.presentation.screen.register_pin.RegisterPinScreen
 
 @Composable
 fun NavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
         //startDestination = Screen.DeviceSelectionScreen.route
-        startDestination = Screen.RegisterPasswordScreen.route
+        startDestination = Screen.RegisterPinScreen.route
     ) {
         composable(route = Screen.DeviceSelectionScreen.route) {
             DeviceSelectionScreen(navController)
@@ -29,8 +29,8 @@ fun NavGraph(navController: NavHostController) {
             AuthFailureScreen()
         }
 
-        composable(route = Screen.RegisterPasswordScreen.route) {
-            RegisterPasswordScreen()
+        composable(route = Screen.RegisterPinScreen.route) {
+            RegisterPinScreen(navController)
         }
 
         composable(route = Screen.ResetScreen.route) {

@@ -1,6 +1,5 @@
 package sg.com.trekstorageauthentication.presentation.screen.recovery
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -13,7 +12,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -32,14 +30,6 @@ fun ResetScreen() {
             .fillMaxSize()
             .padding(10.dp)
     ) {
-        Image(
-            painter = painterResource(R.drawable.logo_register),
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
-        )
-
         Spacer(modifier = Modifier.height(16.dp))
 
         PasswordTextField(

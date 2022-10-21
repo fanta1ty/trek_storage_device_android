@@ -12,13 +12,15 @@
     <string name="authentication_description">Please authenticate to continue.</string>
     <string name="settings_authentication_disabled">You haven\'t set up any security measures on your phone\'s settings.</string>
     <string name="use_passcode">Use Passcode</string>
-    <string name="register_recovery_pin">Register Recovery Pin</string>
+
+    <string name="set_recovery_pin">Set Recovery Pin</string>
     <string name="recovery_pin">Recovery Pin</string>
     <string name="confirm_recovery_pin">Confirm Recovery Pin</string>
     <string name="error_field_empty">This field cannot be empty</string>
     <string name="error_pin_invalid_length">Your pin must be at least 8 characters</string>
     <string name="error_pin_invalid_space">Pin cannot contain empty spaces</string>
-    <string name="confirm_pin_not_match">Doesn\'t match the pin above</string>
+    <string name="error_confirm_pin_not_match">Doesn\'t match the pin above</string>
+    <string name="error_register_pin_failed">Pin registration failed</string>
     <string name="save">Save</string>
 
     <string name="connecting">Connecting</string>

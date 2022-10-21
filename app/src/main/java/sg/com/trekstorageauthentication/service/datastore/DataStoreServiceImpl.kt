@@ -13,16 +13,16 @@ import java.util.*
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(Constants.DATA_STORE_NAME)
 
 class DataStoreServiceImpl : DataStoreService {
-    override suspend fun getStoredPassword(context: Context): String {
-        val key = stringPreferencesKey(Constants.DATA_STORE_PASSWORD_KEY)
+    override suspend fun getStoredPin(context: Context): String {
+        val key = stringPreferencesKey(Constants.DATA_STORE_PIN_KEY)
         val preferences = context.dataStore.data.first()
         return preferences[key] ?: ""
     }
 
-    override suspend fun saveStoredPassword(context: Context, password: String) {
+    override suspend fun saveStoredPin(context: Context, pin: String) {
         context.dataStore.edit { preferences ->
-            val key = stringPreferencesKey(Constants.DATA_STORE_PASSWORD_KEY)
-            preferences[key] = password
+            val key = stringPreferencesKey(Constants.DATA_STORE_PIN_KEY)
+            preferences[key] = pin
         }
     }
 

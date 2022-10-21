@@ -3,9 +3,9 @@ package sg.com.trekstorageauthentication.service.datastore
 import android.content.Context
 
 interface DataStoreService {
-    suspend fun getStoredPassword(context: Context): String
+    suspend fun getStoredPin(context: Context): String
 
-    suspend fun saveStoredPassword(context: Context, password: String)
+    suspend fun saveStoredPin(context: Context, pin: String)
 
     fun generateUniqueIdentifier(): String
 }
