@@ -1,4 +1,4 @@
-package sg.com.trekstorageauthentication.presentation.screen.register_pin
+package sg.com.trekstorageauthentication.presentation.screen.recovery
 
 import android.content.Context
 import androidx.compose.foundation.background
@@ -9,7 +9,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -25,11 +28,11 @@ import kotlinx.coroutines.CoroutineScope
 import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.presentation.component.textfield.PasswordTextField
 import sg.com.trekstorageauthentication.presentation.component.textfield.PasswordTextFieldState
-import sg.com.trekstorageauthentication.presentation.screen.register_pin.state.RegisterPinScreenStateHolder
+import sg.com.trekstorageauthentication.presentation.screen.recovery.state.RecoveryScreenStateHolder
 
 @Composable
-fun RegisterPinScreen(navController: NavHostController) {
-    val stateHolder = rememberRegisterPinScreenStateHolder(navController)
+fun RecoveryScreen(navController: NavHostController) {
+    val stateHolder = rememberRecoveryScreenStateHolder(navController)
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -51,7 +54,7 @@ fun RegisterPinScreen(navController: NavHostController) {
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                stringResource(R.string.set_recovery_pin),
+                stringResource(R.string.enter_recovery_pin),
                 style = MaterialTheme.typography.h2
             )
 
@@ -63,47 +66,31 @@ fun RegisterPinScreen(navController: NavHostController) {
                 label = stringResource(R.string.recovery_pin),
                 modifier = Modifier.fillMaxWidth(),
                 imeAction = ImeAction.Next,
-                keyboardActions = KeyboardActions { stateHolder.moveFocusDown() }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            PasswordTextField(
-                state = stateHolder.confirmPinState,
-                onValueChange = stateHolder::setConfirmPinStateValue,
-                label = stringResource(R.string.confirm_recovery_pin),
-                modifier = Modifier.fillMaxWidth(),
                 keyboardActions = KeyboardActions { stateHolder.clearFocus() }
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
-                onClick = stateHolder::save,
+                onClick = stateHolder::login,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp)
-            ) { Text(stringResource(R.string.save)) }
+            ) { Text(stringResource(R.string.confirm)) }
         }
     }
 }
 
 @Composable
-private fun rememberRegisterPinScreenStateHolder(
+private fun rememberRecoveryScreenStateHolder(
     navController: NavHostController,
     context: Context = LocalContext.current,
-    focusManager: FocusManager = LocalFocusManager.current,
-    viewModel: RegisterPinViewModel = hiltViewModel(),
+    viewModel: RecoveryViewModel = hiltViewModel(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    focusManager: FocusManager = LocalFocusManager.current,
     pinState: MutableState<PasswordTextFieldState> = mutableStateOf(PasswordTextFieldState()),
-    confirmPinState: MutableState<PasswordTextFieldState> = mutableStateOf(
-        PasswordTextFieldState()
+): RecoveryScreenStateHolder {
+    return RecoveryScreenStateHolder(
+        navController, context, viewModel, coroutineScope, focusManager, pinState
     )
-): RegisterPinScreenStateHolder {
-    return remember {
-        RegisterPinScreenStateHolder(
-            navController, context, focusManager, viewModel,
-            coroutineScope, pinState, confirmPinState
-        )
-    }
 }

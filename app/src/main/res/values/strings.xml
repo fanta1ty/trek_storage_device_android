@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Trek Storage Authentication</string>
 
+    <string name="scanning_devices">Scanning Devices</string>
+    <string name="scan">SCAN</string>
+    <string name="stop">STOP</string>
     <string name="permission_required">Permission Required</string>
     <string name="permission_permanent_denied_msg">Without your permission to access location the app is unable to scan for nearby bluetooth devices.\nPlease grant the required permissions in the app settings.</string>
     <string name="location_required">Location Service Required</string>
@@ -23,6 +26,11 @@
     <string name="error_register_pin_failed">Pin registration failed</string>
     <string name="save">Save</string>
 
+    <string name="enter_recovery_pin">Enter Recovery Pin</string>
+    <string name="recovery_successful">Recovery Successful</string>
+    <string name="error_recovery_pin_incorrect">Incorrect recovery pin</string>
+    <string name="confirm">Confirm</string>
+
     <string name="connecting">Connecting</string>
     <string name="register_password_success">Your password has been registered</string>
     <string name="register_password_fail">Failed to register password</string>
@@ -30,10 +38,6 @@
     <string name="unlock_storage_fail">Failed to authenticate. Please re-enter your password</string>
     <string name="no_trek_devices_found">No Trek devices found</string>
     <string name="reset_settings_fail">Failed to reset settings</string>
-    <string name="confirm">Confirm</string>
     <string name="dialog_loading_title">Please Wait…</string>
     <string name="dialog_loading_content">Loading…</string>
-    <string name="scanning_devices">Scanning Devices</string>
-    <string name="scan">SCAN</string>
-    <string name="stop">STOP</string>
 </resources>
