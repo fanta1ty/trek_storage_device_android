@@ -10,11 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import sg.com.trekstorageauthentication.R
+import sg.com.trekstorageauthentication.presentation.navigation.Screen
 
 @Composable
-fun AuthFailureScreen() {
+fun AuthFailureScreen(navController: NavHostController) {
     Column(modifier = Modifier.fillMaxSize()) {
         Spacer(
             modifier = Modifier
@@ -28,7 +31,9 @@ fun AuthFailureScreen() {
             contentAlignment = Alignment.Center
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -43,14 +48,23 @@ fun AuthFailureScreen() {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
-                    "Authentication Fail",
+                    stringResource(R.string.authentication_fail),
                     style = MaterialTheme.typography.h4
                 )
 
                 Spacer(modifier = Modifier.height(48.dp))
 
-                Button(onClick = { }) {
-                    Text("Enter Recovery Pin")
+                Button(
+                    onClick = {
+                        navController.navigate(Screen.RecoveryScreen.route) {
+                            popUpTo(Screen.AuthFailureScreen.route) { inclusive = true }
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp)
+                ) {
+                    Text(stringResource(R.string.enter_recovery_pin))
                 }
             }
         }

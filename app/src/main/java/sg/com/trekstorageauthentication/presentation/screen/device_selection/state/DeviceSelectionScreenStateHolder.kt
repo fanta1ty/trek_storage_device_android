@@ -12,6 +12,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.presentation.navigation.Screen
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.DeviceSelectionViewModel
 import sg.com.trekstorageauthentication.service.authentication.AuthenticationService
@@ -27,13 +28,13 @@ class DeviceSelectionScreenStateHolder(
     private val multiplePermissionsState: MultiplePermissionsState
 ) : AuthenticationService by AuthenticationServiceImpl(context) {
 
+    private var activityResultLauncher: ActivityResultLauncher<Intent>? = null
+    private var selectedItemPosition = -1
+
     init {
         Log.d("HuyTest", "DeviceSelectionScreenStateHolder init")
         registerDataResponseEvent()
     }
-
-    private var activityResultLauncher: ActivityResultLauncher<Intent>? = null
-    private var selectedItemPosition = -1
 
     fun toggleScanningOnOff() {
         if (!viewModel.getIsScanningState().value) { //Start scan
@@ -104,7 +105,8 @@ class DeviceSelectionScreenStateHolder(
                             }
 
                             else -> { //Not Trek device
-                                Toast.makeText(context, "Not Trek device", Toast.LENGTH_LONG).show()
+                                val msg = context.getString(R.string.no_trek_devices_found)
+                                Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
                             }
                         }
                     }

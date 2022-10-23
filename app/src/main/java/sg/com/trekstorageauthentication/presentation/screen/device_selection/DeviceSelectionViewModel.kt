@@ -12,6 +12,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.common.Constants
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.state.DeviceSelectionDialogState
 import sg.com.trekstorageauthentication.service.ble.BleConnectionState
@@ -112,8 +113,8 @@ class DeviceSelectionViewModel @Inject constructor(
                     }
 
                     BleConnectionState.ERROR -> {
-                        Toast.makeText(context, "BleConnectionState.ERROR", Toast.LENGTH_LONG)
-                            .show()
+                        val msg = context.getString(R.string.bluetooth_disconnected)
+                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
                     }
 
                     else -> Unit

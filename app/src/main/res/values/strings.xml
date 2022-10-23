@@ -15,6 +15,8 @@
     <string name="authentication_description">Please authenticate to continue.</string>
     <string name="settings_authentication_disabled">You haven\'t set up any security measures on your phone\'s settings.</string>
     <string name="use_passcode">Use Passcode</string>
+    <string name="bluetooth_disconnected">Bluetooth disconnected</string>
+    <string name="no_trek_devices_found">No Trek devices found</string>
 
     <string name="set_recovery_pin">Set Recovery Pin</string>
     <string name="recovery_pin">Recovery Pin</string>
@@ -31,13 +33,7 @@
     <string name="error_recovery_pin_incorrect">Incorrect recovery pin</string>
     <string name="confirm">Confirm</string>
 
-    <string name="connecting">Connecting</string>
-    <string name="register_password_success">Your password has been registered</string>
-    <string name="register_password_fail">Failed to register password</string>
-    <string name="unlock_storage_success">Trek storage unlocked</string>
-    <string name="unlock_storage_fail">Failed to authenticate. Please re-enter your password</string>
-    <string name="no_trek_devices_found">No Trek devices found</string>
-    <string name="reset_settings_fail">Failed to reset settings</string>
-    <string name="dialog_loading_title">Please Wait…</string>
-    <string name="dialog_loading_content">Loading…</string>
+    <string name="authentication_fail">Authentication Fail</string>
+    <string name="authentication_successful">Authentication Successful</string>
+    <string name="authentication_successful_desc">The thumb drive has now been\nunlocked and ready to be used on your PC</string>
 </resources>

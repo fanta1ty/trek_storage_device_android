@@ -14,7 +14,8 @@ import sg.com.trekstorageauthentication.presentation.screen.register_pin.Registe
 fun NavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Screen.DeviceSelectionScreen.route
+        //startDestination = Screen.DeviceSelectionScreen.route
+        startDestination = Screen.AuthFailureScreen.route
     ) {
         composable(route = Screen.DeviceSelectionScreen.route) {
             DeviceSelectionScreen(navController)
@@ -25,7 +26,7 @@ fun NavGraph(navController: NavHostController) {
         }
 
         composable(route = Screen.AuthFailureScreen.route) {
-            AuthFailureScreen()
+            AuthFailureScreen(navController)
         }
 
         composable(route = Screen.RegisterPinScreen.route) {

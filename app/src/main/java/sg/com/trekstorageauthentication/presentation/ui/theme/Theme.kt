@@ -22,7 +22,7 @@ fun TrekStorageAuthenticationTheme(
 ) {
     val colors = LightColorPalette
     val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(color = Color.White)
+    systemUiController.setStatusBarColor(color = Blue700)
 
     MaterialTheme(
         colors = colors,
