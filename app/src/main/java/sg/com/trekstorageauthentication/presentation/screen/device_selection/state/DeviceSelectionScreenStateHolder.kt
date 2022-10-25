@@ -22,7 +22,7 @@ import sg.com.trekstorageauthentication.service.ble.BleResponseType
 class DeviceSelectionScreenStateHolder(
     private val context: Context,
     val viewModel: DeviceSelectionViewModel,
-    private val navController: NavHostController,
+    private val navController: NavHostController?,
     private val coroutineScope: CoroutineScope,
     private val multiplePermissionsState: MultiplePermissionsState
 ) : AuthenticationService by AuthenticationServiceImpl(context) {
@@ -97,7 +97,7 @@ class DeviceSelectionScreenStateHolder(
                             }
 
                             1 -> { //USB doesn't have a pin
-                                navController.navigate(Screen.RegisterPinScreen.route) {
+                                navController?.navigate(Screen.RegisterPinScreen.route) {
                                     popUpTo(Screen.DeviceSelectionScreen.route) { inclusive = true }
                                 }
                             }
@@ -110,13 +110,13 @@ class DeviceSelectionScreenStateHolder(
                     }
 
                     BleResponseType.LOG_IN_SUCCESS -> {
-                        navController.navigate(Screen.AuthSuccessScreen.route) {
+                        navController?.navigate(Screen.AuthSuccessScreen.route) {
                             popUpTo(Screen.DeviceSelectionScreen.route) { inclusive = true }
                         }
                     }
 
                     BleResponseType.LOG_IN_FAIL -> {
-                        navController.navigate(Screen.AuthFailureScreen.route) {
+                        navController?.navigate(Screen.AuthFailureScreen.route) {
                             popUpTo(Screen.DeviceSelectionScreen.route) { inclusive = true }
                         }
                     }

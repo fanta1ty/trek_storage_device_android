@@ -14,7 +14,7 @@ import sg.com.trekstorageauthentication.presentation.screen.recovery.RecoveryVie
 import sg.com.trekstorageauthentication.service.ble.BleResponseType
 
 class RecoveryScreenStateHolder(
-    private val navController: NavHostController,
+    private val navController: NavHostController?,
     private val context: Context,
     private val viewModel: RecoveryViewModel,
     private val coroutineScope: CoroutineScope,
@@ -52,7 +52,7 @@ class RecoveryScreenStateHolder(
 
                         viewModel.saveStoredPin(context, _pinState.value.input)
 
-                        navController.navigate(Screen.AuthSuccessScreen.route) {
+                        navController?.navigate(Screen.AuthSuccessScreen.route) {
                             popUpTo(Screen.RecoveryScreen.route) { inclusive = true }
                         }
                     }

@@ -16,7 +16,7 @@ import sg.com.trekstorageauthentication.presentation.screen.register_pin.Registe
 import sg.com.trekstorageauthentication.service.ble.BleResponseType
 
 class RegisterPinScreenStateHolder(
-    private val navController: NavHostController,
+    private val navController: NavHostController?,
     private val context: Context,
     private val focusManager: FocusManager,
     private val viewModel: RegisterPinViewModel,
@@ -66,7 +66,7 @@ class RegisterPinScreenStateHolder(
                     BleResponseType.REGISTER_PIN_SUCCESS -> {
                         viewModel.saveStoredPin(context, _pinState.value.input)
 
-                        navController.navigate(Screen.AuthSuccessScreen.route) {
+                        navController?.navigate(Screen.AuthSuccessScreen.route) {
                             popUpTo(Screen.RegisterPinScreen.route) { inclusive = true }
                         }
                     }

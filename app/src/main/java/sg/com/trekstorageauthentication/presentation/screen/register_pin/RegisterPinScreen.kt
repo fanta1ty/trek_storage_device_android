@@ -23,13 +23,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
 import sg.com.trekstorageauthentication.R
+import sg.com.trekstorageauthentication.presentation.component.LocalNavController
 import sg.com.trekstorageauthentication.presentation.component.textfield.PasswordTextField
 import sg.com.trekstorageauthentication.presentation.component.textfield.PasswordTextFieldState
 import sg.com.trekstorageauthentication.presentation.screen.register_pin.state.RegisterPinScreenStateHolder
 
 @Composable
-fun RegisterPinScreen(navController: NavHostController) {
-    val stateHolder = rememberRegisterPinScreenStateHolder(navController)
+fun RegisterPinScreen() {
+    val stateHolder = rememberRegisterPinScreenStateHolder(LocalNavController.current)
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -90,7 +91,7 @@ fun RegisterPinScreen(navController: NavHostController) {
 
 @Composable
 private fun rememberRegisterPinScreenStateHolder(
-    navController: NavHostController,
+    navController: NavHostController?,
     context: Context = LocalContext.current,
     focusManager: FocusManager = LocalFocusManager.current,
     viewModel: RegisterPinViewModel = hiltViewModel(),

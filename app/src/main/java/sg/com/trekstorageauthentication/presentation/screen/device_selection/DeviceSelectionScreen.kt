@@ -5,7 +5,6 @@ package sg.com.trekstorageauthentication.presentation.screen.device_selection
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
@@ -22,6 +21,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.CoroutineScope
+import sg.com.trekstorageauthentication.presentation.component.LocalNavController
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.component.DeviceItem
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.component.DeviceSelectionDialog
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.component.DeviceSelectionToolbar
@@ -29,10 +29,8 @@ import sg.com.trekstorageauthentication.presentation.screen.device_selection.sta
 
 @SuppressLint("MissingPermission")
 @Composable
-fun DeviceSelectionScreen(navController: NavHostController) {
-    Log.d("HuyTest", "DeviceSelectionScreen recompose")
-
-    val stateHolder = rememberDeviceSelectionScreenStateHolder(navController)
+fun DeviceSelectionScreen() {
+    val stateHolder = rememberDeviceSelectionScreenStateHolder(LocalNavController.current)
     val trekDevice = stateHolder.viewModel.trekDevice
 
     Column(
@@ -71,7 +69,7 @@ fun DeviceSelectionScreen(navController: NavHostController) {
 
 @Composable
 private fun rememberDeviceSelectionScreenStateHolder(
-    navController: NavHostController,
+    navController: NavHostController?,
     context: Context = LocalContext.current,
     viewModel: DeviceSelectionViewModel = hiltViewModel(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),

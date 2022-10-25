@@ -12,12 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import sg.com.trekstorageauthentication.R
+import sg.com.trekstorageauthentication.presentation.component.LocalNavController
 import sg.com.trekstorageauthentication.presentation.navigation.Screen
 
 @Composable
-fun AuthFailureScreen(navController: NavHostController) {
+fun AuthFailureScreen() {
+    val navController = LocalNavController.current
     Column(modifier = Modifier.fillMaxSize()) {
         Spacer(
             modifier = Modifier
@@ -56,7 +57,7 @@ fun AuthFailureScreen(navController: NavHostController) {
 
                 Button(
                     onClick = {
-                        navController.navigate(Screen.RecoveryScreen.route) {
+                        navController?.navigate(Screen.RecoveryScreen.route) {
                             popUpTo(Screen.AuthFailureScreen.route) { inclusive = true }
                         }
                     },

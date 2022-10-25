@@ -22,6 +22,10 @@ import java.util.*
 @Suppress("DEPRECATION")
 class BleServiceImpl(private val context: Context) : BleService {
 
+    companion object {
+        private const val TAG = "BleService"
+    }
+
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private val alreadyEmittedDevices = mutableListOf<Int>()
     private val trekDeviceEmitEvent = Channel<BluetoothDevice>()
@@ -92,7 +96,7 @@ class BleServiceImpl(private val context: Context) : BleService {
     }
 
     override fun write(uuid: String, bytes: ByteArray) {
-        Log.d("HuyTest", "Ble write: ${bytesToHex(bytes)}")
+        Log.d(TAG, "Ble write: ${bytesToHex(bytes)}")
 
         val serviceUuid = UUID.fromString(Constants.SERVICE_UUID)
         val charUuid = UUID.fromString(uuid)
