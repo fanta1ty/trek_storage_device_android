@@ -108,16 +108,20 @@ class DeviceSelectionViewModel @Inject constructor(
         viewModelScope.launch {
             bleService.getBleConnectionEvent().collect { connectionState ->
                 when (connectionState) {
+                    BleConnectionState.CONNECTING -> {
+                        _dialogState.apply { value = value.copy(isShowLoadingDialog = true) }
+                    }
+
                     BleConnectionState.CONNECTED -> {
+                        dismissDialog()
                         readPinStatus()
                     }
 
                     BleConnectionState.ERROR -> {
+                        dismissDialog()
                         val msg = context.getString(R.string.bluetooth_disconnected)
-                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                     }
-
-                    else -> Unit
                 }
             }
         }

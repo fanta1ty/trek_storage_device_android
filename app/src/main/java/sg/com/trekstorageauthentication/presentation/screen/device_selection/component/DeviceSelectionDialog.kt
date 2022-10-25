@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.res.stringResource
 import sg.com.trekstorageauthentication.R
+import sg.com.trekstorageauthentication.presentation.component.LoadingDialog
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.state.DeviceSelectionDialogState
 import sg.com.trekstorageauthentication.presentation.ui.common.Dialog
 
@@ -40,6 +41,14 @@ fun DeviceSelectionDialog(
             content = stringResource(R.string.bluetooth_disabled_msg),
             isCancellable = false,
             onPositiveClickEvent = onBluetoothDisabledPositiveEvent
+        )
+    }
+
+    if (value.isShowLoadingDialog) {
+        LoadingDialog(
+            title = stringResource(R.string.please_wait),
+            content = stringResource(R.string.connecting_to_pc),
+            isCancellable = false
         )
     }
 }

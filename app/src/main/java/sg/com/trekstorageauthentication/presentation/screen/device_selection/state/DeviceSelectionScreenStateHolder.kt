@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.navigation.NavHostController
@@ -32,7 +31,6 @@ class DeviceSelectionScreenStateHolder(
     private var selectedItemPosition = -1
 
     init {
-        Log.d("HuyTest", "DeviceSelectionScreenStateHolder init")
         registerDataResponseEvent()
     }
 
@@ -106,7 +104,7 @@ class DeviceSelectionScreenStateHolder(
 
                             else -> { //Not Trek device
                                 val msg = context.getString(R.string.no_trek_devices_found)
-                                Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+                                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                             }
                         }
                     }

@@ -70,8 +70,11 @@ class BleServiceImpl(private val context: Context) : BleService {
     }
 
     override fun connect(device: BluetoothDevice) {
-        close()
-        gatt = device.connectGatt(context, false, getGattCallback())
+        coroutineScope.launch {
+            close()
+            bleConnectionEvent.send(BleConnectionState.CONNECTING)
+            gatt = device.connectGatt(context, false, getGattCallback())
+        }
     }
 
     override fun close() {
