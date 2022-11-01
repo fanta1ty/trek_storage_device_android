@@ -33,7 +33,7 @@ import sg.com.trekstorageauthentication.presentation.screen.recovery.state.Recov
 
 @Composable
 fun RecoveryScreen() {
-    val stateHolder = rememberRecoveryScreenStateHolder(LocalNavController.current)
+    val stateHolder = rememberRecoveryScreenStateHolder()
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -84,7 +84,7 @@ fun RecoveryScreen() {
 
 @Composable
 private fun rememberRecoveryScreenStateHolder(
-    navController: NavHostController?,
+    navController: NavHostController? = LocalNavController.current,
     context: Context = LocalContext.current,
     viewModel: RecoveryViewModel = hiltViewModel(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),

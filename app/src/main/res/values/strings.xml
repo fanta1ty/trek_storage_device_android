@@ -31,11 +31,17 @@
     <string name="save">Save</string>
 
     <string name="enter_recovery_pin">Enter Recovery Pin</string>
-    <string name="recovery_successful">Recovery Successful</string>
+    <string name="recovery_successful">Recovery successful</string>
     <string name="error_recovery_pin_incorrect">Incorrect recovery pin</string>
     <string name="confirm">Confirm</string>
 
     <string name="authentication_fail">Authentication Fail</string>
     <string name="authentication_successful">Authentication Successful</string>
     <string name="authentication_successful_desc">The thumb drive has now been\nunlocked and ready to be used on your PC</string>
+    <string name="change_pin">Change Pin</string>
+    <string name="reset_thumb_drive">Reset Thumb Drive</string>
+    <string name="reset_thumb_drive_confirm_title">Reset Thumb Drive?</string>
+    <string name="reset_thumb_drive_confirm_desc">This will reset you thumb drive to its default factory settings.</string>
+    <string name="reset_thumb_drive_successful">Thumb drive reset successful</string>
+    <string name="reset_thumb_drive_fail">Thumb drive reset failed</string>
 </resources>

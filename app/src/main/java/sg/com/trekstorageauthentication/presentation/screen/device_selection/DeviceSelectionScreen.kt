@@ -30,7 +30,7 @@ import sg.com.trekstorageauthentication.presentation.screen.device_selection.sta
 @SuppressLint("MissingPermission")
 @Composable
 fun DeviceSelectionScreen() {
-    val stateHolder = rememberDeviceSelectionScreenStateHolder(LocalNavController.current)
+    val stateHolder = rememberDeviceSelectionScreenStateHolder()
     val trekDevice = stateHolder.viewModel.trekDevice
 
     Column(
@@ -69,7 +69,7 @@ fun DeviceSelectionScreen() {
 
 @Composable
 private fun rememberDeviceSelectionScreenStateHolder(
-    navController: NavHostController?,
+    navController: NavHostController? = LocalNavController.current,
     context: Context = LocalContext.current,
     viewModel: DeviceSelectionViewModel = hiltViewModel(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),

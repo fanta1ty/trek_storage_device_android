@@ -239,7 +239,9 @@ class BleServiceImpl(private val context: Context) : BleService {
             4 -> Pair(BleResponseType.LOG_IN_SUCCESS, byteArrayOf())
             5 -> Pair(BleResponseType.LOG_IN_FAIL, byteArrayOf())
             6 -> Pair(BleResponseType.RESET_SETTINGS_SUCCESS, byteArrayOf())
-            else -> Pair(BleResponseType.RESET_SETTINGS_FAIL, byteArrayOf())
+            7 -> Pair(BleResponseType.RESET_SETTINGS_FAIL, byteArrayOf())
+            8 -> Pair(BleResponseType.CHANGE_PIN_SUCCESS, byteArrayOf())
+            else -> Pair(BleResponseType.CHANGE_PIN_FAIL, byteArrayOf())
         }
     }
 

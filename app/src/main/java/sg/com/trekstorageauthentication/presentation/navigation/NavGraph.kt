@@ -3,8 +3,10 @@ package sg.com.trekstorageauthentication.presentation.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import sg.com.trekstorageauthentication.presentation.component.LocalNavController
 import sg.com.trekstorageauthentication.presentation.screen.auth_failure.AuthFailureScreen
 import sg.com.trekstorageauthentication.presentation.screen.auth_success.AuthSuccessScreen
@@ -31,8 +33,16 @@ fun NavGraph(navController: NavHostController) {
                 AuthFailureScreen()
             }
 
-            composable(route = Screen.RegisterPinScreen.route) {
-                RegisterPinScreen()
+            composable(
+                route = Screen.RegisterPinScreen.routeWithArgs,
+                arguments = listOf(navArgument(Screen.RegisterPinScreen.isRegisterParam) {
+                    type = NavType.BoolType
+                    defaultValue = true
+                })
+            ) { entry ->
+                RegisterPinScreen(
+                    entry.arguments!!.getBoolean(Screen.RegisterPinScreen.isRegisterParam)
+                )
             }
 
             composable(route = Screen.RecoveryScreen.route) {

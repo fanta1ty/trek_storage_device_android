@@ -29,8 +29,8 @@ import sg.com.trekstorageauthentication.presentation.component.textfield.Passwor
 import sg.com.trekstorageauthentication.presentation.screen.register_pin.state.RegisterPinScreenStateHolder
 
 @Composable
-fun RegisterPinScreen() {
-    val stateHolder = rememberRegisterPinScreenStateHolder(LocalNavController.current)
+fun RegisterPinScreen(isRegister: Boolean) {
+    val stateHolder = rememberRegisterPinScreenStateHolder()
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -91,7 +91,7 @@ fun RegisterPinScreen() {
 
 @Composable
 private fun rememberRegisterPinScreenStateHolder(
-    navController: NavHostController?,
+    navController: NavHostController? = LocalNavController.current,
     context: Context = LocalContext.current,
     focusManager: FocusManager = LocalFocusManager.current,
     viewModel: RegisterPinViewModel = hiltViewModel(),
