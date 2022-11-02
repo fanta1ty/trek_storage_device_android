@@ -67,13 +67,13 @@ fun AuthSuccessScreen() {
                 )
             }
         }
-
-        ConfirmResetThumbDriveDialog(
-            stateHolder.viewModel.dialogState.collectAsState(),
-            stateHolder.viewModel::resetThumbDrive,
-            stateHolder.viewModel::dismissDialog,
-        )
     }
+
+    ConfirmResetThumbDriveDialog(
+        stateHolder.viewModel.dialogState.collectAsState(),
+        stateHolder.viewModel::resetThumbDrive,
+        stateHolder.viewModel::dismissDialog,
+    )
 }
 
 @Composable

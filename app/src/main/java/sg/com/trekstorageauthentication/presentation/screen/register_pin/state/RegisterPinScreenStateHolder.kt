@@ -16,6 +16,7 @@ import sg.com.trekstorageauthentication.presentation.screen.register_pin.Registe
 import sg.com.trekstorageauthentication.service.ble.BleResponseType
 
 class RegisterPinScreenStateHolder(
+    private val isRegister: Boolean,
     private val navController: NavHostController?,
     private val context: Context,
     private val focusManager: FocusManager,
@@ -53,7 +54,11 @@ class RegisterPinScreenStateHolder(
     fun save() {
         if (verifyPin() && verifyConfirmPin()) {
             clearFocus()
-            viewModel.registerPin(_pinState.value.input)
+
+            if (isRegister)
+                viewModel.registerPin(_pinState.value.input)
+            else
+                viewModel.changePin(_pinState.value.input)
         }
     }
 
@@ -63,16 +68,32 @@ class RegisterPinScreenStateHolder(
                 val (type, _) = it
 
                 when (type) {
-                    BleResponseType.REGISTER_PIN_SUCCESS -> {
+                    BleResponseType.REGISTER_PIN_SUCCESS,
+                    BleResponseType.CHANGE_PIN_SUCCESS -> {
                         viewModel.saveStoredPin(context, _pinState.value.input)
 
+                        val msg = if (isRegister)
+                            context.getString(R.string.error_register_pin_successful)
+                        else
+                            context.getString(R.string.error_reset_pin_successful)
+
+                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+
+                        val currentRoute = navController?.currentBackStackEntry?.destination?.route
+                            ?: Screen.RegisterPinScreen.route
+
                         navController?.navigate(Screen.AuthSuccessScreen.route) {
-                            popUpTo(Screen.RegisterPinScreen.route) { inclusive = true }
+                            popUpTo(currentRoute) { inclusive = true }
                         }
                     }
 
-                    BleResponseType.REGISTER_PIN_FAIL -> {
-                        val msg = context.getString(R.string.error_register_pin_failed)
+                    BleResponseType.REGISTER_PIN_FAIL,
+                    BleResponseType.CHANGE_PIN_FAIL -> {
+                        val msg = if (isRegister)
+                            context.getString(R.string.error_register_pin_failed)
+                        else
+                            context.getString(R.string.error_reset_pin_failed)
+
                         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                     }
 

@@ -21,7 +21,9 @@ class AuthSuccessScreenStateHolder(
     }
 
     fun navigateChangePinScreen() {
-        navController?.navigate(Screen.RegisterPinScreen.withArgs(false))
+        navController?.navigate(Screen.RegisterPinScreen.withArgs(false)) {
+            popUpTo(Screen.AuthSuccessScreen.route) { inclusive = true }
+        }
     }
 
     private fun registerDataResponseEvent() {

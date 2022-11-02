@@ -30,7 +30,7 @@ import sg.com.trekstorageauthentication.presentation.screen.register_pin.state.R
 
 @Composable
 fun RegisterPinScreen(isRegister: Boolean) {
-    val stateHolder = rememberRegisterPinScreenStateHolder()
+    val stateHolder = rememberRegisterPinScreenStateHolder(isRegister)
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -52,7 +52,12 @@ fun RegisterPinScreen(isRegister: Boolean) {
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                stringResource(R.string.set_recovery_pin),
+                stringResource(
+                    if (isRegister)
+                        R.string.set_recovery_pin
+                    else
+                        R.string.change_recovery_pin
+                ),
                 style = MaterialTheme.typography.h2
             )
 
@@ -91,6 +96,7 @@ fun RegisterPinScreen(isRegister: Boolean) {
 
 @Composable
 private fun rememberRegisterPinScreenStateHolder(
+    isRegister: Boolean,
     navController: NavHostController? = LocalNavController.current,
     context: Context = LocalContext.current,
     focusManager: FocusManager = LocalFocusManager.current,
@@ -103,8 +109,8 @@ private fun rememberRegisterPinScreenStateHolder(
 ): RegisterPinScreenStateHolder {
     return remember {
         RegisterPinScreenStateHolder(
-            navController, context, focusManager, viewModel,
-            coroutineScope, pinState, confirmPinState
+            isRegister, navController, context, focusManager,
+            viewModel, coroutineScope, pinState, confirmPinState
         )
     }
 }

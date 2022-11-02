@@ -21,13 +21,17 @@
     <string name="no_trek_devices_found">No Trek devices found</string>
 
     <string name="set_recovery_pin">Set Recovery Pin</string>
+    <string name="change_recovery_pin">Change Recovery Pin</string>
     <string name="recovery_pin">Recovery Pin</string>
     <string name="confirm_recovery_pin">Confirm Recovery Pin</string>
     <string name="error_field_empty">This field cannot be empty</string>
     <string name="error_pin_invalid_length">Your pin must be at least 8 characters</string>
     <string name="error_pin_invalid_space">Pin cannot contain empty spaces</string>
     <string name="error_confirm_pin_not_match">Doesn\'t match the pin above</string>
+    <string name="error_register_pin_successful">Pin registration successful</string>
     <string name="error_register_pin_failed">Pin registration failed</string>
+    <string name="error_reset_pin_successful">Pin reset successful</string>
+    <string name="error_reset_pin_failed">Pin reset failed</string>
     <string name="save">Save</string>
 
     <string name="enter_recovery_pin">Enter Recovery Pin</string>
