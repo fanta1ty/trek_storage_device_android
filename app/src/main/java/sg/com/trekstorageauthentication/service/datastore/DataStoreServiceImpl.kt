@@ -24,4 +24,17 @@ class DataStoreServiceImpl : DataStoreService {
             preferences[key] = pin
         }
     }
+
+    override suspend fun getLastConnectedDeviceName(context: Context): String {
+        val key = stringPreferencesKey(Constants.DATA_STORE_LAST_CONNECTED_DEVICE_NAME_KEY)
+        val preferences = context.dataStore.data.first()
+        return preferences[key] ?: ""
+    }
+
+    override suspend fun saveLastConnectedDeviceName(context: Context, deviceName: String) {
+        context.dataStore.edit { preferences ->
+            val key = stringPreferencesKey(Constants.DATA_STORE_LAST_CONNECTED_DEVICE_NAME_KEY)
+            preferences[key] = deviceName
+        }
+    }
 }

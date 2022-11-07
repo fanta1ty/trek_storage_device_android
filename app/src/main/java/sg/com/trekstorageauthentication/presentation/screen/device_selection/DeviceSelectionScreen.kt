@@ -9,10 +9,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,6 +18,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collectLatest
 import sg.com.trekstorageauthentication.presentation.component.LocalNavController
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.component.DeviceItem
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.component.DeviceSelectionDialog
@@ -44,8 +42,7 @@ fun DeviceSelectionScreen() {
         LazyColumn(content = {
             items(trekDevice.size) {
                 DeviceItem(
-                    deviceName = trekDevice[it].name.takeIf { name -> !name.isNullOrEmpty() }
-                        ?: "N/A",
+                    deviceName = trekDevice[it].name.takeIf { name -> !name.isNullOrEmpty() } ?: "N/A",
                     position = it,
                     onItemClick = { index ->
                         stateHolder.setSelectedItemPosition(index)
@@ -57,6 +54,23 @@ fun DeviceSelectionScreen() {
                 )
             }
         })
+
+        LaunchedEffect(Unit) {
+            stateHolder.viewModel.autoConnectFlow.collectLatest { index ->
+                if (index != null) {
+                    stateHolder.setSelectedItemPosition(index)
+                    stateHolder.authenticate(
+                        stateHolder::connect,
+                        stateHolder::launchPasscodeAuthentication
+                    )
+                }
+            }
+        }
+    }
+
+    // Auto scan on launch
+    LaunchedEffect(Unit) {
+        stateHolder.toggleScanningOnOff()
     }
 
     DeviceSelectionDialog(

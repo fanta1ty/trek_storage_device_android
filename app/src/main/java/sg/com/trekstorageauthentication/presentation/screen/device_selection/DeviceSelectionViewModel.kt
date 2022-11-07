@@ -9,8 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.common.Constants
@@ -23,7 +22,7 @@ import sg.com.trekstorageauthentication.service.permission.PermissionService
 import sg.com.trekstorageauthentication.service.permission.StoragePermissionServiceImpl
 import javax.inject.Inject
 
-@SuppressLint("StaticFieldLeak")
+@SuppressLint("StaticFieldLeak", "MissingPermission")
 @HiltViewModel
 class DeviceSelectionViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -38,9 +37,25 @@ class DeviceSelectionViewModel @Inject constructor(
     private val _trekDevices = mutableStateListOf<BluetoothDevice>()
     val trekDevice: List<BluetoothDevice> = _trekDevices
 
+    private val _newDeviceFoundFlow = MutableSharedFlow<Int>()
+
+    private val _autoConnectFlow = MutableSharedFlow<Int?>()
+    val autoConnectFlow: SharedFlow<Int?> = _autoConnectFlow
+
     init {
         registerTrekDeviceEmittedEvent()
         registerBleConnectionEvent()
+
+        // Listen to new device
+        // If the device is the last connected device, emit it's index value into auto connect flow
+        viewModelScope.launch {
+            val lastConnectedDeviceName = getLastConnectedDeviceName(context)
+            _newDeviceFoundFlow.collect { index ->
+                if (_trekDevices[index].name == lastConnectedDeviceName) {
+                    _autoConnectFlow.emit(index)
+                }
+            }
+        }
     }
 
     fun startScan(permissionResult: Boolean) {
@@ -74,6 +89,13 @@ class DeviceSelectionViewModel @Inject constructor(
     }
 
     fun connect(index: Int) {
+        // Save last connected device name
+        viewModelScope.launch {
+            if (_trekDevices[index].name != null) {
+                saveLastConnectedDeviceName(context, _trekDevices[index].name)
+            }
+        }
+
         bleService.connect(_trekDevices[index])
     }
 
@@ -100,7 +122,11 @@ class DeviceSelectionViewModel @Inject constructor(
 
     private fun registerTrekDeviceEmittedEvent() {
         viewModelScope.launch {
-            bleService.getTrekDeviceEmitEvent().collect { _trekDevices.add(it) }
+            bleService.getTrekDeviceEmitEvent().collect {
+                _trekDevices.add(it)
+                // Notify to flow that a new device is found
+                _newDeviceFoundFlow.emit(_trekDevices.size - 1)
+            }
         }
     }
 

@@ -4,6 +4,7 @@ object Constants {
     //Data Store
     const val DATA_STORE_NAME = "Trek_Data_Store"
     const val DATA_STORE_PIN_KEY = "Pin"
+    const val DATA_STORE_LAST_CONNECTED_DEVICE_NAME_KEY = "Last_Connected_Device_Name"
 
     //BLE
     const val SERVICE_UUID = "a4ff2a50-28de-11ed-a261-0242ac120002"
