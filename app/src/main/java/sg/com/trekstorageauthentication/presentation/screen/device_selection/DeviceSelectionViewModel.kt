@@ -132,7 +132,7 @@ class DeviceSelectionViewModel @Inject constructor(
 //            "${manufacturer.uppercase()} ${model.uppercase()}"
 //        }
         val phoneName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            Settings.Global.DEVICE_NAME
+            Settings.Global.getString(context.contentResolver, Settings.Global.DEVICE_NAME)
         } else model.uppercase()
 
         bleService.write(Constants.SEND_PHONE_NAME_UUID, phoneName.toByteArray())

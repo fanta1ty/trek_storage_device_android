@@ -3,15 +3,14 @@ package sg.com.trekstorageauthentication
 import org.junit.Test
 
 import org.junit.Assert.*
+import sg.com.trekstorageauthentication.util.RandomUtil
+import java.util.*
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class ExampleUnitTest {
+class RandomUtilUnitTest {
+
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun randomUUID() {
+        val additionalCharacterCount = 8
+        RandomUtil.randomNumericString(additionalCharacterCount)
     }
 }
