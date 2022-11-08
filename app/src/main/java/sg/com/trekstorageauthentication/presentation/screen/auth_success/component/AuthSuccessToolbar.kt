@@ -42,12 +42,12 @@ fun AuthSuccessToolbar(
             DropdownMenu(
                 expanded = isExpandDropDownMenu,
                 onDismissRequest = { isExpandDropDownMenu = false }) {
-                DropdownMenuItem(
-                    onClick = {
-                        isExpandDropDownMenu = false
-                        onChangePin()
-                    }
-                ) { Text(stringResource(R.string.change_pin)) }
+//                DropdownMenuItem(
+//                    onClick = {
+//                        isExpandDropDownMenu = false
+//                        onChangePin()
+//                    }
+//                ) { Text(stringResource(R.string.change_pin)) }
 
                 DropdownMenuItem(
                     onClick = {

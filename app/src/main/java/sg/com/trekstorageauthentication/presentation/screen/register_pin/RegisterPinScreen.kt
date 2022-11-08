@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -51,45 +52,54 @@ fun RegisterPinScreen(isRegister: Boolean) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+//            Text(
+//                stringResource(
+//                    if (isRegister)
+//                        R.string.set_recovery_pin
+//                    else
+//                        R.string.change_recovery_pin
+//                ),
+//                style = MaterialTheme.typography.h2
+//            )
+//
+//            Spacer(modifier = Modifier.height(32.dp))
+//
+//            PasswordTextField(
+//                state = stateHolder.pinState,
+//                onValueChange = stateHolder::setPinStateValue,
+//                label = stringResource(R.string.recovery_pin),
+//                modifier = Modifier.fillMaxWidth(),
+//                imeAction = ImeAction.Next,
+//                keyboardActions = KeyboardActions { stateHolder.moveFocusDown() }
+//            )
+//
+//            Spacer(modifier = Modifier.height(16.dp))
+//
+//            PasswordTextField(
+//                state = stateHolder.confirmPinState,
+//                onValueChange = stateHolder::setConfirmPinStateValue,
+//                label = stringResource(R.string.confirm_recovery_pin),
+//                modifier = Modifier.fillMaxWidth(),
+//                keyboardActions = KeyboardActions { stateHolder.clearFocus() }
+//            )
+//
+//            Spacer(modifier = Modifier.height(32.dp))
+//
+//            Button(
+//                onClick = stateHolder::save,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(48.dp)
+//            ) { Text(stringResource(R.string.save)) }
+
+            CircularProgressIndicator(modifier = Modifier.size(150.dp))
+
+            Spacer(modifier = Modifier.height(48.dp))
+
             Text(
-                stringResource(
-                    if (isRegister)
-                        R.string.set_recovery_pin
-                    else
-                        R.string.change_recovery_pin
-                ),
+                text = stringResource(R.string.setting_up_device),
                 style = MaterialTheme.typography.h2
             )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            PasswordTextField(
-                state = stateHolder.pinState,
-                onValueChange = stateHolder::setPinStateValue,
-                label = stringResource(R.string.recovery_pin),
-                modifier = Modifier.fillMaxWidth(),
-                imeAction = ImeAction.Next,
-                keyboardActions = KeyboardActions { stateHolder.moveFocusDown() }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            PasswordTextField(
-                state = stateHolder.confirmPinState,
-                onValueChange = stateHolder::setConfirmPinStateValue,
-                label = stringResource(R.string.confirm_recovery_pin),
-                modifier = Modifier.fillMaxWidth(),
-                keyboardActions = KeyboardActions { stateHolder.clearFocus() }
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Button(
-                onClick = stateHolder::save,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp)
-            ) { Text(stringResource(R.string.save)) }
         }
     }
 }

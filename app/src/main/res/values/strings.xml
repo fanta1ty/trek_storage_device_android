@@ -48,4 +48,8 @@
     <string name="reset_thumb_drive_confirm_desc">This will reset you thumb drive to its default factory settings.</string>
     <string name="reset_thumb_drive_successful">Thumb drive reset successful</string>
     <string name="reset_thumb_drive_fail">Thumb drive reset failed</string>
+    <string name="device_setup_successful">Device setup successful</string>
+    <string name="setting_up_device">Setting up device</string>
+    <string name="device_setup_failed">Device setup failed</string>
+    <string name="go_back">Go Back</string>
 </resources>

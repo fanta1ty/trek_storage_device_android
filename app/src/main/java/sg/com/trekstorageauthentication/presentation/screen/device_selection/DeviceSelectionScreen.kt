@@ -56,7 +56,7 @@ fun DeviceSelectionScreen() {
         })
 
         LaunchedEffect(Unit) {
-            stateHolder.viewModel.autoConnectFlow.collectLatest { index ->
+            stateHolder.viewModel.autoConnectFlow.collect { index ->
                 if (index != null) {
                     stateHolder.setSelectedItemPosition(index)
                     stateHolder.authenticate(

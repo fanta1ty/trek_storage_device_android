@@ -2,18 +2,21 @@ package sg.com.trekstorageauthentication.presentation.screen.register_pin.state
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
+import androidx.compose.runtime.*
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.presentation.component.textfield.PasswordTextFieldState
 import sg.com.trekstorageauthentication.presentation.navigation.Screen
 import sg.com.trekstorageauthentication.presentation.screen.register_pin.RegisterPinViewModel
 import sg.com.trekstorageauthentication.service.ble.BleResponseType
+import sg.com.trekstorageauthentication.util.RandomUtil
+import java.util.*
 
 class RegisterPinScreenStateHolder(
     private val isRegister: Boolean,
@@ -31,8 +34,21 @@ class RegisterPinScreenStateHolder(
     val confirmPinState: State<PasswordTextFieldState>
         get() = _confirmPinState
 
+
     init {
         registerDataResponseEvent()
+        setUpDevice()
+    }
+
+    private fun setUpDevice() {
+        // Auto generate pin and register it
+        coroutineScope.launch {
+            // Add delay so that data response event is registered properly
+            delay(2000)
+            val pin = RandomUtil.randomNumericString(8)
+            viewModel.saveStoredPin(context, pin)
+            viewModel.registerPin(pin)
+        }
     }
 
     fun setPinStateValue(value: String) {
@@ -70,12 +86,15 @@ class RegisterPinScreenStateHolder(
                 when (type) {
                     BleResponseType.REGISTER_PIN_SUCCESS,
                     BleResponseType.CHANGE_PIN_SUCCESS -> {
-                        viewModel.saveStoredPin(context, _pinState.value.input)
+                        println("Register pin success")
+//                        viewModel.saveStoredPin(context, _pinState.value.input)
+//
+//                        val msg = if (isRegister)
+//                            context.getString(R.string.error_register_pin_successful)
+//                        else
+//                            context.getString(R.string.error_reset_pin_successful)
 
-                        val msg = if (isRegister)
-                            context.getString(R.string.error_register_pin_successful)
-                        else
-                            context.getString(R.string.error_reset_pin_successful)
+                        val msg = context.getString(R.string.device_setup_successful)
 
                         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
 
@@ -89,17 +108,22 @@ class RegisterPinScreenStateHolder(
 
                     BleResponseType.REGISTER_PIN_FAIL,
                     BleResponseType.CHANGE_PIN_FAIL -> {
-                        val msg = if (isRegister)
-                            context.getString(R.string.error_register_pin_failed)
-                        else
-                            context.getString(R.string.error_reset_pin_failed)
+//                        val msg = if (isRegister)
+//                            context.getString(R.string.error_register_pin_failed)
+//                        else
+//                            context.getString(R.string.error_reset_pin_failed)
+
+                        val msg = context.getString(R.string.device_setup_failed)
 
                         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+
+                        navController?.popBackStack()
                     }
 
                     else -> Unit
                 }
             }
+
         }
     }
 

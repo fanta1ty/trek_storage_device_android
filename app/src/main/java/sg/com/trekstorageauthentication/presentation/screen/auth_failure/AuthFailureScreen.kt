@@ -55,9 +55,22 @@ fun AuthFailureScreen() {
 
                 Spacer(modifier = Modifier.height(48.dp))
 
+//                Button(
+//                    onClick = {
+//                        navController?.navigate(Screen.RecoveryScreen.route) {
+//                            popUpTo(Screen.AuthFailureScreen.route) { inclusive = true }
+//                        }
+//                    },
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(48.dp)
+//                ) {
+//                    Text(stringResource(R.string.enter_recovery_pin))
+//                }
+
                 Button(
                     onClick = {
-                        navController?.navigate(Screen.RecoveryScreen.route) {
+                        navController?.navigate(Screen.DeviceSelectionScreen.route) {
                             popUpTo(Screen.AuthFailureScreen.route) { inclusive = true }
                         }
                     },
@@ -65,7 +78,7 @@ fun AuthFailureScreen() {
                         .fillMaxWidth()
                         .height(48.dp)
                 ) {
-                    Text(stringResource(R.string.enter_recovery_pin))
+                    Text(stringResource(R.string.go_back))
                 }
             }
         }
