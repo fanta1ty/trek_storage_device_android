@@ -3,6 +3,7 @@ package sg.com.trekstorageauthentication.presentation.screen.device_selection
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.content.Context
+import android.os.Build
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
@@ -21,6 +22,7 @@ import sg.com.trekstorageauthentication.service.datastore.DataStoreService
 import sg.com.trekstorageauthentication.service.datastore.DataStoreServiceImpl
 import sg.com.trekstorageauthentication.service.permission.PermissionService
 import sg.com.trekstorageauthentication.service.permission.StoragePermissionServiceImpl
+import java.util.*
 import javax.inject.Inject
 
 @SuppressLint("StaticFieldLeak")
@@ -94,8 +96,20 @@ class DeviceSelectionViewModel @Inject constructor(
         }
     }
 
-    private fun readPinStatus() {
+    fun readPinStatus() {
         bleService.read(Constants.READ_PIN_STATUS_CHARACTERISTIC_UUID)
+    }
+
+    private fun sendPhoneName() {
+        val manufacturer = Build.MANUFACTURER
+        val model = Build.MODEL
+        val phoneName = if (model.lowercase().startsWith(manufacturer.lowercase())) {
+            model.uppercase()
+        } else {
+            "${manufacturer.uppercase()} ${model.uppercase()}"
+        }
+
+        bleService.write(Constants.SEND_PHONE_NAME_UUID, phoneName.toByteArray())
     }
 
     private fun registerTrekDeviceEmittedEvent() {
@@ -114,7 +128,7 @@ class DeviceSelectionViewModel @Inject constructor(
 
                     BleConnectionState.CONNECTED -> {
                         dismissDialog()
-                        readPinStatus()
+                        sendPhoneName()
                     }
 
                     BleConnectionState.ERROR -> {

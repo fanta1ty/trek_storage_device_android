@@ -89,6 +89,8 @@ class DeviceSelectionScreenStateHolder(
             viewModel.getDataResponseEvent().collect {
                 val (type, data) = it
                 when (type) {
+                    BleResponseType.PHONE_NAME_SENT -> viewModel.readPinStatus()
+
                     BleResponseType.PIN_STATUS -> {
                         when (String(data).toInt()) {
                             0 -> {
