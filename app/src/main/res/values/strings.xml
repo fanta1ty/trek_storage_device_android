@@ -41,15 +41,20 @@
 
     <string name="authentication_fail">Authentication Fail</string>
     <string name="authentication_successful">Authentication Successful</string>
-    <string name="authentication_successful_desc">The thumb drive has now been\nunlocked and ready to be used on your PC</string>
+    <string name="authentication_successful_desc">The thumb drive has been\nunlocked and ready to be used on your PC</string>
     <string name="change_pin">Change Pin</string>
     <string name="reset_thumb_drive">Reset Thumb Drive</string>
     <string name="reset_thumb_drive_confirm_title">Reset Thumb Drive?</string>
-    <string name="reset_thumb_drive_confirm_desc">This will reset you thumb drive to its default factory settings.</string>
-    <string name="reset_thumb_drive_successful">Thumb drive reset successful</string>
+    <string name="reset_thumb_drive_confirm_desc">This will reset your thumb drive to its default factory settings.</string>
+    <string name="reset_thumb_drive_successful">Reset thumb drive successful</string>
     <string name="reset_thumb_drive_fail">Thumb drive reset failed</string>
     <string name="device_setup_successful">Device setup successful</string>
     <string name="setting_up_device">Setting up device</string>
     <string name="device_setup_failed">Device setup failed</string>
     <string name="go_back">Go Back</string>
+    <string name="registration_successful">Registration Successful</string>
+    <string name="registration_successful_desc">The thumb drive has been registered,\nunlocked and ready to be used on your PC</string>
+    <string name="go_to_main_screen">Go To Main Screen</string>
+    <string name="reset_thumb_drive_failed">Thumb drive reset failed</string>
+    <string name="reset_thumb_drive_successful_desc">Please unplug the thumb drive.</string>
 </resources>

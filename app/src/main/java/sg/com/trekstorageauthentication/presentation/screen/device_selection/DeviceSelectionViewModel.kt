@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.os.Build
+import android.provider.Settings
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
@@ -123,13 +124,16 @@ class DeviceSelectionViewModel @Inject constructor(
     }
 
     private fun sendPhoneName() {
-        val manufacturer = Build.MANUFACTURER
+//        val manufacturer = Build.MANUFACTURER
         val model = Build.MODEL
-        val phoneName = if (model.lowercase().startsWith(manufacturer.lowercase())) {
-            model.uppercase()
-        } else {
-            "${manufacturer.uppercase()} ${model.uppercase()}"
-        }
+//        val phoneName = if (model.lowercase().startsWith(manufacturer.lowercase())) {
+//            model.uppercase()
+//        } else {
+//            "${manufacturer.uppercase()} ${model.uppercase()}"
+//        }
+        val phoneName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            Settings.Global.DEVICE_NAME
+        } else model.uppercase()
 
         bleService.write(Constants.SEND_PHONE_NAME_UUID, phoneName.toByteArray())
     }

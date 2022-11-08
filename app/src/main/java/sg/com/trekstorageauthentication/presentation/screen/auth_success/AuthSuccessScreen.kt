@@ -26,8 +26,8 @@ import sg.com.trekstorageauthentication.presentation.screen.auth_success.compone
 import sg.com.trekstorageauthentication.presentation.screen.auth_success.state.AuthSuccessScreenStateHolder
 
 @Composable
-fun AuthSuccessScreen() {
-    val stateHolder = rememberAuthSuccessScreenStateHolder()
+fun AuthSuccessScreen(isRegister: Boolean) {
+    val stateHolder = rememberAuthSuccessScreenStateHolder(isRegister)
 
     Column(modifier = Modifier.fillMaxSize()) {
         AuthSuccessToolbar(
@@ -55,15 +55,17 @@ fun AuthSuccessScreen() {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
-                    stringResource(R.string.authentication_successful),
-                    style = MaterialTheme.typography.h4,
+                    text = if (stateHolder.isRegister) stringResource(R.string.registration_successful) else
+                        stringResource(R.string.authentication_successful),
+                    style = MaterialTheme.typography.h2,
                 )
 
                 Spacer(modifier = Modifier.height(48.dp))
 
                 Text(
-                    stringResource(R.string.authentication_successful_desc),
-                    style = MaterialTheme.typography.h4.copy(textAlign = TextAlign.Center)
+                    if (stateHolder.isRegister) stringResource(R.string.registration_successful_desc) else
+                        stringResource(R.string.authentication_successful_desc),
+                    style = MaterialTheme.typography.h3.copy(textAlign = TextAlign.Center)
                 )
             }
         }
@@ -78,12 +80,13 @@ fun AuthSuccessScreen() {
 
 @Composable
 private fun rememberAuthSuccessScreenStateHolder(
+    isRegister: Boolean,
     navController: NavHostController? = LocalNavController.current,
     context: Context = LocalContext.current,
     viewModel: AuthSuccessViewModel = hiltViewModel(),
     coroutineScope: CoroutineScope = rememberCoroutineScope()
 ): AuthSuccessScreenStateHolder {
     return remember {
-        AuthSuccessScreenStateHolder(navController, context, viewModel, coroutineScope)
+        AuthSuccessScreenStateHolder(isRegister, navController, context, viewModel, coroutineScope)
     }
 }

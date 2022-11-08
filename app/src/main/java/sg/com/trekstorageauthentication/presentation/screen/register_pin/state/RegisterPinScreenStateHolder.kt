@@ -86,7 +86,6 @@ class RegisterPinScreenStateHolder(
                 when (type) {
                     BleResponseType.REGISTER_PIN_SUCCESS,
                     BleResponseType.CHANGE_PIN_SUCCESS -> {
-                        println("Register pin success")
 //                        viewModel.saveStoredPin(context, _pinState.value.input)
 //
 //                        val msg = if (isRegister)
@@ -94,16 +93,20 @@ class RegisterPinScreenStateHolder(
 //                        else
 //                            context.getString(R.string.error_reset_pin_successful)
 
-                        val msg = context.getString(R.string.device_setup_successful)
-
-                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+//                        val msg = context.getString(R.string.device_setup_successful)
+//
+//                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
 
                         val currentRoute = navController?.currentBackStackEntry?.destination?.route
                             ?: Screen.RegisterPinScreen.route
 
-                        navController?.navigate(Screen.AuthSuccessScreen.route) {
+                        navController?.navigate(Screen.AuthSuccessScreen.withArgs(true)) {
                             popUpTo(currentRoute) { inclusive = true }
                         }
+
+//                        navController?.navigate(Screen.AuthSuccessScreen.route) {
+//                            popUpTo(currentRoute) { inclusive = true }
+//                        }
                     }
 
                     BleResponseType.REGISTER_PIN_FAIL,

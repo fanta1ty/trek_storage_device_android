@@ -199,7 +199,10 @@ class BleServiceImpl(private val context: Context) : BleService {
                 characteristic: BluetoothGattCharacteristic?,
                 status: Int
             ) {
-                characteristic?.apply { onCharacteristicReadResponse(uuid.toString(), value) }
+                characteristic?.apply {
+                    onCharacteristicReadResponse(uuid.toString(), value)
+                    println("$uuid ${bytesToHex(value)}")
+                }
             }
 
             //Android 13 API

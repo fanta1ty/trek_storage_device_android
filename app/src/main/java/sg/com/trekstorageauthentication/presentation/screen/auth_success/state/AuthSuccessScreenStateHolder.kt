@@ -11,6 +11,7 @@ import sg.com.trekstorageauthentication.presentation.screen.auth_success.AuthSuc
 import sg.com.trekstorageauthentication.service.ble.BleResponseType
 
 class AuthSuccessScreenStateHolder(
+    val isRegister: Boolean,
     private val navController: NavHostController?,
     private val context: Context,
     val viewModel: AuthSuccessViewModel,
@@ -26,6 +27,8 @@ class AuthSuccessScreenStateHolder(
         }
     }
 
+
+
     private fun registerDataResponseEvent() {
         coroutineScope.launch {
             viewModel.getDataResponseEvent().collect {
@@ -33,17 +36,19 @@ class AuthSuccessScreenStateHolder(
 
                 when (type) {
                     BleResponseType.RESET_SETTINGS_SUCCESS -> {
-                        val msg = context.getString(R.string.reset_thumb_drive_successful)
-                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+//                        val msg = context.getString(R.string.reset_thumb_drive_successful)
+//                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
 
-                        navController?.navigate(Screen.DeviceSelectionScreen.route) {
-                            popUpTo(Screen.AuthSuccessScreen.route) { inclusive = true }
+                        navController?.navigate(Screen.ResetSuccessScreen.route) {
+                            popUpTo(0) { inclusive = true }
                         }
                     }
 
                     BleResponseType.RESET_SETTINGS_FAIL -> {
-                        val msg = context.getString(R.string.reset_thumb_drive_fail)
-                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+//                        val msg = context.getString(R.string.reset_thumb_drive_fail)
+//                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+
+                        navController?.navigate(Screen.ResetSuccessScreen.route)
                     }
 
                     else -> Unit
