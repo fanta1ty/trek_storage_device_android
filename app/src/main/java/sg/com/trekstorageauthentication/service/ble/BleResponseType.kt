@@ -9,5 +9,6 @@ enum class BleResponseType {
     RESET_SETTINGS_FAIL,
     CHANGE_PIN_SUCCESS,
     CHANGE_PIN_FAIL,
-    PIN_STATUS
+    PIN_STATUS,
+    PHONE_NAME_SENT
 }

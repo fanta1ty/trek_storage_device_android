@@ -233,6 +233,8 @@ class BleServiceImpl(private val context: Context) : BleService {
     private fun onCharacteristicChangedResponse(
         responseType: Int
     ): Pair<BleResponseType, ByteArray> {
+        Log.d(TAG, "Response Type: $responseType")
+
         return when (responseType) {
             2 -> Pair(BleResponseType.REGISTER_PIN_SUCCESS, byteArrayOf())
             3 -> Pair(BleResponseType.REGISTER_PIN_FAIL, byteArrayOf())
@@ -241,7 +243,8 @@ class BleServiceImpl(private val context: Context) : BleService {
             6 -> Pair(BleResponseType.RESET_SETTINGS_SUCCESS, byteArrayOf())
             7 -> Pair(BleResponseType.RESET_SETTINGS_FAIL, byteArrayOf())
             8 -> Pair(BleResponseType.CHANGE_PIN_SUCCESS, byteArrayOf())
-            else -> Pair(BleResponseType.CHANGE_PIN_FAIL, byteArrayOf())
+            9 -> Pair(BleResponseType.CHANGE_PIN_FAIL, byteArrayOf())
+            else -> Pair(BleResponseType.PHONE_NAME_SENT, byteArrayOf())
         }
     }
 
