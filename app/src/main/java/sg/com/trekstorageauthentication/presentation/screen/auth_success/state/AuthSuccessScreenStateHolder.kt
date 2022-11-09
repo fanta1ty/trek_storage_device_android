@@ -28,7 +28,6 @@ class AuthSuccessScreenStateHolder(
     }
 
 
-
     private fun registerDataResponseEvent() {
         coroutineScope.launch {
             viewModel.getDataResponseEvent().collect {
@@ -39,6 +38,7 @@ class AuthSuccessScreenStateHolder(
 //                        val msg = context.getString(R.string.reset_thumb_drive_successful)
 //                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
 
+                        viewModel.thumbDriveResetting = false
                         navController?.navigate(Screen.ResetSuccessScreen.route) {
                             popUpTo(0) { inclusive = true }
                         }
@@ -48,7 +48,8 @@ class AuthSuccessScreenStateHolder(
 //                        val msg = context.getString(R.string.reset_thumb_drive_fail)
 //                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
 
-                        navController?.navigate(Screen.ResetSuccessScreen.route)
+                        viewModel.thumbDriveResetting = false
+                        navController?.navigate(Screen.ResetFailedScreen.route)
                     }
 
                     else -> Unit

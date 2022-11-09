@@ -57,4 +57,5 @@
     <string name="go_to_main_screen">Go To Main Screen</string>
     <string name="reset_thumb_drive_failed">Thumb drive reset failed</string>
     <string name="reset_thumb_drive_successful_desc">Please unplug the thumb drive.</string>
+    <string name="resetting_thumb_drive">Resetting Thumb Drive</string>
 </resources>

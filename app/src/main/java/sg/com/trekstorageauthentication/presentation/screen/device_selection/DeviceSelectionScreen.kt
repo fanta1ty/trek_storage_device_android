@@ -79,6 +79,8 @@ fun DeviceSelectionScreen() {
         onLocationDisabledPositiveEvent = stateHolder::navigateToLocationServiceSettings,
         onBluetoothDisabledPositiveEvent = stateHolder.viewModel::dismissDialog
     )
+
+
 }
 
 @Composable
