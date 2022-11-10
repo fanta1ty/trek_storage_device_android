@@ -13,8 +13,10 @@ import sg.com.trekstorageauthentication.presentation.screen.auth_success.AuthSuc
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.DeviceSelectionScreen
 import sg.com.trekstorageauthentication.presentation.screen.recovery.RecoveryScreen
 import sg.com.trekstorageauthentication.presentation.screen.register_pin.RegisterPinScreen
-import sg.com.trekstorageauthentication.presentation.screen.reset_status.ResetFailedScreen
-import sg.com.trekstorageauthentication.presentation.screen.reset_status.ResetSuccessScreen
+import sg.com.trekstorageauthentication.presentation.screen.unregister_reset_status.FactoryResetFailedScreen
+import sg.com.trekstorageauthentication.presentation.screen.unregister_reset_status.FactoryResetSuccessScreen
+import sg.com.trekstorageauthentication.presentation.screen.unregister_reset_status.DisableAuthenticationFailedScreen
+import sg.com.trekstorageauthentication.presentation.screen.unregister_reset_status.DisableAuthenticationSuccessScreen
 
 @Composable
 fun NavGraph(navController: NavHostController) {
@@ -59,12 +61,20 @@ fun NavGraph(navController: NavHostController) {
                 RecoveryScreen()
             }
 
-            composable(route = Screen.ResetSuccessScreen.route) {
-                ResetSuccessScreen()
+            composable(route = Screen.FactoryResetSuccessScreen.route) {
+                FactoryResetSuccessScreen()
             }
 
-            composable(route = Screen.ResetFailedScreen.route) {
-                ResetFailedScreen()
+            composable(route = Screen.FactoryResetFailedScreen.route) {
+                FactoryResetFailedScreen()
+            }
+
+            composable(route = Screen.DisableAuthenticationSuccessScreen.route) {
+                DisableAuthenticationSuccessScreen()
+            }
+
+            composable(route = Screen.DisableAuthenticationFailedScreen.route) {
+                DisableAuthenticationFailedScreen()
             }
         }
     }

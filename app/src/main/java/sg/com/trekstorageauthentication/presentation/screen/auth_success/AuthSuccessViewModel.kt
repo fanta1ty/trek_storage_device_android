@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -30,22 +29,43 @@ class AuthSuccessViewModel @Inject constructor(
 ) : ViewModel(),
     DataStoreService by DataStoreServiceImpl() {
 
-    private val _dialogState = MutableStateFlow(AuthSuccessDialogState())
-    val dialogState = _dialogState.asStateFlow()
+    private val _unregisterDialogState = MutableStateFlow(AuthSuccessDialogState())
+    val unregisterDialogState = _unregisterDialogState.asStateFlow()
 
-    var thumbDriveResetting by mutableStateOf(false)
+    private val _resetDialogState = MutableStateFlow(AuthSuccessDialogState())
+    val resetDialogState = _resetDialogState.asStateFlow()
 
-    fun resetThumbDrive() {
-        dismissDialog()
+    var thumbDriveFactoryResetting by mutableStateOf(false)
+    var thumbDriveDisablingAuthentication by mutableStateOf(false)
+
+    fun disableAuthentication() {
+        dismissDisableAuthenticationDialog()
         viewModelScope.launch {
             // Delete saved last connected device name
             saveLastConnectedDeviceName(context, "")
 
             if (bleService.isConnected()) {
-                thumbDriveResetting = true
-                bleService.write(Constants.RESET_THUMB_DRIVE_CHARACTERISTIC_UUID, "1".toByteArray())
+                thumbDriveDisablingAuthentication = true
+                bleService.write(Constants.DISABLE_AUTHENTICATION_CHARACTERISTIC_UUID, "1".toByteArray())
             } else {
-                thumbDriveResetting = false
+                thumbDriveDisablingAuthentication = false
+                val msg = context.getString(R.string.bluetooth_disconnected)
+                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    fun factoryResetThumbDrive() {
+        dismissFactoryResetDialog()
+        viewModelScope.launch {
+            // Delete saved last connected device name
+            saveLastConnectedDeviceName(context, "")
+
+            if (bleService.isConnected()) {
+                thumbDriveFactoryResetting = true
+                bleService.write(Constants.FACTORY_RESET_CHARACTERISTIC_UUID, "1".toByteArray())
+            } else {
+                thumbDriveFactoryResetting = false
                 val msg = context.getString(R.string.bluetooth_disconnected)
                 Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
             }
@@ -53,12 +73,20 @@ class AuthSuccessViewModel @Inject constructor(
 
     }
 
-    fun showConfirmResetThumbDriveDialog() {
-        _dialogState.value = _dialogState.value.copy(isShowConfirmResetThumbDriveDialog = true)
+    fun showConfirmDisableAuthenticationDialog() {
+        _unregisterDialogState.value = _unregisterDialogState.value.copy(isShowing = true)
     }
 
-    fun dismissDialog() {
-        _dialogState.value = AuthSuccessDialogState()
+    fun showConfirmFactoryResetThumbDriveDialog() {
+        _resetDialogState.value = _resetDialogState.value.copy(isShowing = true)
+    }
+
+    fun dismissDisableAuthenticationDialog() {
+        _unregisterDialogState.value = AuthSuccessDialogState()
+    }
+
+    fun dismissFactoryResetDialog() {
+        _resetDialogState.value = AuthSuccessDialogState()
     }
 
     fun getDataResponseEvent() = bleService.getDataResponseEvent()

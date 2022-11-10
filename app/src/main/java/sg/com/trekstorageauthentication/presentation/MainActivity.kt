@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +16,12 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import sg.com.trekstorageauthentication.presentation.navigation.NavGraph
+import sg.com.trekstorageauthentication.presentation.screen.auth_failure.AuthFailureScreen
+import sg.com.trekstorageauthentication.presentation.screen.auth_success.AuthSuccessScreen
+import sg.com.trekstorageauthentication.presentation.screen.register_pin.RegisterPinScreen
+import sg.com.trekstorageauthentication.presentation.screen.unregister_reset_status.DisableAuthenticationFailedScreen
+import sg.com.trekstorageauthentication.presentation.screen.unregister_reset_status.DisableAuthenticationSuccessScreen
+import sg.com.trekstorageauthentication.presentation.screen.unregister_reset_status.FactoryResetFailedScreen
 import sg.com.trekstorageauthentication.presentation.ui.theme.TrekStorageAuthenticationTheme
 
 @SuppressLint("SourceLockedOrientationActivity")

@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -34,24 +35,12 @@ fun RegisterPinScreen(isRegister: Boolean) {
     val stateHolder = rememberRegisterPinScreenStateHolder(isRegister)
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Spacer(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .background(color = MaterialTheme.colors.primary)
-        )
-
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .fillMaxWidth()
-                .height(LocalConfiguration.current.screenHeightDp.dp - 50.dp)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
 //            Text(
 //                stringResource(
 //                    if (isRegister)
@@ -92,15 +81,15 @@ fun RegisterPinScreen(isRegister: Boolean) {
 //                    .height(48.dp)
 //            ) { Text(stringResource(R.string.save)) }
 
-            CircularProgressIndicator(modifier = Modifier.size(150.dp))
+        CircularProgressIndicator(modifier = Modifier.size(150.dp))
 
-            Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(48.dp))
 
-            Text(
-                text = stringResource(R.string.setting_up_device),
-                style = MaterialTheme.typography.h2
-            )
-        }
+        Text(
+            text = stringResource(R.string.setting_up_device),
+            style = MaterialTheme.typography.h2,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 

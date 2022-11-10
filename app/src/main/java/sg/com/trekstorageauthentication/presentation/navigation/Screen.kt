@@ -17,6 +17,8 @@ sealed class Screen(val route: String) {
         fun withArgs(isRegister: Boolean) = "$route?$isRegisterParam=$isRegister"
     }
 
-    object ResetSuccessScreen: Screen("reset_success_screen")
-    object ResetFailedScreen: Screen("reset_failed_screen")
+    object DisableAuthenticationSuccessScreen: Screen("disable_authentication_success_screen")
+    object DisableAuthenticationFailedScreen: Screen("disable_authentication_failed_screen")
+    object FactoryResetSuccessScreen: Screen("factory_reset_success_screen")
+    object FactoryResetFailedScreen: Screen("factory_reset_failed_screen")
 }

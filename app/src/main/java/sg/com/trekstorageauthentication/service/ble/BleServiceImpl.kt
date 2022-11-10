@@ -7,6 +7,7 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.ParcelUuid
 import android.util.Log
+import android.widget.Toast
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat
 import no.nordicsemi.android.support.v18.scanner.ScanCallback
 import no.nordicsemi.android.support.v18.scanner.ScanResult
+import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.common.Constants
 import java.util.*
 
@@ -152,6 +154,7 @@ class BleServiceImpl(private val context: Context) : BleService {
                         isConnected = true
                         gatt?.apply { discoverServices() }
                     } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                        Toast.makeText(context, context.getString(R.string.bluetooth_disconnected), Toast.LENGTH_SHORT).show()
                         close()
                         coroutineScope.launch { bleConnectionEvent.send(BleConnectionState.ERROR) }
                     }
@@ -243,10 +246,10 @@ class BleServiceImpl(private val context: Context) : BleService {
             3 -> Pair(BleResponseType.REGISTER_PIN_FAIL, byteArrayOf())
             4 -> Pair(BleResponseType.LOG_IN_SUCCESS, byteArrayOf())
             5 -> Pair(BleResponseType.LOG_IN_FAIL, byteArrayOf())
-            6 -> Pair(BleResponseType.RESET_SETTINGS_SUCCESS, byteArrayOf())
-            7 -> Pair(BleResponseType.RESET_SETTINGS_FAIL, byteArrayOf())
-            8 -> Pair(BleResponseType.CHANGE_PIN_SUCCESS, byteArrayOf())
-            9 -> Pair(BleResponseType.CHANGE_PIN_FAIL, byteArrayOf())
+            6 -> Pair(BleResponseType.DISABLE_AUTHENTICATION_SUCCESS, byteArrayOf())
+            7 -> Pair(BleResponseType.DISABLE_AUTHENTICATION_FAILED, byteArrayOf())
+            8 -> Pair(BleResponseType.FACTORY_RESET_SETTINGS_SUCCESS, byteArrayOf())
+            9 -> Pair(BleResponseType.FACTORY_RESET_SETTINGS_FAIL, byteArrayOf())
             else -> Pair(BleResponseType.PHONE_NAME_SENT, byteArrayOf())
         }
     }

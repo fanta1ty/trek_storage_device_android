@@ -1,4 +1,4 @@
-package sg.com.trekstorageauthentication.presentation.ui.common
+package sg.com.trekstorageauthentication.presentation.component
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.AlertDialog
@@ -33,6 +33,53 @@ fun Dialog(
         text = {
             Text(content)
         },
+        buttons = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 8.dp, bottom = 8.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
+                if (onNegativeClickEvent != null) {
+                    TextButton(onClick = onNegativeClickEvent) {
+                        Text(stringResource(negativeButtonText))
+                    }
+
+                    if (onPositiveClickEvent != null) {
+                        Spacer(modifier = Modifier.width(16.dp))
+                    }
+                }
+
+                if (onPositiveClickEvent != null) {
+                    TextButton(onClick = onPositiveClickEvent) {
+                        Text(stringResource(positiveButtonText))
+                    }
+                }
+            }
+        })
+}
+
+@Composable
+fun Dialog(
+    title: String = "",
+    content: @Composable () -> Unit = {},
+    isCancellable: Boolean = true,
+    positiveButtonText: Int = android.R.string.ok,
+    negativeButtonText: Int = android.R.string.cancel,
+    onNegativeClickEvent: (() -> Unit)? = null,
+    onPositiveClickEvent: (() -> Unit)? = null,
+    onDismissRequest: (() -> Unit)? = null
+) {
+    AlertDialog(
+        onDismissRequest = { onDismissRequest?.invoke() },
+        properties = DialogProperties(
+            dismissOnBackPress = isCancellable,
+            dismissOnClickOutside = isCancellable
+        ),
+        title = {
+            Text(title)
+        },
+        text = content,
         buttons = {
             Row(
                 modifier = Modifier

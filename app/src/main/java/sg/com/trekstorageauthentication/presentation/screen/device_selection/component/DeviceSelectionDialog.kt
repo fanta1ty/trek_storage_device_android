@@ -6,7 +6,7 @@ import androidx.compose.ui.res.stringResource
 import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.presentation.component.LoadingDialog
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.state.DeviceSelectionDialogState
-import sg.com.trekstorageauthentication.presentation.ui.common.Dialog
+import sg.com.trekstorageauthentication.presentation.component.Dialog
 
 @Composable
 fun DeviceSelectionDialog(

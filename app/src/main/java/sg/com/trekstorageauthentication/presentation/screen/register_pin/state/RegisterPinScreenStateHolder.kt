@@ -45,8 +45,9 @@ class RegisterPinScreenStateHolder(
         coroutineScope.launch {
             // Add delay so that data response event is registered properly
             delay(2000)
-            val pin = RandomUtil.randomNumericString(8)
-            viewModel.saveStoredPin(context, pin)
+//            val pin = RandomUtil.randomNumericString(8)
+//            viewModel.saveStoredPin(context, pin)
+            val pin = viewModel.getStoredPin(context)
             viewModel.registerPin(pin)
         }
     }

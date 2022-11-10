@@ -18,7 +18,8 @@ import sg.com.trekstorageauthentication.R
 @Composable
 fun AuthSuccessToolbar(
     onChangePin: () -> Unit,
-    onResetThumbDrive: () -> Unit
+    onUnregisterThumbDrive: () -> Unit,
+    onResetThumbDrive: () -> Unit,
 ) {
     var isExpandDropDownMenu by remember { mutableStateOf(false) }
 
@@ -35,7 +36,7 @@ fun AuthSuccessToolbar(
                 Icon(
                     imageVector = Icons.Default.MoreVert,
                     contentDescription = "",
-                    tint = MaterialTheme.colors.onPrimary
+                    tint = MaterialTheme.colors.onPrimary,
                 )
             }
 
@@ -52,9 +53,16 @@ fun AuthSuccessToolbar(
                 DropdownMenuItem(
                     onClick = {
                         isExpandDropDownMenu = false
+                        onUnregisterThumbDrive()
+                    }
+                ) { Text(stringResource(R.string.disable_authentication)) }
+
+                DropdownMenuItem(
+                    onClick = {
+                        isExpandDropDownMenu = false
                         onResetThumbDrive()
                     }
-                ) { Text(stringResource(R.string.reset_thumb_drive)) }
+                ) { Text(stringResource(R.string.factory_reset)) }
             }
         }
     }
