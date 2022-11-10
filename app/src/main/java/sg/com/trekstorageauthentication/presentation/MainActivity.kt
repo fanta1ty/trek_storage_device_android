@@ -12,9 +12,12 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import sg.com.trekstorageauthentication.presentation.navigation.NavGraph
 import sg.com.trekstorageauthentication.presentation.screen.auth_failure.AuthFailureScreen
 import sg.com.trekstorageauthentication.presentation.screen.auth_success.AuthSuccessScreen
@@ -23,6 +26,7 @@ import sg.com.trekstorageauthentication.presentation.screen.unregister_reset_sta
 import sg.com.trekstorageauthentication.presentation.screen.unregister_reset_status.DisableAuthenticationSuccessScreen
 import sg.com.trekstorageauthentication.presentation.screen.unregister_reset_status.FactoryResetFailedScreen
 import sg.com.trekstorageauthentication.presentation.ui.theme.TrekStorageAuthenticationTheme
+import sg.com.trekstorageauthentication.service.datastore.DataStoreServiceImpl
 
 @SuppressLint("SourceLockedOrientationActivity")
 @AndroidEntryPoint

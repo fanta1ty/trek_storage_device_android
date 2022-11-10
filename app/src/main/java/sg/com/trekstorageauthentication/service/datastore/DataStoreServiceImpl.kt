@@ -10,6 +10,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
 import sg.com.trekstorageauthentication.common.Constants
+import sg.com.trekstorageauthentication.util.AESEncryption
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(Constants.DATA_STORE_NAME)
 
@@ -25,7 +26,11 @@ class DataStoreServiceImpl : DataStoreService {
     override suspend fun getStoredPin(context: Context): String {
         val key = stringPreferencesKey(Constants.DATA_STORE_PIN_KEY)
         val preferences = context.dataStore.data.first()
-        return preferences[key] ?: Settings.Secure.getString(
+        val encryptedPin = preferences[key]
+        if (encryptedPin != null) {
+            return AESEncryption.decrypt(encryptedPin)
+        }
+        return Settings.Secure.getString(
             context.contentResolver,
             Settings.Secure.ANDROID_ID
         ).apply { saveStoredPin(context, this) }
@@ -34,7 +39,8 @@ class DataStoreServiceImpl : DataStoreService {
     override suspend fun saveStoredPin(context: Context, pin: String) {
         context.dataStore.edit { preferences ->
             val key = stringPreferencesKey(Constants.DATA_STORE_PIN_KEY)
-            preferences[key] = pin
+            val encryptedPin = AESEncryption.encrypt(pin)
+            preferences[key] = encryptedPin
         }
     }
 

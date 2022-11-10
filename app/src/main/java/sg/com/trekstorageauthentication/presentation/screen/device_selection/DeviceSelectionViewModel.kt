@@ -8,6 +8,7 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -48,6 +49,14 @@ class DeviceSelectionViewModel @Inject constructor(
     init {
         registerTrekDeviceEmittedEvent()
         registerBleConnectionEvent()
+
+        viewModelScope.launch {
+            Toast.makeText(
+                context,
+                getStoredPin(context),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
 
         // Listen to new device
         // If the device is the last connected device, emit it's index value into auto connect flow
