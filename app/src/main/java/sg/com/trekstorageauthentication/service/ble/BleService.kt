@@ -13,6 +13,8 @@ interface BleService {
 
     fun close()
 
+    fun disconnect()
+
     fun read(uuid: String)
 
     fun write(uuid: String, bytes: ByteArray)

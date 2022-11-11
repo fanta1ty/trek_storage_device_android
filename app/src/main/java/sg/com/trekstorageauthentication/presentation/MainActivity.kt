@@ -62,4 +62,9 @@ class MainActivity : FragmentActivity() {
         super.onSaveInstanceState(outState)
         outState.putInt(viewModel.viewModelId.first, viewModel.viewModelId.second)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.disconnect()
+    }
 }

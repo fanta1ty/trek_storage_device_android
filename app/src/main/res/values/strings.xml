@@ -43,7 +43,7 @@
 <!--    <string name="authentication_fail_desc">Please use the correct hand phone to unlock the TD Bio.</string>-->
     <string name="authentication_fail_desc">Access Denied</string>
     <string name="authentication_successful">Authentication Passed</string>
-<!--    <string name="authentication_successful_desc">The thumb drive has been unlocked and ready to be used on your PC</string>-->
+<!--    <string name="authentication_successful_desc">The Thumbdrive has been unlocked and ready to be used on your PC</string>-->
     <string name="authentication_successful_desc">TD BIO ready to be used on your PC.</string>
     <string name="change_pin">Change Pin</string>
     <string name="go_back">Go Back</string>
@@ -56,20 +56,20 @@
     <string name="go_to_main_screen">Go To Main Screen</string>
 
     <string name="factory_reset">Factory Reset</string>
-    <string name="factory_reset_failed"> Factory Reset Thumb Drive Failed</string>
-    <string name="factory_reset_successful_desc">Thumb drive has been reset to its factory settings.\nPlease unplug the thumb drive.</string>
-    <string name="factory_reset_confirm_title">Factory Reset Thumb Drive?</string>
-    <string name="factory_reset_confirm_desc">This will reset thumb drive to its default factory settings.</string>
-    <string name="factory_reset_confirm_desc_2">All authentication information and data in the thumb drive will be erased.</string>
-    <string name="factory_resetting">Factory Resetting Thumb Drive</string>
-    <string name="factory_reset_successful">Factory Reset Thumb Drive Successful</string>
-    <string name="factory_reset_fail">Factory Reset Thumb Drive Failed</string>
+    <string name="factory_reset_failed"> Factory Reset Thumbdrive Failed</string>
+    <string name="factory_reset_successful_desc">Thumbdrive has been reset to its factory settings.\nPlease unplug the thumbdrive.</string>
+    <string name="factory_reset_confirm_title">Factory Reset Thumbdrive?</string>
+    <string name="factory_reset_confirm_desc">This will reset thumbdrive to its default factory settings.</string>
+    <string name="factory_reset_confirm_desc_2">All authentication information and data in the thumbdrive will be erased.</string>
+    <string name="factory_resetting">Factory Resetting Thumbdrive</string>
+    <string name="factory_reset_successful">Factory Reset Thumbdrive Successful</string>
+    <string name="factory_reset_fail">Factory Reset Thumbdrive Failed</string>
 
     <string name="disable_authentication">Disable Authentication</string>
-    <string name="disable_authentication_confirm_title">Disable Thumb Drive\'s Authentication?</string>
-    <string name="disable_authentication_confirm_desc">Thumb drive will remove its authentication.\nYour data inside thumb drive won\'t be affected.</string>
-    <string name="disabling_authentication">Disabling thumb drive\'s authentication</string>
+    <string name="disable_authentication_confirm_title">Disable Thumbdrive\'s Authentication?</string>
+    <string name="disable_authentication_confirm_desc">Thumbdrive will remove its authentication.\nYour data inside thumbdrive won\'t be affected.</string>
+    <string name="disabling_authentication">Disabling Thumbdrive\'s Authentication</string>
     <string name="disable_authentication_successful">Disable Authentication Successful</string>
-    <string name="disable_authentication_successful_desc">Thumb drive\'s authentication has been disabled.\nYou can enable it again by register hand phone to the thumb drive.</string>
-    <string name="disable_authentication_failed">Disable Thumb Drive\'s Authentication Failed</string>
+    <string name="disable_authentication_successful_desc">Thumbdrive\'s authentication has been disabled.\nYou can enable it again by register hand phone to the thumbdrive.</string>
+    <string name="disable_authentication_failed">Disable Thumbdrive\'s Authentication Failed</string>
 </resources>

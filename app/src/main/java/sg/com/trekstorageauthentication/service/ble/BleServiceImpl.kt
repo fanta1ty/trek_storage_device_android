@@ -90,6 +90,10 @@ class BleServiceImpl(private val context: Context) : BleService {
         isConnected = false
     }
 
+    override fun disconnect() {
+        gatt?.disconnect()
+    }
+
     override fun read(uuid: String) {
         val serviceUuid = UUID.fromString(Constants.SERVICE_UUID)
         val charUuid = UUID.fromString(uuid)
