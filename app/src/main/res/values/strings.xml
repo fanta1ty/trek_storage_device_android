@@ -39,18 +39,20 @@
     <string name="error_recovery_pin_incorrect">Incorrect recovery pin</string>
     <string name="confirm">Confirm</string>
 
-    <string name="authentication_fail">Authentication Fail</string>
-    <string name="authentication_fail_desc">Please use the correct hand phone to unlock the TD Bio.</string>
-    <string name="authentication_successful">Authentication Successful</string>
-    <string name="authentication_successful_desc">The thumb drive has been unlocked and ready to be used on your PC</string>
+    <string name="authentication_fail">Authentication Failed</string>
+<!--    <string name="authentication_fail_desc">Please use the correct hand phone to unlock the TD Bio.</string>-->
+    <string name="authentication_fail_desc">Access Denied</string>
+    <string name="authentication_successful">Authentication Passed</string>
+<!--    <string name="authentication_successful_desc">The thumb drive has been unlocked and ready to be used on your PC</string>-->
+    <string name="authentication_successful_desc">TD BIO ready to be used on your PC.</string>
     <string name="change_pin">Change Pin</string>
     <string name="go_back">Go Back</string>
 
     <string name="device_setup_successful">Device setup successful</string>
     <string name="setting_up_device">Setting up device</string>
     <string name="device_setup_failed">Device setup failed</string>
-    <string name="registration_successful">Registration Successful</string>
-    <string name="registration_successful_desc">The thumb drive has been registered, unlocked and ready to be used on your PC</string>
+    <string name="registration_successful">Registration Completed</string>
+    <string name="registration_successful_desc">TD Bio has been registered, unlocked and ready to be used on your PC</string>
     <string name="go_to_main_screen">Go To Main Screen</string>
 
     <string name="factory_reset">Factory Reset</string>

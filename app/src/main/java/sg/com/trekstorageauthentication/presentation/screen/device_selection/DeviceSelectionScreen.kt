@@ -54,19 +54,20 @@ fun DeviceSelectionScreen() {
                 )
             }
         })
-
-        LaunchedEffect(Unit) {
-            stateHolder.viewModel.autoConnectFlow.collect { index ->
-                if (index != null) {
-                    stateHolder.setSelectedItemPosition(index)
-                    stateHolder.authenticate(
-                        stateHolder::connect,
-                        stateHolder::launchPasscodeAuthentication
-                    )
-                }
-            }
-        }
     }
+
+    // Auto connect to device emitted in auto connect flow
+//    LaunchedEffect(Unit) {
+//        stateHolder.viewModel.autoConnectFlow.collect { index ->
+//            if (index != null) {
+//                stateHolder.setSelectedItemPosition(index)
+//                stateHolder.authenticate(
+//                    stateHolder::connect,
+//                    stateHolder::launchPasscodeAuthentication
+//                )
+//            }
+//        }
+//    }
 
     // Auto scan on launch
     LaunchedEffect(Unit) {

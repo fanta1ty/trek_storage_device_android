@@ -41,33 +41,25 @@ class DeviceSelectionViewModel @Inject constructor(
     private val _trekDevices = mutableStateListOf<BluetoothDevice>()
     val trekDevice: List<BluetoothDevice> = _trekDevices
 
-    private val _newDeviceFoundFlow = MutableSharedFlow<Int>()
+//    private val _newDeviceFoundFlow = MutableSharedFlow<Int>()
 
-    private val _autoConnectFlow = MutableSharedFlow<Int?>()
-    val autoConnectFlow: SharedFlow<Int?> = _autoConnectFlow
+//    private val _autoConnectFlow = MutableSharedFlow<Int?>()
+//    val autoConnectFlow: SharedFlow<Int?> = _autoConnectFlow
 
     init {
         registerTrekDeviceEmittedEvent()
         registerBleConnectionEvent()
 
-        viewModelScope.launch {
-            Toast.makeText(
-                context,
-                getStoredPin(context),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-
         // Listen to new device
         // If the device is the last connected device, emit it's index value into auto connect flow
-        viewModelScope.launch {
-            val lastConnectedDeviceName = getLastConnectedDeviceName(context)
-            _newDeviceFoundFlow.collect { index ->
-                if (_trekDevices[index].name == lastConnectedDeviceName) {
-                    _autoConnectFlow.emit(index)
-                }
-            }
-        }
+//        viewModelScope.launch {
+//            val lastConnectedDeviceName = getLastConnectedDeviceName(context)
+//            _newDeviceFoundFlow.collect { index ->
+//                if (_trekDevices[index].name == lastConnectedDeviceName) {
+//                    _autoConnectFlow.emit(index)
+//                }
+//            }
+//        }
     }
 
     fun startScan(permissionResult: Boolean) {
@@ -152,7 +144,7 @@ class DeviceSelectionViewModel @Inject constructor(
             bleService.getTrekDeviceEmitEvent().collect {
                 _trekDevices.add(it)
                 // Notify to flow that a new device is found
-                _newDeviceFoundFlow.emit(_trekDevices.size - 1)
+//                _newDeviceFoundFlow.emit(_trekDevices.size - 1)
             }
         }
     }
