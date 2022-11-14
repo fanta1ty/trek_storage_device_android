@@ -8,6 +8,7 @@ import javax.crypto.spec.SecretKeySpec
 object AESEncryption {
     private const val secretKey = "awS2Xc4IJEffn69jQjh1Mg=="
     private const val iv = "QBUFPpiZ8GsLzW39i5ZChA=="
+
     private const val algorithm = "AES"
     private const val feedbackMode = "CBC"
     private const val padding = "PKCS5PADDING"

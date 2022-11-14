@@ -102,7 +102,7 @@ class BleServiceImpl(private val context: Context) : BleService {
     }
 
     override fun write(uuid: String, bytes: ByteArray) {
-        Log.d(TAG, "Ble write: ${bytesToHex(bytes)}")
+//        Log.d(TAG, "Ble write: ${bytesToHex(bytes)}")
 
         val serviceUuid = UUID.fromString(Constants.SERVICE_UUID)
         val charUuid = UUID.fromString(uuid)
@@ -123,7 +123,7 @@ class BleServiceImpl(private val context: Context) : BleService {
         val bluetoothManager =
             context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
 
-        return bluetoothManager.adapter.isEnabled
+        return bluetoothManager.adapter?.isEnabled ?: false
     }
 
     override fun isLocationServiceEnabled(): Boolean {
