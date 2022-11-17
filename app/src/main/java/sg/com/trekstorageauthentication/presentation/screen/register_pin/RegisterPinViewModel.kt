@@ -29,14 +29,5 @@ class RegisterPinViewModel @Inject constructor(
         }
     }
 
-    fun changePin(pin: String) {
-        if (bleService.isConnected()) {
-            bleService.write(Constants.CHANGE_PIN_CHARACTERISTIC_UUID, pin.toByteArray())
-        } else {
-            val msg = context.getString(R.string.bluetooth_disconnected)
-            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-        }
-    }
-
     fun getDataResponseEvent() = bleService.getDataResponseEvent()
 }

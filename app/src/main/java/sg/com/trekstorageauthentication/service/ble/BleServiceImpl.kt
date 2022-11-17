@@ -7,7 +7,6 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.ParcelUuid
 import android.util.Log
-import android.widget.Toast
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +15,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat
 import no.nordicsemi.android.support.v18.scanner.ScanCallback
 import no.nordicsemi.android.support.v18.scanner.ScanResult
-import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.common.Constants
 import java.util.*
 
@@ -38,6 +36,7 @@ class BleServiceImpl(private val context: Context) : BleService {
     private val scanner = BluetoothLeScannerCompat.getScanner()
     private var gatt: BluetoothGatt? = null
     private var isConnected = false
+    private var scanJob: Job? = null
     private var scanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             val isTrekBleDevice = result.scanRecord?.serviceUuids
@@ -58,11 +57,12 @@ class BleServiceImpl(private val context: Context) : BleService {
 
     override fun startScan() {
         if (isScanning.value) return
+        scanJob?.cancel()
         isScanning.value = true
         alreadyEmittedDevices.clear()
         scanner.startScan(scanCallback)
 
-        coroutineScope.launch {
+        scanJob = coroutineScope.launch {
             delay(30000)
             stopScan()
         }
@@ -102,7 +102,7 @@ class BleServiceImpl(private val context: Context) : BleService {
     }
 
     override fun write(uuid: String, bytes: ByteArray) {
-//        Log.d(TAG, "Ble write: ${bytesToHex(bytes)}")
+        Log.d(TAG, "Ble write: ${bytesToHex(bytes)}")
 
         val serviceUuid = UUID.fromString(Constants.SERVICE_UUID)
         val charUuid = UUID.fromString(uuid)
@@ -143,6 +143,22 @@ class BleServiceImpl(private val context: Context) : BleService {
 
     override fun getDataResponseEvent() = dataResponseEvent.receiveAsFlow()
 
+    override fun registerNotification() {
+        val serviceUuid = UUID.fromString(Constants.SERVICE_UUID)
+        val charUuid = UUID.fromString(Constants.NOTIFICATION_CHARACTERISTIC_UUID)
+        val descriptorUuid = UUID.fromString(Constants.NOTIFICATION_DESCRIPTOR_UUID)
+        val characteristic = gatt?.getService(serviceUuid)?.getCharacteristic(charUuid) ?: return
+        val descriptor = characteristic.getDescriptor(descriptorUuid) ?: return
+        gatt?.setCharacteristicNotification(characteristic, true)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            gatt?.writeDescriptor(descriptor, BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE)
+        } else {
+            descriptor.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+            gatt?.writeDescriptor(descriptor)
+        }
+    }
+
     //---------
 
     private fun getGattCallback(): BluetoothGattCallback {
@@ -158,7 +174,6 @@ class BleServiceImpl(private val context: Context) : BleService {
                         isConnected = true
                         gatt?.apply { discoverServices() }
                     } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                        Toast.makeText(context, context.getString(R.string.bluetooth_disconnected), Toast.LENGTH_SHORT).show()
                         close()
                         coroutineScope.launch { bleConnectionEvent.send(BleConnectionState.ERROR) }
                     }
@@ -169,11 +184,7 @@ class BleServiceImpl(private val context: Context) : BleService {
             }
 
             override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
-                coroutineScope.launch {
-                    registerNotification()
-                    delay(1000)
-                    bleConnectionEvent.send(BleConnectionState.CONNECTED)
-                }
+                coroutineScope.launch { bleConnectionEvent.send(BleConnectionState.CONNECTED) }
             }
 
             @Deprecated("Android 12 and lower")
@@ -224,22 +235,6 @@ class BleServiceImpl(private val context: Context) : BleService {
         }
     }
 
-    private fun registerNotification() {
-        val serviceUuid = UUID.fromString(Constants.SERVICE_UUID)
-        val charUuid = UUID.fromString(Constants.NOTIFICATION_CHARACTERISTIC_UUID)
-        val descriptorUuid = UUID.fromString(Constants.NOTIFICATION_DESCRIPTOR_UUID)
-        val characteristic = gatt?.getService(serviceUuid)?.getCharacteristic(charUuid) ?: return
-        val descriptor = characteristic.getDescriptor(descriptorUuid) ?: return
-        gatt?.setCharacteristicNotification(characteristic, true)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            gatt?.writeDescriptor(descriptor, BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE)
-        } else {
-            descriptor.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
-            gatt?.writeDescriptor(descriptor)
-        }
-    }
-
     private fun onCharacteristicChangedResponse(
         responseType: Int
     ): Pair<BleResponseType, ByteArray> {
@@ -263,6 +258,13 @@ class BleServiceImpl(private val context: Context) : BleService {
             Constants.READ_PIN_STATUS_CHARACTERISTIC_UUID -> {
                 coroutineScope.launch {
                     val data = Pair(BleResponseType.PIN_STATUS, value)
+                    dataResponseEvent.send(data)
+                }
+            }
+
+            Constants.READ_PC_CONNECTION_STATUS_UUID -> {
+                coroutineScope.launch {
+                    val data = Pair(BleResponseType.PC_CONNECTION_STATUS, value)
                     dataResponseEvent.send(data)
                 }
             }

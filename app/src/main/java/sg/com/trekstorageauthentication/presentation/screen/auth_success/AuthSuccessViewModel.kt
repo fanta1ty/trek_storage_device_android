@@ -26,8 +26,7 @@ import javax.inject.Inject
 class AuthSuccessViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val bleService: BleService
-) : ViewModel(),
-    DataStoreService by DataStoreServiceImpl() {
+) : ViewModel(), DataStoreService by DataStoreServiceImpl() {
 
     private val _unregisterDialogState = MutableStateFlow(AuthSuccessDialogState())
     val unregisterDialogState = _unregisterDialogState.asStateFlow()
@@ -41,12 +40,12 @@ class AuthSuccessViewModel @Inject constructor(
     fun disableAuthentication() {
         dismissDisableAuthenticationDialog()
         viewModelScope.launch {
-            // Delete saved last connected device name
-            saveLastConnectedDeviceName(context, "")
-
             if (bleService.isConnected()) {
                 thumbDriveDisablingAuthentication = true
-                bleService.write(Constants.DISABLE_AUTHENTICATION_CHARACTERISTIC_UUID, "1".toByteArray())
+                bleService.write(
+                    Constants.DISABLE_AUTHENTICATION_CHARACTERISTIC_UUID,
+                    "TD_RESET".toByteArray()
+                )
             } else {
                 thumbDriveDisablingAuthentication = false
                 val msg = context.getString(R.string.bluetooth_disconnected)
@@ -58,12 +57,12 @@ class AuthSuccessViewModel @Inject constructor(
     fun factoryResetThumbDrive() {
         dismissFactoryResetDialog()
         viewModelScope.launch {
-            // Delete saved last connected device name
-            saveLastConnectedDeviceName(context, "")
-
             if (bleService.isConnected()) {
                 thumbDriveFactoryResetting = true
-                bleService.write(Constants.FACTORY_RESET_CHARACTERISTIC_UUID, "1".toByteArray())
+                bleService.write(
+                    Constants.FACTORY_RESET_CHARACTERISTIC_UUID,
+                    "TD_RESET".toByteArray()
+                )
             } else {
                 thumbDriveFactoryResetting = false
                 val msg = context.getString(R.string.bluetooth_disconnected)

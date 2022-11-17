@@ -19,6 +19,8 @@ interface BleService {
 
     fun write(uuid: String, bytes: ByteArray)
 
+    fun registerNotification()
+
     fun isBluetoothEnabled(): Boolean
 
     fun isLocationServiceEnabled(): Boolean

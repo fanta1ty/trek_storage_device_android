@@ -22,7 +22,7 @@ object AESEncryption {
         return String(Base64.encode(cipherText, Base64.DEFAULT))
     }
 
-    fun decrypt(inputCipher: String) : String {
+    fun decrypt(inputCipher: String): String {
         val ivParameterSpec = IvParameterSpec(Base64.decode(iv, Base64.DEFAULT))
         val secretKeySpec = SecretKeySpec(Base64.decode(secretKey, Base64.DEFAULT), algorithm)
         val cipher = Cipher.getInstance("$algorithm/$feedbackMode/$padding")
@@ -30,5 +30,4 @@ object AESEncryption {
         val plainText = cipher.doFinal(Base64.decode(inputCipher, Base64.DEFAULT))
         return String(plainText)
     }
-
 }

@@ -1,6 +1,5 @@
 package sg.com.trekstorageauthentication.presentation.screen.auth_success
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
@@ -11,7 +10,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -26,14 +24,14 @@ import sg.com.trekstorageauthentication.presentation.screen.auth_success.state.A
 
 @Composable
 fun AuthSuccessScreen(isRegister: Boolean) {
-    val stateHolder = rememberAuthSuccessScreenStateHolder(isRegister)
+    val stateHolder = rememberAuthSuccessScreenStateHolder()
 
     Column(modifier = Modifier.fillMaxSize()) {
         AuthSuccessToolbar(
-            stateHolder::navigateChangePinScreen,
             stateHolder.viewModel::showConfirmDisableAuthenticationDialog,
             stateHolder.viewModel::showConfirmFactoryResetThumbDriveDialog,
         )
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -53,7 +51,7 @@ fun AuthSuccessScreen(isRegister: Boolean) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = if (stateHolder.isRegister)
+                text = if (isRegister)
                     stringResource(R.string.registration_successful) else
                     stringResource(R.string.authentication_successful),
                 style = MaterialTheme.typography.h2,
@@ -63,14 +61,13 @@ fun AuthSuccessScreen(isRegister: Boolean) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                if (stateHolder.isRegister)
+                if (isRegister)
                     stringResource(R.string.registration_successful_desc) else
                     stringResource(R.string.authentication_successful_desc),
                 style = MaterialTheme.typography.h3,
                 textAlign = TextAlign.Center,
             )
         }
-
     }
 
     ConfirmDisableAuthenticationDialog(
@@ -85,19 +82,15 @@ fun AuthSuccessScreen(isRegister: Boolean) {
         stateHolder.viewModel::dismissFactoryResetDialog,
     )
 
-    DisableAuthenticationProgressDialog(isShowing = stateHolder.viewModel.thumbDriveDisablingAuthentication)
-    FactoryResetProgressDialog(isShowing = stateHolder.viewModel.thumbDriveFactoryResetting)
+    DisableAuthenticationProgressDialog(stateHolder.viewModel.thumbDriveDisablingAuthentication)
+    FactoryResetProgressDialog(stateHolder.viewModel.thumbDriveFactoryResetting)
 }
 
 @Composable
 private fun rememberAuthSuccessScreenStateHolder(
-    isRegister: Boolean,
     navController: NavHostController? = LocalNavController.current,
-    context: Context = LocalContext.current,
     viewModel: AuthSuccessViewModel = hiltViewModel(),
     coroutineScope: CoroutineScope = rememberCoroutineScope()
 ): AuthSuccessScreenStateHolder {
-    return remember {
-        AuthSuccessScreenStateHolder(isRegister, navController, context, viewModel, coroutineScope)
-    }
+    return remember { AuthSuccessScreenStateHolder(navController, viewModel, coroutineScope) }
 }

@@ -17,7 +17,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(Constants.
 class DataStoreServiceImpl : DataStoreService {
 
     /**
-     * Read stored PIN from shared preference.
+     * Read stored PIN from Data Store.
      * If no PIN is stored, take the ANDROID_ID, save it and use it as PIN.
      * This will make sure the app on the same device will return the same ANDROID_ID
      * unless user factory reset the device.
@@ -41,19 +41,6 @@ class DataStoreServiceImpl : DataStoreService {
             val key = stringPreferencesKey(Constants.DATA_STORE_PIN_KEY)
             val encryptedPin = AESEncryption.encrypt(pin)
             preferences[key] = encryptedPin
-        }
-    }
-
-    override suspend fun getLastConnectedDeviceName(context: Context): String {
-        val key = stringPreferencesKey(Constants.DATA_STORE_LAST_CONNECTED_DEVICE_NAME_KEY)
-        val preferences = context.dataStore.data.first()
-        return preferences[key] ?: ""
-    }
-
-    override suspend fun saveLastConnectedDeviceName(context: Context, deviceName: String) {
-        context.dataStore.edit { preferences ->
-            val key = stringPreferencesKey(Constants.DATA_STORE_LAST_CONNECTED_DEVICE_NAME_KEY)
-            preferences[key] = deviceName
         }
     }
 }

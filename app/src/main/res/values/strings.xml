@@ -10,6 +10,9 @@
     <string name="location_disabled_msg">This app needs access to location service to scan for nearby bluetooth devices.</string>
     <string name="bluetooth_required">Bluetooth Required</string>
     <string name="bluetooth_disabled_msg">This app needs bluetooth to be turned on to establish connection.</string>
+
+    <string name="pc_already_connected">PC has already connected to another device</string>
+
     <string name="biometric_authentication_title">Biometric Authentication</string>
     <string name="passcode_authentication_title">Passcode Authentication</string>
     <string name="authentication_description">Please authenticate to continue.</string>
@@ -20,35 +23,17 @@
     <string name="bluetooth_disconnected">Bluetooth disconnected</string>
     <string name="no_trek_devices_found">No Trek devices found</string>
 
-    <string name="set_recovery_pin">Set Recovery Pin</string>
-    <string name="change_recovery_pin">Change Recovery Pin</string>
-    <string name="recovery_pin">Recovery Pin</string>
-    <string name="confirm_recovery_pin">Confirm Recovery Pin</string>
     <string name="error_field_empty">This field cannot be empty</string>
     <string name="error_pin_invalid_length">Your pin must be at least 8 characters</string>
     <string name="error_pin_invalid_space">Pin cannot contain empty spaces</string>
     <string name="error_confirm_pin_not_match">Doesn\'t match the pin above</string>
-    <string name="error_register_pin_successful">Pin registration successful</string>
-    <string name="error_register_pin_failed">Pin registration failed</string>
-    <string name="error_reset_pin_successful">Pin reset successful</string>
-    <string name="error_reset_pin_failed">Pin reset failed</string>
-    <string name="save">Save</string>
-
-    <string name="enter_recovery_pin">Enter Recovery Pin</string>
-    <string name="recovery_successful">Recovery successful</string>
-    <string name="error_recovery_pin_incorrect">Incorrect recovery pin</string>
-    <string name="confirm">Confirm</string>
 
     <string name="authentication_fail">Authentication Failed</string>
-<!--    <string name="authentication_fail_desc">Please use the correct hand phone to unlock the TD Bio.</string>-->
     <string name="authentication_fail_desc">Access Denied</string>
     <string name="authentication_successful">Authentication Passed</string>
-<!--    <string name="authentication_successful_desc">The Thumbdrive has been unlocked and ready to be used on your PC</string>-->
-    <string name="authentication_successful_desc">TD BIO ready to be used on your PC.</string>
-    <string name="change_pin">Change Pin</string>
+    <string name="authentication_successful_desc">TD Bio ready to be used on your PC.</string>
     <string name="go_back">Go Back</string>
 
-    <string name="device_setup_successful">Device setup successful</string>
     <string name="setting_up_device">Setting up device</string>
     <string name="device_setup_failed">Device setup failed</string>
     <string name="registration_successful">Registration Completed</string>
@@ -63,7 +48,6 @@
     <string name="factory_reset_confirm_desc_2">All authentication information and data in the thumbdrive will be erased.</string>
     <string name="factory_resetting">Factory Resetting Thumbdrive</string>
     <string name="factory_reset_successful">Factory Reset Thumbdrive Successful</string>
-    <string name="factory_reset_fail">Factory Reset Thumbdrive Failed</string>
 
     <string name="disable_authentication">Disable Authentication</string>
     <string name="disable_authentication_confirm_title">Disable Thumbdrive\'s Authentication?</string>

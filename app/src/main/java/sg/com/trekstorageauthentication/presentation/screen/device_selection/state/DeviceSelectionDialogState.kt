@@ -4,5 +4,6 @@ data class DeviceSelectionDialogState(
     val isShowPermissionsRequestDialog: Boolean = false,
     val isShowBluetoothDisabledDialog: Boolean = false,
     val isShowLocationServiceDisabledDialog: Boolean = false,
+    val isShowPCAlreadyConnectedDialog: Boolean = false,
     val isShowLoadingDialog: Boolean = false,
 )

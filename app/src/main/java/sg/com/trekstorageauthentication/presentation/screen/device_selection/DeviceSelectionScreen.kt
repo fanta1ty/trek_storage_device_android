@@ -18,7 +18,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collectLatest
 import sg.com.trekstorageauthentication.presentation.component.LocalNavController
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.component.DeviceItem
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.component.DeviceSelectionDialog
@@ -31,6 +30,8 @@ fun DeviceSelectionScreen() {
     val stateHolder = rememberDeviceSelectionScreenStateHolder()
     val trekDevice = stateHolder.viewModel.trekDevice
 
+    LaunchedEffect(true) { stateHolder.toggleScanningOnOff() }
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -42,7 +43,8 @@ fun DeviceSelectionScreen() {
         LazyColumn(content = {
             items(trekDevice.size) {
                 DeviceItem(
-                    deviceName = trekDevice[it].name.takeIf { name -> !name.isNullOrEmpty() } ?: "N/A",
+                    deviceName = trekDevice[it].name.takeIf { name -> !name.isNullOrEmpty() }
+                        ?: "N/A",
                     position = it,
                     onItemClick = { index ->
                         stateHolder.setSelectedItemPosition(index)
@@ -56,32 +58,12 @@ fun DeviceSelectionScreen() {
         })
     }
 
-    // Auto connect to device emitted in auto connect flow
-//    LaunchedEffect(Unit) {
-//        stateHolder.viewModel.autoConnectFlow.collect { index ->
-//            if (index != null) {
-//                stateHolder.setSelectedItemPosition(index)
-//                stateHolder.authenticate(
-//                    stateHolder::connect,
-//                    stateHolder::launchPasscodeAuthentication
-//                )
-//            }
-//        }
-//    }
-
-    // Auto scan on launch
-    LaunchedEffect(Unit) {
-        stateHolder.toggleScanningOnOff()
-    }
-
     DeviceSelectionDialog(
         state = stateHolder.viewModel.dialogState.collectAsState(),
         onPermissionPositiveEvent = stateHolder::navigateToAppPermissionSettings,
         onLocationDisabledPositiveEvent = stateHolder::navigateToLocationServiceSettings,
-        onBluetoothDisabledPositiveEvent = stateHolder.viewModel::dismissDialog
+        onDismissDialog = stateHolder.viewModel::dismissDialog
     )
-
-
 }
 
 @Composable

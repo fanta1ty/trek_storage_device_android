@@ -11,12 +11,11 @@ import sg.com.trekstorageauthentication.presentation.component.LocalNavControlle
 import sg.com.trekstorageauthentication.presentation.screen.auth_failure.AuthFailureScreen
 import sg.com.trekstorageauthentication.presentation.screen.auth_success.AuthSuccessScreen
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.DeviceSelectionScreen
-import sg.com.trekstorageauthentication.presentation.screen.recovery.RecoveryScreen
 import sg.com.trekstorageauthentication.presentation.screen.register_pin.RegisterPinScreen
-import sg.com.trekstorageauthentication.presentation.screen.unregister_reset_status.FactoryResetFailedScreen
-import sg.com.trekstorageauthentication.presentation.screen.unregister_reset_status.FactoryResetSuccessScreen
 import sg.com.trekstorageauthentication.presentation.screen.unregister_reset_status.DisableAuthenticationFailedScreen
 import sg.com.trekstorageauthentication.presentation.screen.unregister_reset_status.DisableAuthenticationSuccessScreen
+import sg.com.trekstorageauthentication.presentation.screen.unregister_reset_status.FactoryResetFailedScreen
+import sg.com.trekstorageauthentication.presentation.screen.unregister_reset_status.FactoryResetSuccessScreen
 
 @Composable
 fun NavGraph(navController: NavHostController) {
@@ -31,13 +30,13 @@ fun NavGraph(navController: NavHostController) {
 
             composable(
                 route = Screen.AuthSuccessScreen.routeWithArgs,
-                arguments = listOf(navArgument(Screen.RegisterPinScreen.isRegisterParam) {
+                arguments = listOf(navArgument(Screen.AuthSuccessScreen.isRegisterParam) {
                     type = NavType.BoolType
                     defaultValue = false
                 })
             ) { entry ->
                 AuthSuccessScreen(
-                    entry.arguments!!.getBoolean(Screen.RegisterPinScreen.isRegisterParam)
+                    entry.arguments!!.getBoolean(Screen.AuthSuccessScreen.isRegisterParam)
                 )
             }
 
@@ -45,20 +44,8 @@ fun NavGraph(navController: NavHostController) {
                 AuthFailureScreen()
             }
 
-            composable(
-                route = Screen.RegisterPinScreen.routeWithArgs,
-                arguments = listOf(navArgument(Screen.RegisterPinScreen.isRegisterParam) {
-                    type = NavType.BoolType
-                    defaultValue = true
-                })
-            ) { entry ->
-                RegisterPinScreen(
-                    entry.arguments!!.getBoolean(Screen.RegisterPinScreen.isRegisterParam)
-                )
-            }
-
-            composable(route = Screen.RecoveryScreen.route) {
-                RecoveryScreen()
+            composable(route = Screen.RegisterPinScreen.route) {
+                RegisterPinScreen()
             }
 
             composable(route = Screen.FactoryResetSuccessScreen.route) {

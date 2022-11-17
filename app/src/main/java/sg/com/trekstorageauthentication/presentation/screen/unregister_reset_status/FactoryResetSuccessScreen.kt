@@ -66,6 +66,4 @@ fun FactoryResetSuccessScreen() {
             Text(stringResource(R.string.go_to_main_screen))
         }
     }
-
-
 }

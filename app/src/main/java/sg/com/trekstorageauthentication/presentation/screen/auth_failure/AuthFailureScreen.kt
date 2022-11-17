@@ -1,7 +1,6 @@
 package sg.com.trekstorageauthentication.presentation.screen.auth_failure
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -20,6 +19,7 @@ import sg.com.trekstorageauthentication.presentation.navigation.Screen
 @Composable
 fun AuthFailureScreen() {
     val navController = LocalNavController.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,19 +52,6 @@ fun AuthFailureScreen() {
         )
 
         Spacer(modifier = Modifier.height(48.dp))
-
-//                Button(
-//                    onClick = {
-//                        navController?.navigate(Screen.RecoveryScreen.route) {
-//                            popUpTo(Screen.AuthFailureScreen.route) { inclusive = true }
-//                        }
-//                    },
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .height(48.dp)
-//                ) {
-//                    Text(stringResource(R.string.enter_recovery_pin))
-//                }
 
         Button(
             onClick = {

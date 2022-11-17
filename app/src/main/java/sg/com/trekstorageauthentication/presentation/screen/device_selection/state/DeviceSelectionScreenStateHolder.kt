@@ -6,7 +6,6 @@ import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
@@ -91,6 +90,18 @@ class DeviceSelectionScreenStateHolder(
             viewModel.getDataResponseEvent().collect {
                 val (type, data) = it
                 when (type) {
+                    BleResponseType.PC_CONNECTION_STATUS -> {
+                        if (String(data).toInt() == 0) {
+                            viewModel.registerNotification()
+                            delay(2000)
+                            viewModel.sendPhoneName()
+                        } else {
+                            viewModel.showPCAlreadyConnectedDialog()
+                        }
+
+                        viewModel.dismissDialog()
+                    }
+
                     BleResponseType.PHONE_NAME_SENT -> viewModel.readPinStatus()
 
                     BleResponseType.PIN_STATUS -> {
