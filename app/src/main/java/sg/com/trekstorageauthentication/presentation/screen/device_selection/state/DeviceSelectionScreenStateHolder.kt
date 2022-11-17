@@ -98,8 +98,6 @@ class DeviceSelectionScreenStateHolder(
                         } else {
                             viewModel.showPCAlreadyConnectedDialog()
                         }
-
-                        viewModel.dismissDialog()
                     }
 
                     BleResponseType.PHONE_NAME_SENT -> viewModel.readPinStatus()
@@ -118,6 +116,7 @@ class DeviceSelectionScreenStateHolder(
                             }
 
                             else -> { //Not Trek device
+                                viewModel.dismissDialog()
                                 val msg = context.getString(R.string.no_trek_devices_found)
                                 Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                             }

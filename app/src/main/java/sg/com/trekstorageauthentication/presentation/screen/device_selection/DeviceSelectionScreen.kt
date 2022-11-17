@@ -30,7 +30,10 @@ fun DeviceSelectionScreen() {
     val stateHolder = rememberDeviceSelectionScreenStateHolder()
     val trekDevice = stateHolder.viewModel.trekDevice
 
-    LaunchedEffect(true) { stateHolder.toggleScanningOnOff() }
+    LaunchedEffect(true) {
+        stateHolder.viewModel.close()
+        stateHolder.toggleScanningOnOff()
+    }
 
     Column(
         modifier = Modifier.fillMaxSize()

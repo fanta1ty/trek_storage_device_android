@@ -79,12 +79,16 @@ class DeviceSelectionViewModel @Inject constructor(
         bleService.connect(_trekDevices[index])
     }
 
+    fun close() {
+        bleService.close()
+    }
+
     fun registerNotification() {
         bleService.registerNotification()
     }
 
     fun showPCAlreadyConnectedDialog() {
-        _dialogState.value = _dialogState.value.copy(isShowPCAlreadyConnectedDialog = true)
+        _dialogState.value = DeviceSelectionDialogState(isShowPCAlreadyConnectedDialog = true)
     }
 
     fun dismissDialog() {
