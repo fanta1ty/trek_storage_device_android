@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Trek Storage Authentication</string>
+    <string name="app_name">TD Bio</string>
 
     <string name="scanning_devices">Scanning Devices</string>
     <string name="scan">SCAN</string>
@@ -10,7 +10,7 @@
     <string name="location_disabled_msg">This app needs access to location service to scan for nearby bluetooth devices.</string>
     <string name="bluetooth_required">Bluetooth Required</string>
     <string name="bluetooth_disabled_msg">This app needs bluetooth to be turned on to establish connection.</string>
-
+    <string name="connection_failed">Connection Failed</string>
     <string name="pc_already_connected">PC has already connected to another device</string>
 
     <string name="biometric_authentication_title">Biometric Authentication</string>
@@ -29,15 +29,15 @@
     <string name="error_confirm_pin_not_match">Doesn\'t match the pin above</string>
 
     <string name="authentication_fail">Authentication Failed</string>
-    <string name="authentication_fail_desc">Access Denied</string>
-    <string name="authentication_successful">Authentication Passed</string>
-    <string name="authentication_successful_desc">TD Bio ready to be used on your PC.</string>
+    <string name="authentication_fail_desc">Please use the correct handphone to unlock the TD Bio</string>
+    <string name="authentication_successful">Authentication Passed\nTD Bio ready to be used</string>
+    <string name="authentication_successful_desc">The Thumbdrive has been unlocked and ready to be used on your PC</string>
     <string name="go_back">Go Back</string>
 
     <string name="setting_up_device">Setting up device</string>
     <string name="device_setup_failed">Device setup failed</string>
-    <string name="registration_successful">Registration Completed</string>
-    <string name="registration_successful_desc">TD Bio has been registered, unlocked and ready to be used on your PC</string>
+    <string name="registration_successful">Authentication Passed\nRegistration Completed</string>
+    <string name="registration_successful_desc">The Thumbdrive has been registered, unlocked and ready to be used on your PC</string>
     <string name="go_to_main_screen">Go To Main Screen</string>
 
     <string name="factory_reset">Factory Reset</string>

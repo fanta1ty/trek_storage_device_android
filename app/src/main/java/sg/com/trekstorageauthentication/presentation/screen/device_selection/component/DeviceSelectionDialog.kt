@@ -46,6 +46,7 @@ fun DeviceSelectionDialog(
 
     if (value.isShowPCAlreadyConnectedDialog) {
         Dialog(
+            title = stringResource(R.string.connection_failed),
             content = stringResource(R.string.pc_already_connected),
             onPositiveClickEvent = onDismissDialog,
             onDismissRequest = onDismissDialog
