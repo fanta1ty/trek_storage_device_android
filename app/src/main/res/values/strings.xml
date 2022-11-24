@@ -25,12 +25,12 @@
 
     <string name="authentication_fail">Authentication Failed,\nAccess Denied</string>
     <string name="authentication_fail_desc">Please use the correct hand phone to unlock the TD Bio</string>
-    <string name="authentication_successful">Authentication Passed,\nRegistration Completed</string>
+    <string name="authentication_successful">Authentication Passed,\nTD BIO ready to be used</string>
     <string name="authentication_successful_desc">The Thumb Drive has been unlocked and ready to be used on your PC</string>
     <string name="go_back">Go Back</string>
     <string name="setting_up_device">Setting up device</string>
     <string name="device_setup_failed">Device setup failed</string>
-    <string name="registration_successful">Authentication Passed,\nTD BIO ready to be used</string>
+    <string name="registration_successful">Authentication Passed,\nRegistration Completed</string>
     <string name="registration_successful_desc">The Thumb Drive has been registered, unlocked and ready to be used on your PC</string>
     <string name="go_to_main_screen">Go To Main Screen</string>
 
