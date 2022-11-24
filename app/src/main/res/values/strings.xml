@@ -23,37 +23,31 @@
     <string name="bluetooth_disconnected">Bluetooth disconnected</string>
     <string name="no_trek_devices_found">No Trek devices found</string>
 
-    <string name="error_field_empty">This field cannot be empty</string>
-    <string name="error_pin_invalid_length">Your pin must be at least 8 characters</string>
-    <string name="error_pin_invalid_space">Pin cannot contain empty spaces</string>
-    <string name="error_confirm_pin_not_match">Doesn\'t match the pin above</string>
-
-    <string name="authentication_fail">Authentication Failed</string>
-    <string name="authentication_fail_desc">Please use the correct handphone to unlock the TD Bio</string>
-    <string name="authentication_successful">Authentication Passed\nTD Bio ready to be used</string>
-    <string name="authentication_successful_desc">The Thumbdrive has been unlocked and ready to be used on your PC</string>
+    <string name="authentication_fail">Authentication Failed,\nAccess Denied</string>
+    <string name="authentication_fail_desc">Please use the correct hand phone to unlock the TD Bio</string>
+    <string name="authentication_successful">Authentication Passed,\nRegistration Completed</string>
+    <string name="authentication_successful_desc">The Thumb Drive has been unlocked and ready to be used on your PC</string>
     <string name="go_back">Go Back</string>
-
     <string name="setting_up_device">Setting up device</string>
     <string name="device_setup_failed">Device setup failed</string>
-    <string name="registration_successful">Authentication Passed\nRegistration Completed</string>
-    <string name="registration_successful_desc">The Thumbdrive has been registered, unlocked and ready to be used on your PC</string>
+    <string name="registration_successful">Authentication Passed,\nTD BIO ready to be used</string>
+    <string name="registration_successful_desc">The Thumb Drive has been registered, unlocked and ready to be used on your PC</string>
     <string name="go_to_main_screen">Go To Main Screen</string>
 
     <string name="factory_reset">Factory Reset</string>
-    <string name="factory_reset_failed"> Factory Reset Thumbdrive Failed</string>
-    <string name="factory_reset_successful_desc">Thumbdrive has been reset to its factory settings.\nPlease unplug the thumbdrive.</string>
-    <string name="factory_reset_confirm_title">Factory Reset Thumbdrive?</string>
-    <string name="factory_reset_confirm_desc">This will reset thumbdrive to its default factory settings.</string>
-    <string name="factory_reset_confirm_desc_2">All authentication information and data in the thumbdrive will be erased.</string>
-    <string name="factory_resetting">Factory Resetting Thumbdrive</string>
-    <string name="factory_reset_successful">Factory Reset Thumbdrive Successful</string>
+    <string name="factory_reset_failed"> Factory Reset Thumb Drive Failed</string>
+    <string name="factory_reset_successful_desc">Thumb Drive has been reset to its factory settings.\nPlease unplug the Thumb Drive.</string>
+    <string name="factory_reset_confirm_title">Factory Reset Thumb Drive?</string>
+    <string name="factory_reset_confirm_desc">This will reset the Thumb Drive to its default factory settings.</string>
+    <string name="factory_reset_confirm_desc_2">All data in the Thumb Drive will be erased.</string>
+    <string name="factory_resetting">Factory Resetting Thumb Drive</string>
+    <string name="factory_reset_successful">Factory Reset Thumb Drive Successful</string>
 
     <string name="disable_authentication">Disable Authentication</string>
-    <string name="disable_authentication_confirm_title">Disable Thumbdrive\'s Authentication?</string>
-    <string name="disable_authentication_confirm_desc">Thumbdrive will remove its authentication.\nYour data inside thumbdrive won\'t be affected.</string>
-    <string name="disabling_authentication">Disabling Thumbdrive\'s Authentication</string>
+    <string name="disable_authentication_confirm_title">Disable Thumb Drive\'s Authentication?</string>
+    <string name="disable_authentication_confirm_desc">Thumb Drive will remove its authentication.\nYour data inside the Thumb Drive will not be affected.</string>
+    <string name="disabling_authentication">Disabling Thumb Drive\'s Authentication</string>
     <string name="disable_authentication_successful">Disable Authentication Successful</string>
-    <string name="disable_authentication_successful_desc">Thumbdrive\'s authentication has been disabled.\nYou can enable it again by register hand phone to the thumbdrive.</string>
-    <string name="disable_authentication_failed">Disable Thumbdrive\'s Authentication Failed</string>
+    <string name="disable_authentication_successful_desc">Thumb Drive’s authentication has been disabled.\nPlease unplug and plug in the Thumb Drive again to re-register.</string>
+    <string name="disable_authentication_failed">Disable Thumb Drive’s Authentication Failed</string>
 </resources>
