@@ -29,6 +29,7 @@ import sg.com.trekstorageauthentication.presentation.screen.device_selection.com
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.component.DeviceSelectionToolbar
 import sg.com.trekstorageauthentication.presentation.screen.device_selection.state.DeviceSelectionScreenStateHolder
 
+@OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("MissingPermission")
 @Composable
 fun DeviceSelectionScreen() {
@@ -74,15 +75,18 @@ fun DeviceSelectionScreen() {
                 .fillMaxWidth()
                 .height(40.dp),
             contentAlignment = Alignment.Center
-        ) {
-            Text(text = "Version: ${BuildConfig.VERSION_NAME}")
-        }
+        ) { Text(text = "Version: ${BuildConfig.VERSION_NAME}") }
     }
 
     DeviceSelectionDialog(
         state = stateHolder.viewModel.dialogState.collectAsState(),
         onPermissionPositiveEvent = stateHolder::navigateToAppPermissionSettings,
         onLocationDisabledPositiveEvent = stateHolder::navigateToLocationServiceSettings,
+        onPCAlreadyConnectedDialogPositiveEvent = {
+            stateHolder.viewModel.close()
+            stateHolder.toggleScanningOnOff()
+            stateHolder.viewModel.dismissDialog()
+        },
         onDismissDialog = stateHolder.viewModel::dismissDialog
     )
 }

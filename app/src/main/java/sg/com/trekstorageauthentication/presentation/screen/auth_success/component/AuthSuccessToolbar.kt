@@ -47,7 +47,7 @@ fun AuthSuccessToolbar(
                         isExpandDropDownMenu = false
                         onUnregisterThumbDrive()
                     }
-                ) { Text(stringResource(R.string.disable_authentication)) }
+                ) { Text(stringResource(R.string.de_register)) }
 
                 DropdownMenuItem(
                     onClick = {

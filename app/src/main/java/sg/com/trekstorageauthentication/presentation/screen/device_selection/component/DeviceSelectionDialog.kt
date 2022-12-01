@@ -13,6 +13,7 @@ fun DeviceSelectionDialog(
     state: State<DeviceSelectionDialogState>,
     onPermissionPositiveEvent: () -> Unit,
     onLocationDisabledPositiveEvent: () -> Unit,
+    onPCAlreadyConnectedDialogPositiveEvent: () -> Unit,
     onDismissDialog: () -> Unit
 ) {
     val value = state.value
@@ -48,7 +49,7 @@ fun DeviceSelectionDialog(
         Dialog(
             title = stringResource(R.string.connection_failed),
             content = stringResource(R.string.pc_already_connected),
-            onPositiveClickEvent = onDismissDialog,
+            onPositiveClickEvent = onPCAlreadyConnectedDialogPositiveEvent,
             onDismissRequest = onDismissDialog
         )
     }

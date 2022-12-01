@@ -8,9 +8,17 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import sg.com.trekstorageauthentication.R
 import sg.com.trekstorageauthentication.presentation.component.LocalNavController
@@ -45,9 +53,33 @@ fun DisableAuthenticationSuccessScreen() {
         Spacer(modifier = Modifier.height(48.dp))
 
         Text(
-            stringResource(R.string.disable_authentication_successful_desc),
+            text = buildAnnotatedString {
+                val fontFamily = FontFamily(Font(R.font.knock_knock))
+                val stringArr = stringArrayResource(R.array.disable_authentication_successful_desc)
+
+                append(stringArr[0])
+
+                withStyle(
+                    style = SpanStyle(
+                        color = Color.Black,
+                        fontFamily = fontFamily,
+                        fontStyle = FontStyle.Italic
+                    )
+                ) { append("${stringArr[1]} ") }
+
+                withStyle(
+                    style = SpanStyle(
+                        color = Color.Red,
+                        fontFamily = fontFamily,
+                        fontStyle = FontStyle.Italic
+                    )
+                ) { append("${stringArr[2]}  ") }
+
+                append(stringArr[3])
+                append(stringArr[4])
+            },
             style = MaterialTheme.typography.h3,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         Spacer(modifier = Modifier.height(48.dp))

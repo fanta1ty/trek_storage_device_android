@@ -44,6 +44,14 @@ fun FactoryResetFailedScreen() {
 
         Spacer(modifier = Modifier.height(48.dp))
 
+        Text(
+            stringResource(R.string.please_try_again),
+            style = MaterialTheme.typography.h3,
+            textAlign = TextAlign.Center,
+        )
+
+        Spacer(modifier = Modifier.height(48.dp))
+
         Button(
             onClick = {
                 navController?.popBackStack()

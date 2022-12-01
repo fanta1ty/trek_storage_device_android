@@ -57,16 +57,6 @@ fun AuthSuccessScreen(isRegister: Boolean) {
                 style = MaterialTheme.typography.h2,
                 textAlign = TextAlign.Center,
             )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text(
-                if (isRegister)
-                    stringResource(R.string.registration_successful_desc) else
-                    stringResource(R.string.authentication_successful_desc),
-                style = MaterialTheme.typography.h3,
-                textAlign = TextAlign.Center,
-            )
         }
     }
 
