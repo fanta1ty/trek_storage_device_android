@@ -1,32 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="disable_authentication_confirm_desc">
-        <item>TD</item>
-        <item>BIO</item>
-        <item>authentication will be removed. Your data won\'t be affected.</item>
-    </string-array>
-
     <string-array name="disable_authentication_successful_desc">
-        <item>Please unplug and plug in the\n</item>
+        <item>Please eject and remove </item>
         <item>TD</item>
         <item>BIO</item>
-        <item>to register\n</item>
-        <item>on the new mobile device.</item>
+        <item>Repeat registration process</item>
     </string-array>
 
     <string-array name="factory_reset_confirm_desc">
         <item>This will reset </item>
         <item>TD</item>
         <item>BIO</item>
-        <item>to its default factory settings.</item>
-        <item>\nAll authentication information and data in the </item>
+        <item>to default factory settings.</item>
+        <item>\n\nWARNING : Factory Reset will erase ALL Data on </item>
         <item>TD</item>
         <item>BIO</item>
-        <item>will be erased.</item>
     </string-array>
 
     <string-array name="factory_reset_successful_desc">
-        <item>Please unplug the </item>
+        <item>Please eject and remove </item>
         <item>TD</item>
         <item>BIO</item>
     </string-array>

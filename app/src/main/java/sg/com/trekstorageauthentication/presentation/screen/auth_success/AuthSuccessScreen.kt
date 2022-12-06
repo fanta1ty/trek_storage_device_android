@@ -30,6 +30,7 @@ fun AuthSuccessScreen(isRegister: Boolean) {
         AuthSuccessToolbar(
             stateHolder.viewModel::showConfirmDisableAuthenticationDialog,
             stateHolder.viewModel::showConfirmFactoryResetThumbDriveDialog,
+            isRegister
         )
 
         Column(

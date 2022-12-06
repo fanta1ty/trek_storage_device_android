@@ -113,29 +113,8 @@ fun DisableAuthenticationProgressDialog(
 
 @Composable
 private fun ConfirmDisableAuthenticationDialogContent() {
-    val fontFamily = FontFamily(Font(R.font.knock_knock))
-    val stringArr = stringArrayResource(R.array.disable_authentication_confirm_desc)
-
     Text(
-        text = buildAnnotatedString {
-            withStyle(
-                style = SpanStyle(
-                    color = Color.Black,
-                    fontFamily = fontFamily,
-                    fontStyle = FontStyle.Italic
-                )
-            ) { append("${stringArr[0]} ") }
-
-            withStyle(
-                style = SpanStyle(
-                    color = Color.Red,
-                    fontFamily = fontFamily,
-                    fontStyle = FontStyle.Italic
-                )
-            ) { append("${stringArr[1]}  ") }
-
-            append(stringArr[2])
-        },
+        stringResource(R.string.disable_authentication_confirm_desc),
         color = Color.Black
     )
 }
@@ -183,9 +162,7 @@ private fun ConfirmFactoryResetDialogContent() {
                     fontFamily = fontFamily,
                     fontStyle = FontStyle.Italic
                 )
-            ) { append("${stringArr[6]}  ") }
-
-            withStyle(style = SpanStyle(color = Color.Red)) { append(stringArr[7]) }
+            ) { append(stringArr[6]) }
         },
         color = Color.Black
     )

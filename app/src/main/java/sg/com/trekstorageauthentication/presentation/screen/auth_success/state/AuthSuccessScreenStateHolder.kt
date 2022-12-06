@@ -1,6 +1,5 @@
 package sg.com.trekstorageauthentication.presentation.screen.auth_success.state
 
-import android.content.Context
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

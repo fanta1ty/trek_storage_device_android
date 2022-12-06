@@ -73,10 +73,9 @@ fun DisableAuthenticationSuccessScreen() {
                         fontFamily = fontFamily,
                         fontStyle = FontStyle.Italic
                     )
-                ) { append("${stringArr[2]}  ") }
+                ) { append("${stringArr[2]}\n") }
 
                 append(stringArr[3])
-                append(stringArr[4])
             },
             style = MaterialTheme.typography.h3,
             textAlign = TextAlign.Center,

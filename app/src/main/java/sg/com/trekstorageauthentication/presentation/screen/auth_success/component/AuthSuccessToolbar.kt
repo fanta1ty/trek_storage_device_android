@@ -19,6 +19,7 @@ import sg.com.trekstorageauthentication.R
 fun AuthSuccessToolbar(
     onUnregisterThumbDrive: () -> Unit,
     onResetThumbDrive: () -> Unit,
+    isRegister: Boolean = false
 ) {
     var isExpandDropDownMenu by remember { mutableStateOf(false) }
 
@@ -30,31 +31,33 @@ fun AuthSuccessToolbar(
             .padding(horizontal = 16.dp),
         contentAlignment = Alignment.CenterEnd
     ) {
-        Box {
-            IconButton(onClick = { isExpandDropDownMenu = true }) {
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = "",
-                    tint = MaterialTheme.colors.onPrimary,
-                )
-            }
+        if (!isRegister) {
+            Box {
+                IconButton(onClick = { isExpandDropDownMenu = true }) {
+                    Icon(
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = "",
+                        tint = MaterialTheme.colors.onPrimary,
+                    )
+                }
 
-            DropdownMenu(
-                expanded = isExpandDropDownMenu,
-                onDismissRequest = { isExpandDropDownMenu = false }) {
-                DropdownMenuItem(
-                    onClick = {
-                        isExpandDropDownMenu = false
-                        onUnregisterThumbDrive()
-                    }
-                ) { Text(stringResource(R.string.de_register)) }
+                DropdownMenu(
+                    expanded = isExpandDropDownMenu,
+                    onDismissRequest = { isExpandDropDownMenu = false }) {
+                    DropdownMenuItem(
+                        onClick = {
+                            isExpandDropDownMenu = false
+                            onUnregisterThumbDrive()
+                        }
+                    ) { Text(stringResource(R.string.reset_biometrics)) }
 
-                DropdownMenuItem(
-                    onClick = {
-                        isExpandDropDownMenu = false
-                        onResetThumbDrive()
-                    }
-                ) { Text(stringResource(R.string.factory_reset)) }
+                    DropdownMenuItem(
+                        onClick = {
+                            isExpandDropDownMenu = false
+                            onResetThumbDrive()
+                        }
+                    ) { Text(stringResource(R.string.factory_reset)) }
+                }
             }
         }
     }

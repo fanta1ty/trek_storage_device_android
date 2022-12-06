@@ -33,13 +33,14 @@
     <string name="go_to_main_screen">Go To Main Screen</string>
 
     <string name="factory_reset">Factory Reset</string>
-    <string name="factory_reset_failed"> Factory Reset Failed</string>
-    <string name="factory_reset_confirm_title">Confirm Factory Reset?</string>
+    <string name="factory_reset_failed">Factory Reset Failed</string>
+    <string name="factory_reset_confirm_title">Confirm “Factory Reset”?</string>
     <string name="factory_reset_successful">Factory Reset Successful</string>
     <string name="please_try_again">Please Try Again</string>
 
-    <string name="de_register">De-Register</string>
-    <string name="disable_authentication_confirm_title">Confirm De-Registration?</string>
-    <string name="disable_authentication_successful">De-Registration Successful</string>
-    <string name="disable_authentication_failed">De-Registration Unsuccessful</string>
+    <string name="reset_biometrics">Reset Biometrics</string>
+    <string name="disable_authentication_confirm_title">Confirm “Reset Biometrics”?</string>
+    <string name="disable_authentication_confirm_desc">Biometric settings will be removed. Your data won\'t be affected.</string>
+    <string name="disable_authentication_successful">Biometrics Successfully Removed</string>
+    <string name="disable_authentication_failed">Reset Biometrics Unsuccessful</string>
 </resources>

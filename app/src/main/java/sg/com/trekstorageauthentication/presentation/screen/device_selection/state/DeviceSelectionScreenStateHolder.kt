@@ -91,7 +91,7 @@ class DeviceSelectionScreenStateHolder(
                 val (type, data) = it
                 when (type) {
                     BleResponseType.PC_CONNECTION_STATUS -> {
-                        if (String(data).toInt() == 0) {
+                        if (String(data) == "00") {
                             viewModel.registerNotification()
                             delay(2000)
                             viewModel.sendPhoneName()
