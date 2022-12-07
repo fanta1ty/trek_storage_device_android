@@ -194,7 +194,7 @@ class BleServiceImpl(private val context: Context) : BleService {
             ) {
                 characteristic?.apply {
                     coroutineScope.launch {
-                        val responseType = String(value).toInt()
+                        val responseType = String(value, Charsets.US_ASCII).toInt()
                         dataResponseEvent.send(onCharacteristicChangedResponse(responseType))
                     }
                 }
@@ -207,7 +207,11 @@ class BleServiceImpl(private val context: Context) : BleService {
                 value: ByteArray
             ) {
                 coroutineScope.launch {
-                    dataResponseEvent.send(onCharacteristicChangedResponse(String(value).toInt()))
+                    dataResponseEvent.send(
+                        onCharacteristicChangedResponse(
+                            String(value, Charsets.US_ASCII).toInt()
+                        )
+                    )
                 }
             }
 

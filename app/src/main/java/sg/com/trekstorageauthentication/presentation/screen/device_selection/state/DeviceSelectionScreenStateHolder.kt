@@ -91,7 +91,7 @@ class DeviceSelectionScreenStateHolder(
                 val (type, data) = it
                 when (type) {
                     BleResponseType.PC_CONNECTION_STATUS -> {
-                        if (String(data) == "00") {
+                        if (String(data, Charsets.US_ASCII).toInt() == 0) {
                             viewModel.registerNotification()
                             delay(2000)
                             viewModel.sendPhoneName()
@@ -103,7 +103,7 @@ class DeviceSelectionScreenStateHolder(
                     BleResponseType.PHONE_NAME_SENT -> viewModel.readPinStatus()
 
                     BleResponseType.PIN_STATUS -> {
-                        when (String(data).toInt()) {
+                        when (String(data, Charsets.US_ASCII).toInt()) {
                             0 -> {
                                 //USB already have a pin
                                 viewModel.login()
